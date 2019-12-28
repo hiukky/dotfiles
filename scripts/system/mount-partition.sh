@@ -43,7 +43,6 @@ mountPartition () {
 	echo
 
 	# Confirm
-
 	echo "${orange}${bold}Confirm your changes: ${nocolor}"
 	echo
 	echo "--| Partition: ${green}${bold} /dev/sda${partition}/ ${nocolor}"
@@ -72,12 +71,11 @@ mountPartition () {
 
 			# 04
 			echo "${purple}${bold}--| Granting Access Permissions...${nocolor}"
-			sudo chown $USER:$USER /"${name}"
+			sudo chown $USER:$USER /run/media/$(whoami)/"${name}"
 			echo
 			sleep .2
 
 			# Finish
-			echo
 			echo "${green}${bold} => SUCCESS! ${nocolor}"
 			echo
 		else 
