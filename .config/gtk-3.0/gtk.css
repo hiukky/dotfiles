@@ -1,0 +1,124 @@
+/**********************
+ * Whisker menu *
+ **********************/
+window#whiskermenu-window scrolledwindow scrollbar {
+  border-color: #FFFFFF;
+}
+
+window#whiskermenu-window scrolledwindow scrollbar.overlay-indicator:not(.dragging):not(.hovering) slider {
+  background-color: #FFFFFF;
+}
+
+window#whiskermenu-window scrolledwindow scrollbar slider {
+  background-color: #FFFFFF;
+}
+
+window#whiskermenu-window scrolledwindow scrollbar slider:hover {
+  background-color: #FFFFFF;
+}
+
+window#whiskermenu-window scrolledwindow scrollbar slider:hover:active {
+  background-color: #FFFFFF;
+}
+
+window#whiskermenu-window scrolledwindow scrollbar slider:disabled {
+  background-color: transparent;
+}
+
+window#whiskermenu-window scrolledwindow scrollbar trough {
+  background-color: #FFFFFF;
+}
+
+window#whiskermenu-window {
+  background-color: transparent;
+  color: #344053;
+  border-radius: 20px;
+  transition: .3s;
+}
+
+window#whiskermenu-window > frame {
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 10px;
+  margin-top: 15px;
+  transition: .3s;
+}
+
+window#whiskermenu-window > frame > border {
+  border-radius: 20px;
+  border: none;
+}
+
+window#whiskermenu-window button {
+  background-color: transparent;
+  background-clip: padding-box;
+  color: #344053;
+  font-weight: bold;
+  border-radius: 15px;
+  border: 0;
+  padding: 3px;
+}
+
+window#whiskermenu-window button:hover {
+  background-color: rgba(110, 68, 255, .4);
+  color: #ffffff;
+  border: 0;
+}
+
+window#whiskermenu-window button:checked, window#whiskermenu-window button:active {
+  background-color: rgba(110, 68, 255, .7);
+  color: #ffffff;
+  border-color: #6F63E1;
+}
+
+window#whiskermenu-window button:disabled {
+  color: rgba(198, 205, 203, 0.45);
+  border-color: rgba(0, 0, 0, 0.15);
+  background-color: #e17055;
+}
+
+window#whiskermenu-window entry {
+  background-color: #FFFFFF;
+  color: #344053;
+  border-color: rgba(52, 64, 83, 0.2);
+  border-radius: 30px;
+  padding: 8px 12px 8px 12px;
+  margin-bottom: 10px;
+}
+
+window#whiskermenu-window entry image {
+  color: #344053;
+}
+
+window#whiskermenu-window entry:focus {
+  border-color: rgba(110, 68, 255, .6);
+}
+
+window#whiskermenu-window entry:focus image {
+  color: #344053;
+}
+
+window#whiskermenu-window entry:disabled {
+  border-color: rgba(52, 64, 83, .5);
+  background-color: rgba(27, 34, 36, 0.45);
+}
+
+window#whiskermenu-window entry:disabled image {
+  color: rgba(198, 205, 203, 0.45);
+}
+
+window#whiskermenu-window scrolledwindow {
+  border: none;
+}
+
+window#whiskermenu-window scrolledwindow treeview.view {
+  background-color: #FFFFFF;
+  color: #344053;
+  padding: 3px 3px 3px 10px;
+}
+
+window#whiskermenu-window scrolledwindow treeview.view:selected:hover {
+  background-color: rgba(110, 68, 255, .4);
+  color: #ffffff;
+  border-radius: 50px;
+}
