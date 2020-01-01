@@ -9,13 +9,13 @@ declare OPTIONS=(
   "[1] - Install Packages"
   "[2] - Uninstall Packages"
   "[3] - Update Package List"
-  "[3] - Mount Partition"
+  "[4] - Mount Partition"
 )
 
 echo
-echo "${aqua}${bold}-------------------- SETUP OPTIONS --------------------${nocolor}"
+echo "${purple}${bold}-------------------- SETUP OPTIONS --------------------${nocolor}"
 echo
-printf '%s\n' "${green}${bold}${OPTIONS[@]}${nocolor}"
+printf '%s\n' "${aqua}${bold}${OPTIONS[@]}${nocolor}"
 echo
 
 : '
@@ -25,6 +25,7 @@ echo
 '
 _imports(){
   source "${BINPATH}/packages/manager.sh"
+  source "${BINPATH}/system/mnt.sh"
 }
 
 : '
@@ -54,6 +55,8 @@ _runTask(){
   2) _uninstall;;
 
   3) _updatePkgList;;
+
+  4) _mountPartition;;
 
   *) echo "Invalid";;
   esac

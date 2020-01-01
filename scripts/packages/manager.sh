@@ -32,7 +32,11 @@ _install(){
   exit
 }
 
-# Uninstall packages
+: '
+ @method _uninstall
+
+ @return void
+'
 _uninstall() {
   local PACKAGES=$(<${BINPATH}/packages/list-uninstall.txt)
 
