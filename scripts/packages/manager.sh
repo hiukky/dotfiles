@@ -1,9 +1,6 @@
 #! /bin/bash
 source "${BINPATH}/utils/colors.sh"
 
-# Sync repositories
-sudo pacman -Sy
-
 # Enable AUR
 sudo sed -i 's/#EnableAUR/EnableAUR/g' /etc/pamac.conf
 
@@ -13,6 +10,8 @@ sudo sed -i 's/#EnableAUR/EnableAUR/g' /etc/pamac.conf
  @return void
 '
 _install(){
+  sudo pacman -Sy
+
   local PACKAGES=$(<${BINPATH}/packages/list-install.txt)
 
   echo
@@ -25,11 +24,9 @@ _install(){
       sudo pacman -S trizen
     fi
 
-    trizen -S --noconfirm ${PACKAGES[@]}
+    trizen -S --noconfirm --noinfo --noedit ${PACKAGES[@]}
 	  sudo pacman -S --noconfirm ${PACKAGES[@]}
   fi
-
-  exit
 }
 
 : '
@@ -47,7 +44,7 @@ _uninstall() {
     sudo pamac remove ${PACKAGES[@]} --no-confirm
   fi
 
-  exit
+  sudo pacman -Sy
 }
 
 : '
@@ -56,9 +53,10 @@ _uninstall() {
  @return void
 '
 _updatePkgList() {
+  sudo pacman -Sy
+
   echo
   echo "${aqua}${bold} UPDATING PACKAGE LIST...${nocolor}"
   comm -23 <(pacman -Qqett | sort) <(pacman -Qqg base -g base-devel | sort | uniq) > "${BINPATH}/packages/list-install.txt"
   echo
-  exit
 }
