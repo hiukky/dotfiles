@@ -3,6 +3,9 @@ readonly BINPATH="$(pwd)/scripts"
 
 # Imports
 source "${BINPATH}/utils/colors.sh"
+source "${BINPATH}/packages/manager.sh"
+source "${BINPATH}/system/mnt.sh"
+source "${BINPATH}/system/configure.sh"
 
 # CLI
 declare OPTIONS=(
@@ -10,6 +13,8 @@ declare OPTIONS=(
   "[2] - Uninstall Packages"
   "[3] - Update Package List"
   "[4] - Mount Partition"
+  " "
+  "${orange}${bold}[0] - Mount System${nocolor}"
 )
 
 echo
@@ -19,23 +24,13 @@ printf '%s\n' "${aqua}${bold}${OPTIONS[@]}${nocolor}"
 echo
 
 : '
-  @method _imports
-
-  @return void
-'
-_imports(){
-  source "${BINPATH}/packages/manager.sh"
-  source "${BINPATH}/system/mnt.sh"
-}
-
-: '
   @method _question
 
   @return string
 '
 _question(){
-read -p "Escolha uma opção: " option
-echo "$option"
+  read -p "Escolha uma opção: " option
+  echo "$option"
 }
 
 : '
@@ -46,9 +41,8 @@ echo "$option"
  @return void
 '
 _runTask(){
-  _imports
-
   case $option in
+  0) _configureSys;;
 
   1) _install;;
 
@@ -60,6 +54,27 @@ _runTask(){
 
   *) echo "Invalid";;
   esac
+}
+
+: '
+  @method _configureSys
+
+  @return void
+'
+_configureSys() {
+  # Remove outdated packages
+  _uninstall
+
+  # Install personal packages
+  _install
+
+  # Mount partition
+  _mountPartition
+
+  # Copy dotfiles
+  _configure
+
+  exit 0
 }
 
 : '
