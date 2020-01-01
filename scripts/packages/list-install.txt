@@ -48,8 +48,6 @@ gvfs-mtp
 gvfs-nfs
 gvfs-smb
 haveged
-hexchat
-hplip
 htop
 insomnia
 intel-ucode
@@ -127,7 +125,6 @@ pamac-snap-plugin
 patchutils
 pavucontrol
 perl-file-mimeinfo
-pidgin
 plank
 poppler-glib
 powertop
@@ -155,7 +152,6 @@ terminus-font
 thunar-archive-plugin
 thunar-media-tags-plugin
 thunar-volman
-thunderbird
 timeshift
 tlp
 trizen
@@ -212,7 +208,6 @@ xfce4-session
 xfce4-settings
 xfce4-smartbookmark-plugin
 xfce4-systemload-plugin
-xfce4-taskmanager
 xfce4-terminal
 xfce4-time-out-plugin
 xfce4-timer-plugin
