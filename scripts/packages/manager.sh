@@ -58,7 +58,7 @@ _uninstall() {
 _updatePkgList() {
   echo
   echo "${aqua}${bold} UPDATING PACKAGE LIST...${nocolor}"
-  pacman -Qqet | sort > "${BINPATH}/packages/list-install.txt"
+  comm -23 <(pacman -Qqett | sort) <(pacman -Qqg base -g base-devel | sort | uniq) > "${BINPATH}/packages/list-install.txt"
   echo
   exit
 }
