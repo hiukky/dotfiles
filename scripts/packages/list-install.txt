@@ -144,6 +144,7 @@ screenfetch
 s-nail
 spectre-meltdown-checker
 splix
+stacer
 steam-manjaro
 subversion
 system-config-printer
