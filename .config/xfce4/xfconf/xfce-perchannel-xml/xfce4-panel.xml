@@ -12,6 +12,7 @@
         <value type="int" value="1"/>
         <value type="int" value="9"/>
         <value type="int" value="5"/>
+        <value type="int" value="2"/>
       </property>
       <property name="role" type="string" value="xfce4-panel-12965750720"/>
       <property name="length-adjust" type="bool" value="true"/>
@@ -36,12 +37,17 @@
     </property>
     <property name="plugin-9" type="string" value="pulseaudio">
       <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
-      <property name="mpris-players" type="string" value="chrome.instance1038;chrome.instance20906;chrome.instance4451"/>
+      <property name="mpris-players" type="string" value="chrome.instance1038;chrome.instance1122;chrome.instance20906;chrome.instance4451;spotify"/>
     </property>
     <property name="plugin-8" type="string" value="whiskermenu"/>
     <property name="plugin-5" type="string" value="clock"/>
     <property name="plugin-1" type="string" value="systray">
       <property name="names-ordered" type="array">
+        <value type="string" value="notas"/>
+        <value type="string" value="stacer"/>
+        <value type="string" value="uget-gtk"/>
+        <value type="string" value="discord"/>
+        <value type="string" value="telegramdesktop"/>
         <value type="string" value="blueman-tray"/>
         <value type="string" value="thunar"/>
         <value type="string" value="msm notifier"/>
@@ -57,6 +63,11 @@
         <value type="string" value="msm notifier"/>
         <value type="string" value="clipman"/>
         <value type="string" value="miniaplicativo gerenciador de redes"/>
+      </property>
+    </property>
+    <property name="plugin-2" type="string" value="launcher">
+      <property name="items" type="array">
+        <value type="string" value="15778541431.desktop"/>
       </property>
     </property>
   </property>
