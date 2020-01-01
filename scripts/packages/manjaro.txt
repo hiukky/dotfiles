@@ -1,7 +1,0 @@
-nodejs
-code
-mariadb
-deepin-system-monitor
-neofetch
-nemo
-telegram-desktop
