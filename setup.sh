@@ -1,5 +1,5 @@
 #! /bin/bash
-readonly BINPATH=$(pwd)
+readonly BINPATH="$(pwd)/scripts"
 
 # Imports
 source "${BINPATH}/utils/colors.sh"
