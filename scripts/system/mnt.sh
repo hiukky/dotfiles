@@ -20,7 +20,7 @@ _mount () {
 
 	# Number of Partition
 	echo
-	read -p "${bold} => Which partition do you want to mount?   ${nocolor}[sda${green}${bold}?${nocolor}] ${green}${bold}Number${nocolor}: " partition
+	read -p "${bold} => Which partition do you want to mount? ${nocolor}[sda${green}${bold}?${nocolor}] ${green}${bold}Number${nocolor}: " partition
 
 	while [ -z "$partition" ]; do
 		read -p "${bold} => Which partition do you want to mount? ${nocolor}[sda${green}${bold}?${nocolor}] -> ${green}${bold}Number${nocolor}: " partition
@@ -31,7 +31,7 @@ _mount () {
 	read -p "${bold} => What name do you want for your partition? ${nocolor}[ex: ${green}${bold}Backup${nocolor}]: " name
 
 	while [ -z "$name" ]; do
-		read -p "${bold} => What name do you want for your partition?: ${nocolor}[ex: ${green}${bold}Backup${nocolor}]: " name
+		read -p "${bold} => What name do you want for your partition? ${nocolor}[ex: ${green}${bold}Backup${nocolor}]: " name
 	done
 
 	echo

@@ -1,0 +1,6 @@
+[
+  {
+    "path": ".config",
+    "folders": ["autostart", "xfce4", "gtk-3.0"]
+  }
+]

@@ -82,7 +82,7 @@ _configureSys() {
 '
 _init() {
   local option=$( _question )
-  echo "[$option]"
+
   if [[ "${OPTIONS[*]}" != *"[$option]"* ]]; then
     echo
     echo "${red}${bold}Invalid option!${nocolor}"

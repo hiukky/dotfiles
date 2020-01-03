@@ -2,7 +2,7 @@
 source "${BASE_DIR}/scripts/utils/colors.sh"
 
 # Config JSON
-declare CONFIG=$(<"${BASE_DIR}/scripts/system/config.json")
+declare CONFIG=$(<"${BASE_DIR}/environment/config.json")
 
 : '
   @method _configure
