@@ -1,11 +1,11 @@
 #! /bin/bash
-readonly BINPATH="$(pwd)/scripts"
+readonly BASE_DIR="$(pwd)"
 
 # Imports
-source "${BINPATH}/utils/colors.sh"
-source "${BINPATH}/packages/manager.sh"
-source "${BINPATH}/system/mnt.sh"
-source "${BINPATH}/system/configure.sh"
+source "${BASE_DIR}/scripts/utils/colors.sh"
+source "${BASE_DIR}/scripts/packages/manager.sh"
+source "${BASE_DIR}/scripts/system/mnt.sh"
+source "${BASE_DIR}/scripts/system/configure.sh"
 
 # CLI
 declare OPTIONS=(
@@ -14,7 +14,8 @@ declare OPTIONS=(
   "[3] - Update Package List"
   "[4] - Mount Partition"
   " "
-  "${orange}${bold}[0] - Mount System${nocolor}"
+  "${orange}${bold}[dot -u] - Update Dotfiles${nocolor}"
+  "${orange}${bold}[sys -c] - Configure System${nocolor}"
 )
 
 echo
@@ -25,32 +26,31 @@ echo
 
 : '
   @method _question
-
   @return string
 '
-_question(){
+_question() {
   read -p "Escolha uma opção: " option
   echo "$option"
 }
 
 : '
  @method _runTask
-
- @params {Number} option
-
+ @params {number} option
  @return void
 '
-_runTask(){
+_runTask() {
   case $option in
-  0) _configureSys;;
+  1) _installPkgs;;
 
-  1) _install;;
-
-  2) _uninstall;;
+  2) _uninstallPkgs;;
 
   3) _updatePkgList;;
 
   4) _mountPartition;;
+
+  "dot -u") _configure "copy";;
+
+  "sys -c") _configureSys;;
 
   *) echo "Invalid";;
   esac
@@ -58,33 +58,31 @@ _runTask(){
 
 : '
   @method _configureSys
-
   @return void
 '
 _configureSys() {
   # Remove outdated packages
-  _uninstall
+  #_uninstall
 
   # Install personal packages
-  _install
+  #_install
 
   # Mount partition
-  _mountPartition
+  #_mountPartition
 
   # Copy dotfiles
-  _configure
+  _configure "config"
 
   exit 0
 }
 
 : '
  @method _runTask
-
  @return void
 '
-_init(){
+_init() {
   local option=$( _question )
-
+  echo "[$option]"
   if [[ "${OPTIONS[*]}" != *"[$option]"* ]]; then
     echo
     echo "${red}${bold}Invalid option!${nocolor}"

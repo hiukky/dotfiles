@@ -1,18 +1,17 @@
 #! /bin/bash
-source "${BINPATH}/utils/colors.sh"
+source "${BASE_DIR}/scripts/utils/colors.sh"
 
 # Enable AUR
 sudo sed -i 's/#EnableAUR/EnableAUR/g' /etc/pamac.conf
 
 : '
- @method _install
-
+ @method _installPkgs
  @return void
 '
-_install(){
+_installPkgs() {
   sudo pacman -Sy
 
-  local PACKAGES=$(<${BINPATH}/packages/list-install.txt)
+  local PACKAGES=$(<${BASE_DIR}/scripts/packages/list-install.txt)
 
   echo
   echo "${aqua}${bold} INSTALLING PACKAGES...${nocolor}"
@@ -30,12 +29,11 @@ _install(){
 }
 
 : '
- @method _uninstall
-
+ @method _uninstallPkgs
  @return void
 '
-_uninstall() {
-  local PACKAGES=$(<${BINPATH}/packages/list-uninstall.txt)
+_uninstallPkgs() {
+  local PACKAGES=$(<${BASE_DIR}/scripts/packages/list-uninstall.txt)
 
   echo
   echo "${aqua}${bold} UNINSTALLING PACKAGES...${nocolor}"
@@ -49,7 +47,6 @@ _uninstall() {
 
 : '
  @method _updatePkgList
-
  @return void
 '
 _updatePkgList() {
@@ -57,6 +54,6 @@ _updatePkgList() {
 
   echo
   echo "${aqua}${bold} UPDATING PACKAGE LIST...${nocolor}"
-  comm -23 <(pacman -Qqett | sort) <(pacman -Qqg base -g base-devel | sort | uniq) > "${BINPATH}/packages/list-install.txt"
+  comm -23 <(pacman -Qqett | sort) <(pacman -Qqg base -g base-devel | sort | uniq) > "${BASE_DIR}/scripts/packages/list-install.txt"
   echo
 }

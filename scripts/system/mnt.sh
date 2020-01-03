@@ -1,9 +1,8 @@
 #! /bin/bash
-source "${BINPATH}/utils/colors.sh"
+source "${BASE_DIR}/scripts/utils/colors.sh"
 
 : '
   @method _mountPartition
-
   @return void
 '
 _mount () {
@@ -81,7 +80,6 @@ _mount () {
 
 : '
   @method _mountPartition
-
   @return void
 '
 _mountPartition() {
