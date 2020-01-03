@@ -9,20 +9,26 @@ source "${BASE_DIR}/scripts/system/configure.sh"
 
 # CLI
 declare OPTIONS=(
-  "[1] - Install Packages"
-  "[2] - Uninstall Packages"
-  "[3] - Update Package List"
-  "[4] - Mount Partition"
+  "[1] - INSTALL PACKAGES"
+  "[2] - UNINSTALL PACKAGES"
+  "[3] - UPDATE PACKAGE LIST"
+  "[4] - MOUNT PARTITION"
   " "
-  "${orange}${bold}[dot -u] - Update Dotfiles${nocolor}"
-  "${orange}${bold}[sys -c] - Configure System${nocolor}"
+  "${orange}${bold}[dot -u] - UPDATE DOTFILES${nocolor}"
+  "${orange}${bold}[sys -c] - CONFIGURE SYSTEM${nocolor}"
 )
 
-echo
-echo "${purple}${bold}-------------------- SETUP OPTIONS --------------------${nocolor}"
-echo
-printf '%s\n' "${aqua}${bold}${OPTIONS[@]}${nocolor}"
-echo
+: '
+  @method _showSetupOptions
+  return void
+'
+_showSetupOptions() {
+  echo
+  echo "${orange}${bold}-------------------- SETUP OPTIONS --------------------${nocolor}"
+  echo
+  printf '%s\n' "${aqua}${bold}${OPTIONS[@]}${nocolor}"
+  echo
+}
 
 : '
   @method _question
@@ -40,19 +46,15 @@ _question() {
 '
 _runTask() {
   case $option in
-  1) _installPkgs;;
+    1) _installPkgs;;
+    2) _uninstallPkgs;;
+    3) _updatePkgList;;
+    4) _mountPartition;;
 
-  2) _uninstallPkgs;;
+    "dot -u") _configure "copy";;
+    "sys -c") _configureSys;;
 
-  3) _updatePkgList;;
-
-  4) _mountPartition;;
-
-  "dot -u") _configure "copy";;
-
-  "sys -c") _configureSys;;
-
-  *) echo "Invalid";;
+    *) echo "Invalid";;
   esac
 }
 
@@ -62,13 +64,13 @@ _runTask() {
 '
 _configureSys() {
   # Remove outdated packages
-  #_uninstall
+  _uninstallPkgs
 
   # Install personal packages
-  #_install
+  _installPkgs
 
   # Mount partition
-  #_mountPartition
+  _mountPartition
 
   # Copy dotfiles
   _configure "config"
@@ -81,6 +83,7 @@ _configureSys() {
  @return void
 '
 _init() {
+  _showSetupOptions
   local option=$( _question )
 
   if [[ "${OPTIONS[*]}" != *"[$option]"* ]]; then

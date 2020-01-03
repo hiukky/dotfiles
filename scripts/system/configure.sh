@@ -1,8 +1,43 @@
 #! /bin/bash
 source "${BASE_DIR}/scripts/utils/colors.sh"
 
-# Config JSON
-declare CONFIG=$(<"${BASE_DIR}/environment/config.json")
+# DE's
+declare ENVS=(
+  "[de -x] - xfce"
+  "[de -g] - gnome"
+)
+
+: '
+  @method _showDEOptions
+  return void
+'
+_showDEOptions() {
+  echo
+  printf '%s\n' "${green}${bold}${ENVS[@]}${nocolor}"
+  echo
+}
+
+: '
+  @method _selectDE
+  @return string
+'
+_selectDE() {
+  read -p "Select your DE: " de
+
+  if [[ "${ENVS[*]}" != *"[${de}]"* ]]; then
+    echo
+    echo "${red}${bold}Invalid option!${nocolor}"
+    read -p "Select your DE: " de
+  fi
+
+  case $de in
+    'de -x') de='xfce';;
+    'de -g') de='gnome';;
+    *) exit
+  esac
+
+  echo "$de"
+}
 
 : '
   @method _configure
@@ -10,8 +45,12 @@ declare CONFIG=$(<"${BASE_DIR}/environment/config.json")
   @params {string} action - [copy | config]
 '
 _configure() {
-  echo "Configuring..."
   local action=$1
+
+  _showDEOptions
+  local de=$( _selectDE )
+
+  declare CONFIG=$(<"${BASE_DIR}/environment/${de}/config.json")
 
   for obj in "$(echo ${CONFIG} | jq -r '.[]')"; do
     if [[  -n $obj  ]]; then
@@ -22,9 +61,7 @@ _configure() {
         for folder in ${folders[@]}; do
           local path="$(echo $obj | jq -r '.path')"
 
-          if [[ -d ~/"${path}/${folder}" ]]; then
-            _execTask $action $path $folder
-          fi
+          _execTask $action $path $folder $de
         done
       fi
     fi
@@ -40,12 +77,8 @@ _configure() {
 '
 _execTask() {
   case $action in
-    "copy")
-      _copyFilesToDotfiles $path $folder
-    ;;
-
-    "config") echo "Config";;
-
+    "copy") _copyFilesToDotfiles $path $folder $de;;
+    "config") _copyFilesToSystem $path $folder $de;;
     *) echo "Invalid";;
   esac
 }
@@ -62,13 +95,13 @@ _copyFilesToDotfiles() {
 
     @example dir "/home/hiukky/Documentos/Github/dotfiles/temp/.config/xfce4"
   '
-  if [[ -d "${BASE_DIR}/${path}/temp/${folder}" ]]; then
-    rm -rf ${BASE_DIR}/${path}/temp/${folder}
+  if [[ -d "${BASE_DIR}/environment/${path}/${folder}" ]]; then
+    rm -rf ${BASE_DIR}/environment/${de}/${path}/${folder}
   fi
 
   # # Copy new settings
-  mkdir -p ${BASE_DIR}/temp/${path}
-  cp -avr ~/temp/${path}/${folder} ${BASE_DIR}/temp/${path}
+  mkdir -p ${BASE_DIR}/${path}
+  cp -avr ~/${path}/${folder} ${BASE_DIR}/environment/${de}/${path}
 }
 
 : '
@@ -86,7 +119,5 @@ _copyFilesToSystem() {
   rm -rf ~/${path}/${folder}
 
   # Copy new settings
-  cp -avr ${BASE_DIR}/${path}/${folder} ~/${path}
+  cp -avr ${BASE_DIR}/environment/${de}/${path}/${folder} ~/${path}
 }
-
-_configure
