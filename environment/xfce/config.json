@@ -7,6 +7,10 @@
     {
       "path": ".local/share/plank",
       "folders":["themes"]
+    },
+    {
+      "path": "Imagens",
+      "folders": ["Wallpapers"]
     }
   ],
 

@@ -53,7 +53,7 @@ _configure() {
   declare CONFIG=$(<"${BASE_DIR}/environment/${de}/config.json")
 
   # Directories
-  local test="$(echo ${CONFIG} | jq -r '.directories'| jq -r 'map("\(.path):\(.folders)")' | jq '.[]')"
+  local directories="$(echo ${CONFIG} | jq -r '.directories'| jq -r 'map("\(.path):\(.folders)")' | jq '.[]')"
 
   while read -r obj; do
     IFS=':' read -r path folders <<< $obj
@@ -66,7 +66,7 @@ _configure() {
       done
     fi
 
-  done <<< "$(echo $test | jq -r),"
+  done <<< "$(echo $directories | jq -r),"
 
   # Files
   local files="$(echo ${CONFIG} | jq -r '.files')"
