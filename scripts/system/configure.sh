@@ -94,7 +94,7 @@ _execTask() {
   case $action in
     "copy") _copyFilesToDotfiles $path $folder $de $type;;
     "config") _copyFilesToSystem $path $folder $de $type;;
-    *) echo "Invalid";;
+    *) echo "${red}${bold}Invalid option!${nocolor}";;
   esac
 }
 
@@ -168,4 +168,31 @@ _copyFilesToSystem() {
       cp -avr ${BASE_DIR}/environment/${de}/${file} ~/
     ;;
   esac
+}
+
+: '
+  @method _configureOhMyZsh
+  @return void
+'
+_configureOhMyZsh() {
+  # Download
+  if [[ ! -d ~/.oh-my-zsh ]]; then
+    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  fi
+
+  # Set default shell
+  if [[ $SHELL != '/usr/bin/zsh' ]]; then
+    chsh -s `which zsh`
+  fi
+
+  # Download theme
+  if [[ ! -d "$ZSH_CUSTOM/themes/spaceship-prompt" ]]; then
+    sudo git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
+    sudo ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
+    sudo sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="spaceship"/g' ~/.zshrc
+  fi
+
+  sleep 2
+  echo
+  echo "${green}${bold} Oh My Zsh configured! ${nocolor}"
 }

@@ -70,7 +70,7 @@ _mount () {
 			sleep .2
 
 			# Finish
-			echo "${green}${bold} SUCCESS! ${nocolor}"
+			echo "${green}${bold} Completed! ${nocolor}"
 			echo
 		else
 			exit

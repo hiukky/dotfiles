@@ -14,6 +14,7 @@ declare OPTIONS=(
   "    p -i     - Install Packages"
   "    p -r     - Uninstall Packages"
   "    p -ul    - Update Packages List"
+  "    omz -c   - Configure Oh My Zsh"
   " "
   "  ${aqua}${bold}NPM${nocolor}"
   "    n -i     - Install Packages"
@@ -58,6 +59,7 @@ _runTask() {
     'p -i') _installPkgs;;
     'p -r') _uninstallPkgs;;
     'p -ul') _updatePkgList;;
+    'omz -c') _configureOhMyZsh;;
     'sys -mnt') _mountPartition;;
     "dot -u") _configure "copy";;
     "sys -c") _configureSys;;
@@ -66,7 +68,7 @@ _runTask() {
     'n -i') _installNpmPkgs;;
     'n -u') _updateNpmPkgList;;
 
-    *) echo "${red}${bold}Invalid option!${nocolor}"
+    *) echo "${red}${bold}Invalid option!${nocolor}";;
   esac
 }
 
@@ -87,9 +89,16 @@ _configureSys() {
   # Mount partition
   _mountPartition
 
+  # Configure ZSH
+  _configureOhMyZsh
+
   # Copy dotfiles
   _configure "config"
 
+  echo
+  echo "${green}${bold} System Configuration completed.! ${nocolor}"
+  echo "${orange}${bold} Restarting... ${nocolor}"
+  sleep 4
   exit 0
 }
 

@@ -15,7 +15,7 @@ _installPkgs() {
   local PACKAGES=$(<${BASE_DIR}/scripts/packages/list-install.txt)
 
   echo
-  echo "${aqua}${bold} INSTALLING PACKAGES...${nocolor}"
+  echo "${aqua}${bold} Installing Packages...${nocolor}"
 
   if [[ PACKAGES ]]; then
     local tz=$(pacman -Q trizen)
@@ -27,6 +27,9 @@ _installPkgs() {
     trizen -S --noconfirm --noinfo --noedit ${PACKAGES[@]}
 	  sudo pacman -S --noconfirm ${PACKAGES[@]}
   fi
+
+  echo
+  echo "${green}${bold} Installed Packages! ${nocolor}"
 }
 
 : '
@@ -37,12 +40,14 @@ _uninstallPkgs() {
   local PACKAGES=$(<${BASE_DIR}/scripts/packages/list-uninstall.txt)
 
   echo
-  echo "${aqua}${bold} UNINSTALLING PACKAGES...${nocolor}"
+  echo "${aqua}${bold} Uninstalling Packages...${nocolor}"
 
   if [[ PACKAGES ]]; then
     sudo pamac remove ${PACKAGES[@]} --no-confirm
   fi
 
+  echo
+  echo "${green}${bold} Uninstalled Packages! ${nocolor}"
   sudo pacman -Sy
 }
 
@@ -54,10 +59,13 @@ _updatePkgList() {
   sudo pacman -Sy
 
   echo
-  echo "${aqua}${bold} UPDATING PACKAGE LIST...${nocolor}"
+  echo "${aqua}${bold} Updating Package List...${nocolor}"
 
   # System
   comm -23 <(pacman -Qqett | sort) <(pacman -Qqg base -g base-devel | sort | uniq) > "${BASE_DIR}/scripts/packages/list-install.txt"
+  sleep 2
+  echo
+  echo "${green}${bold} Updated list! ${nocolor}"
 }
 
 
@@ -79,6 +87,9 @@ _installNpmPkgs() {
 
     sudo npm install -g ${PACKAGES[@]}
   fi
+
+  echo
+  echo "${green}${bold} Uninstalled Packages! ${nocolor}"
 }
 
 : '
@@ -93,4 +104,7 @@ _updateNpmPkgList() {
   npm="$(echo ${npm//'└──'/''})"
 
   printf '%s\n' ${npm} > "${BASE_DIR}/scripts/packages/npm-install.txt"
+  sleep 2
+  echo
+  echo "${green}${bold} Updated list! ${nocolor}"
 }
