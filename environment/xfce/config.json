@@ -3,6 +3,10 @@
     {
       "path": ".config",
       "folders": ["autostart", "xfce4", "gtk-3.0", "plank", "dconf"]
+    },
+    {
+      "path": ".local/share/plank",
+      "folders":["themes"]
     }
   ],
 
