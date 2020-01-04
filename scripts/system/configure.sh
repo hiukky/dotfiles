@@ -52,20 +52,21 @@ _configure() {
 
   declare CONFIG=$(<"${BASE_DIR}/environment/${de}/config.json")
 
-  # Folders
-  for obj in "$(echo ${CONFIG} | jq -r '.directories' | jq -r '.[]')"; do
-    if [[  -n $obj  ]]; then
-      local -a folders=$(echo $obj | jq -r '.folders')
-      folders=(${folders//[\,\"\]\[]/""})
+  # Directories
+  local test="$(echo ${CONFIG} | jq -r '.directories'| jq -r 'map("\(.path):\(.folders)")' | jq '.[]')"
 
-      if [[ -n folders ]]; then
-        for folder in ${folders[@]}; do
-          local path="$(echo $obj | jq -r '.path')"
-          _execTask $action $path $folder $de "dir"
-        done
-      fi
+  while read -r obj; do
+    IFS=':' read -r path folders <<< $obj
+
+    folders=(${folders//[\,\"\]\[]/' '})
+
+    if [[ -n $path ]] && [[ -n $folders ]]; then
+      for folder in "${folders[@]}"; do
+        _execTask $action $path $folder $de "dir"
+      done
     fi
-  done
+
+  done <<< "$(echo $test | jq -r),"
 
   # Files
   local files="$(echo ${CONFIG} | jq -r '.files')"
@@ -111,19 +112,20 @@ _copyFilesToDotfiles() {
 
     @example dir "/home/hiukky/Documentos/Github/dotfiles/temp/.config/xfce4"
   '
+
   case $type in
     'dir')
-      if [[ -d "${BASE_DIR}/environment/${path}/${folder}" ]]; then
+      if [[ -d "${BASE_DIR}/environment/${de}/${path}/${folder}" ]]; then
         rm -rf ${BASE_DIR}/environment/${de}/${path}/${folder}
       fi
 
       # Copy new settings
-      mkdir -p ${BASE_DIR}/${path}
+      mkdir -p ${BASE_DIR}/environment/${de}/${path}
       cp -avr ~/${path}/${folder} ${BASE_DIR}/environment/${de}/${path}
     ;;
 
     'file')
-      if [[ -f "${BASE_DIR}/environment/${file}" ]]; then
+      if [[ -f "${BASE_DIR}/environment/${de}/${file}" ]]; then
         rm -rf ${BASE_DIR}/environment/${de}/${file}
       fi
 
