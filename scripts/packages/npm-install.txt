@@ -1,0 +1,5 @@
+@adonisjs/cli@4.0.12
+node-gyp@6.0.1
+npm@6.13.4
+semver@6.3.0
+yarn@1.21.1
