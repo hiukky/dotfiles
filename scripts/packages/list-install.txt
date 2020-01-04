@@ -8,6 +8,7 @@ bash-completion
 bauh
 blueman
 catfish
+color-picker
 cpupower
 crda
 cups-pdf
@@ -111,9 +112,9 @@ networkmanager-openvpn
 networkmanager-pptp
 networkmanager-vpnc
 nfs-utils
-nodejs
 noto-fonts-cjk
 noto-fonts-emoji
+npm
 nss-mdns
 ntfs-3g
 ntp
@@ -227,6 +228,7 @@ xiccd
 xorg-server
 xorg-twm
 xorg-xkill
+yarn
 yay
 yelp
 zsh
