@@ -99,7 +99,7 @@ _configureSys() {
   echo "${green}${bold} System Configuration completed.! ${nocolor}"
   echo "${orange}${bold} Restarting... ${nocolor}"
   sleep 4
-  exit 0
+  reboot
 }
 
 : '
