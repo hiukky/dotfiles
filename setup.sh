@@ -9,7 +9,7 @@ source "${BASE_DIR}/scripts/system/configure.sh"
 
 # CLI
 declare OPTIONS=(
-  "${purple}${bold}PACKAGES${nocolor}"
+  "${purple}${bold}TOOLS${nocolor}"
   "  ${aqua}${bold}System${nocolor}"
   "    p -i     - Install Packages"
   "    p -r     - Uninstall Packages"
