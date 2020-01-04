@@ -9,13 +9,21 @@ source "${BASE_DIR}/scripts/system/configure.sh"
 
 # CLI
 declare OPTIONS=(
-  "[1] - INSTALL PACKAGES"
-  "[2] - UNINSTALL PACKAGES"
-  "[3] - UPDATE PACKAGE LIST"
-  "[4] - MOUNT PARTITION"
+  "${purple}${bold}PACKAGES${nocolor}"
+  "  ${aqua}${bold}System${nocolor}"
+  "    p -i     - Install Packages"
+  "    p -r     - Uninstall Packages"
+  "    p -ul    - Update Packages List"
   " "
-  "${orange}${bold}[dot -u] - UPDATE DOTFILES${nocolor}"
-  "${orange}${bold}[sys -c] - CONFIGURE SYSTEM${nocolor}"
+  "  ${aqua}${bold}NPM${nocolor}"
+  "    n -i     - Install Packages"
+  "    n -u     - Update Packages List"
+  " "
+  "${purple}${bold}SYSTEM${nocolor}"
+  "    sys -mnt - Mount Partition"
+  " "
+  "    ${orange}${bold}dot -u   - Update Dotfiles${nocolor}"
+  "    ${orange}${bold}sys -c   - Complete System Setup${nocolor}"
 )
 
 : '
@@ -24,7 +32,7 @@ declare OPTIONS=(
 '
 _showSetupOptions() {
   echo
-  echo "${orange}${bold}-------------------- SETUP OPTIONS --------------------${nocolor}"
+  echo "${orange}${bold}-------------------- DOTFILES OPTIONS --------------------${nocolor}"
   echo
   printf '%s\n' "${aqua}${bold}${OPTIONS[@]}${nocolor}"
   echo
@@ -46,15 +54,19 @@ _question() {
 '
 _runTask() {
   case $option in
-    1) _installPkgs;;
-    2) _uninstallPkgs;;
-    3) _updatePkgList;;
-    4) _mountPartition;;
-
+    # System
+    'p -i') _installPkgs;;
+    'p -r') _uninstallPkgs;;
+    'p -ul') _updatePkgList;;
+    'sys -mnt') _mountPartition;;
     "dot -u") _configure "copy";;
     "sys -c") _configureSys;;
 
-    *) echo "Invalid";;
+    # NPM
+    'n -i') _installNpmPkgs;;
+    'n -u') _updateNpmPkgList;;
+
+    *) echo "${red}${bold}Invalid option!${nocolor}"
   esac
 }
 
@@ -68,6 +80,9 @@ _configureSys() {
 
   # Install personal packages
   _installPkgs
+
+  # Install NPM Packages
+  _installNpmPkgs
 
   # Mount partition
   _mountPartition
@@ -86,7 +101,7 @@ _init() {
   _showSetupOptions
   local option=$( _question )
 
-  if [[ "${OPTIONS[*]}" != *"[$option]"* ]]; then
+  if [[ "${OPTIONS[*]}" != *"$option"* ]]; then
     echo
     echo "${red}${bold}Invalid option!${nocolor}"
     option=$( _question )
