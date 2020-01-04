@@ -57,6 +57,7 @@ ipw2100-fw
 ipw2200-fw
 jdk8-openjdk
 jfsutils
+jq
 kernel-alive
 ktorrent
 lib32-flex
@@ -76,6 +77,7 @@ libva-vdpau-driver
 licenses
 lightdm-gtk-greeter-settings
 light-locker
+linux54-headers
 logrotate
 man-db
 manjaro-alsa
@@ -159,12 +161,15 @@ ttf-inconsolata
 ttf-indic-otf
 tumbler
 udiskie
+uefitool-git
 uget
 unace
 unrar
 usb_modeswitch
 vi
 viewnior
+virtualbox-ext-oracle
+virtualbox-guest-utils
 visual-studio-code-bin
 vulkan-intel
 vulkan-radeon
