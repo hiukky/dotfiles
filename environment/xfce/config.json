@@ -14,5 +14,5 @@
     }
   ],
 
-  "files": [".face", ".gitconfig", ".profile", ".xinitrc", ".bashrc"]
+  "files": [".face", ".gitconfig", ".profile", ".xinitrc", ".zshrc"]
 }
