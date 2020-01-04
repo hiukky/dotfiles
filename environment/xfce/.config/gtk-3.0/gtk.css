@@ -65,7 +65,7 @@ window#whiskermenu-window button:hover {
 }
 
 window#whiskermenu-window button:checked, window#whiskermenu-window button:active {
-  background-color: rgba(238, 116, 74, .7);
+  background-color: rgba(238, 116, 74, .5);
   color: #ffffff;
   border-color: #6F63E1;
 }
@@ -118,7 +118,7 @@ window#whiskermenu-window scrolledwindow treeview.view {
 }
 
 window#whiskermenu-window scrolledwindow treeview.view:selected:hover {
-  background-color: rgba(238, 116, 74, .4);
+  background-color: rgba(238, 116, 74, .3);
   color: #ffffff;
   border-radius: 50px;
 }
