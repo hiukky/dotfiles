@@ -1,5 +1,5 @@
 favorites=exo-terminal-emulator.desktop,exo-file-manager.desktop,exo-web-browser.desktop,exo-mail-reader.desktop
-recent=xfce4-settings-editor.desktop,mousepad.desktop,xfce4-notes.desktop,xfce-wm-settings.desktop,xfce-wmtweaks-settings.desktop,xfce-ui-settings.desktop,com.spotify.Client.desktop,stacer.desktop,bauh.desktop,uget-gtk.desktop
+recent=org.manjaro.pamac.manager.desktop,com.spotify.Client.desktop,galculator.desktop,xfce4-settings-editor.desktop,mousepad.desktop,xfce4-notes.desktop,xfce-wm-settings.desktop,xfce-wmtweaks-settings.desktop,xfce-ui-settings.desktop
 button-title=Aplicações
 button-icon=/usr/share/icons/whiskermenu-manjaro.svg
 button-single-row=false
@@ -21,8 +21,8 @@ position-commands-alternate=false
 position-categories-alternate=true
 stay-on-focus-out=false
 confirm-session-command=true
-menu-width=620
-menu-height=842
+menu-width=548
+menu-height=672
 menu-opacity=99
 command-settings=xfce4-settings-manager
 show-command-settings=true

@@ -1,6 +1,10 @@
-[
-  {
-    "path": ".config",
-    "folders": ["autostart", "xfce4", "gtk-3.0"]
-  }
-]
+{
+  "directories": [
+    {
+      "path": ".config",
+      "folders": ["autostart", "xfce4", "gtk-3.0", "plank", "dconf"]
+    }
+  ],
+
+  "files": [".face", ".gitconfig", ".profile", ".xinitrc", ".bashrc"]
+}
