@@ -52,7 +52,8 @@ _configure() {
 
   declare CONFIG=$(<"${BASE_DIR}/environment/${de}/config.json")
 
-  for obj in "$(echo ${CONFIG} | jq -r '.[]')"; do
+  # Folders
+  for obj in "$(echo ${CONFIG} | jq -r '.directories' | jq -r '.[]')"; do
     if [[  -n $obj  ]]; then
       local -a folders=$(echo $obj | jq -r '.folders')
       folders=(${folders//[\,\"\]\[]/""})
@@ -60,12 +61,21 @@ _configure() {
       if [[ -n folders ]]; then
         for folder in ${folders[@]}; do
           local path="$(echo $obj | jq -r '.path')"
-
-          _execTask $action $path $folder $de
+          _execTask $action $path $folder $de "dir"
         done
       fi
     fi
   done
+
+  # Files
+  local files="$(echo ${CONFIG} | jq -r '.files')"
+  files=(${files//[\,\"\]\[]/""})
+
+  if [[ -n ${files} ]]; then
+    for file in ${files[@]}; do
+      _execTask $action $path $folder $de "file"
+    done
+  fi
 }
 
 : '
@@ -74,11 +84,15 @@ _configure() {
   @params {string} action - [copy | config]
   @params {string} path
   @params {string} folder
+  @params {string} de
+  @params {string} type
 '
 _execTask() {
+  local type="$5"
+
   case $action in
-    "copy") _copyFilesToDotfiles $path $folder $de;;
-    "config") _copyFilesToSystem $path $folder $de;;
+    "copy") _copyFilesToDotfiles $path $folder $de $type;;
+    "config") _copyFilesToSystem $path $folder $de $type;;
     *) echo "Invalid";;
   esac
 }
@@ -88,6 +102,8 @@ _execTask() {
   @return void
   @params {string} path
   @params {string} folder
+  @params {string} de
+  @params {string} type
 '
 _copyFilesToDotfiles() {
   : '
@@ -95,13 +111,26 @@ _copyFilesToDotfiles() {
 
     @example dir "/home/hiukky/Documentos/Github/dotfiles/temp/.config/xfce4"
   '
-  if [[ -d "${BASE_DIR}/environment/${path}/${folder}" ]]; then
-    rm -rf ${BASE_DIR}/environment/${de}/${path}/${folder}
-  fi
+  case $type in
+    'dir')
+      if [[ -d "${BASE_DIR}/environment/${path}/${folder}" ]]; then
+        rm -rf ${BASE_DIR}/environment/${de}/${path}/${folder}
+      fi
 
-  # # Copy new settings
-  mkdir -p ${BASE_DIR}/${path}
-  cp -avr ~/${path}/${folder} ${BASE_DIR}/environment/${de}/${path}
+      # Copy new settings
+      mkdir -p ${BASE_DIR}/${path}
+      cp -avr ~/${path}/${folder} ${BASE_DIR}/environment/${de}/${path}
+    ;;
+
+    'file')
+      if [[ -f "${BASE_DIR}/environment/${file}" ]]; then
+        rm -rf ${BASE_DIR}/environment/${de}/${file}
+      fi
+
+      # Copy new settings
+      cp -avr ~/${file} ${BASE_DIR}/environment/${de}
+    ;;
+  esac
 }
 
 : '
@@ -109,6 +138,8 @@ _copyFilesToDotfiles() {
   @return void
   @params {string} path
   @params {string} folder
+  @params {string} de
+  @params {string} type
 '
 _copyFilesToSystem() {
   : '
@@ -116,8 +147,23 @@ _copyFilesToSystem() {
 
     @example dir "/home/hiukky/.config/xfce4"
   '
-  rm -rf ~/${path}/${folder}
+    case $type in
+    'dir')
+      if [[ -d "~/${path}/${folder}" ]]; then
+        rm -rf ~/${path}/${folder}
+      fi
 
-  # Copy new settings
-  cp -avr ${BASE_DIR}/environment/${de}/${path}/${folder} ~/${path}
+      # Copy new settings
+      cp -avr ${BASE_DIR}/environment/${de}/${path}/${folder} ~/${path}
+    ;;
+
+    'file')
+      if [[ -f "~/${file}" ]]; then
+        rm -rf ~/${file}
+      fi
+
+      # Copy new settings
+      cp -avr ${BASE_DIR}/environment/${de}/${file} ~/
+    ;;
+  esac
 }
