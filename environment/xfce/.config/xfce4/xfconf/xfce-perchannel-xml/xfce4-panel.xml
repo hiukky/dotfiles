@@ -43,6 +43,7 @@
     <property name="plugin-5" type="string" value="clock"/>
     <property name="plugin-1" type="string" value="systray">
       <property name="names-ordered" type="array">
+        <value type="string" value="flameshot"/>
         <value type="string" value="vmware-tray"/>
         <value type="string" value="notas"/>
         <value type="string" value="stacer"/>
