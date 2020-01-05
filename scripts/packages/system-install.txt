@@ -26,6 +26,7 @@ f2fs-tools
 ffmpegthumbnailer
 file-roller
 firefox
+flameshot
 flatpak
 freeoffice
 galculator-gtk2
