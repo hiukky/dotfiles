@@ -29,7 +29,7 @@ _installPkgs() {
   fi
 
   echo
-  echo "${green}${bold} Installed Packages! ${nocolor}"
+  echo "${green}${bold} System packages installed! ${nocolor}"
 }
 
 : '
@@ -47,7 +47,7 @@ _uninstallPkgs() {
   fi
 
   echo
-  echo "${green}${bold} Uninstalled Packages! ${nocolor}"
+  echo "${green}${bold} System uninstalled packages! ${nocolor}"
   echo
   sudo pacman -Sy
 }
@@ -66,7 +66,7 @@ _updatePkgList() {
   comm -23 <(pacman -Qqett | sort) <(pacman -Qqg base -g base-devel | sort | uniq) > "${BASE_DIR}/scripts/packages/system-install.txt"
   sleep 2
   echo
-  echo "${green}${bold} Updated list! ${nocolor}"
+  echo "${green}${bold} System updated package list! ${nocolor}"
   echo
 }
 
@@ -91,7 +91,7 @@ _installNpmPkgs() {
   fi
 
   echo
-  echo "${green}${bold} Uninstalled Packages! ${nocolor}"
+  echo "${green}${bold} NPM packages installed! ${nocolor}"
   echo
 }
 
@@ -109,7 +109,7 @@ _updateNpmPkgList() {
   printf '%s\n' ${npm} > "${BASE_DIR}/scripts/packages/npm-global.txt"
   sleep 2
   echo
-  echo "${green}${bold} Updated list! ${nocolor}"
+  echo "${green}${bold} NPM updated package list! ${nocolor}"
   echo
 }
 
@@ -129,7 +129,7 @@ _installCodeExtensions() {
 
   sleep 3
   echo
-  echo "${green}${bold} Installed Extensions! ${nocolor}"
+  echo "${green}${bold} VS Code extensions installed! ${nocolor}"
   echo
 }
 
@@ -141,6 +141,6 @@ _updateCodeExtensions() {
   code --list-extensions | xargs -L 1 echo code --install-extension > "${BASE_DIR}/scripts/packages/vscode-extensions.txt"
   sleep 2
   echo
-  echo "${green}${bold} Updated list! ${nocolor}"
+  echo "${green}${bold} VS Code extension list updated! ${nocolor}"
   echo
 }

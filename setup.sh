@@ -69,7 +69,7 @@ _runTask() {
     'dot --u-npl') _updateNpmPkgList;;
     'dot --u-vse') _updateCodeExtensions;;
 
-    "dot -u") _configure "copy";;
+    "dot -u") _updateDotfiles;;
 
     # System
     'sys --i-spl') _installPkgs;;
@@ -83,6 +83,29 @@ _runTask() {
 
     *) echo "${red}${bold}Invalid option!${nocolor}";;
   esac
+}
+
+: '
+  @method _updateDotfiles
+  @return void
+'
+_updateDotfiles() {
+  # Copy config
+  _configure "copy"
+
+  # Update system packages list
+  _updatePkgList
+
+  # Update NPM packages list
+  _updateNpmPkgList
+
+  # Update VS code extensions
+  _updateCodeExtensions
+
+  sleep 10
+  echo
+  echo "${green}${bold} Dotfiles Updated! ${nocolor}"
+  echo
 }
 
 : '
@@ -112,10 +135,10 @@ _configureSys() {
   _configureOhMyZsh &
   sleep 10
   echo
-  echo "${green}${bold} System Configuration completed.! ${nocolor}"
+  echo "${green}${bold} System Configuration completed! ${nocolor}"
   echo "${orange}${bold} Restarting... ${nocolor}"
   sleep 4
-  # reboot
+  reboot
 }
 
 : '
