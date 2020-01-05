@@ -175,24 +175,47 @@ _copyFilesToSystem() {
   @return void
 '
 _configureOhMyZsh() {
-  # Download
-  if [[ ! -d ~/.oh-my-zsh ]]; then
-    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  _downloadOhMyZsh
+  _configureOhMyZshTheme
+  _setShellToZsh
+
+  echo
+  echo "${green}${bold} Oh My Zsh configured! ${nocolor}"
+}
+
+: '
+  @method _downloadOhMyZsh
+  @return void
+'
+_downloadOhMyZsh() {
+  if [[ -d ~/.oh-my-zsh ]]; then
+    sudo rm -rf ~/.oh-my-zsh
+  fi
+  
+  sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  sleep 5
+}
+
+: '
+  @method _configureOhMyZshTheme
+  @return void
+'
+_configureOhMyZshTheme() {
+  if [[ -d "$ZSH_CUSTOM/themes/spaceship-prompt" ]]; then
+    sudo rm -rf "$ZSH_CUSTOM/themes/spaceship-prompt"
   fi
 
-  # Set default shell
+  sudo git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
+  sudo ln -sf "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
+  sudo sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="spaceship"/g' ~/.zshrc
+}
+
+: '
+  @method _setShellToZsh
+  @return void
+'
+_setShellToZsh() {
   if [[ $SHELL != '/usr/bin/zsh' ]]; then
     chsh -s `which zsh`
   fi
-
-  # Download theme
-  if [[ ! -d "$ZSH_CUSTOM/themes/spaceship-prompt" ]]; then
-    sudo git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
-    sudo ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
-    sudo sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="spaceship"/g' ~/.zshrc
-  fi
-
-  sleep 2
-  echo
-  echo "${green}${bold} Oh My Zsh configured! ${nocolor}"
 }

@@ -89,11 +89,11 @@ _configureSys() {
   # Mount partition
   _mountPartition
 
-  # Configure ZSH
-  _configureOhMyZsh
-
   # Copy dotfiles
   _configure "config"
+
+  # Configure ZSH
+  _configureOhMyZsh
 
   echo
   echo "${green}${bold} System Configuration completed.! ${nocolor}"
