@@ -8,27 +8,31 @@ source "${BASE_DIR}/scripts/system/mnt.sh"
 source "${BASE_DIR}/scripts/system/configure.sh"
 
 # CLI
-declare OPTIONS=(
-  "${purple}${bold}TOOLS${nocolor}"
-  "  ${aqua}${bold}System${nocolor}"
-  "    p -i     - Install Packages"
-  "    p -r     - Uninstall Packages"
-  "    p -ul    - Update Packages List"
-  "    omz -c   - Configure Oh My Zsh"
+declare -a OPTIONS=(
+  " ${green}${bold}D o t f i l e s${nocolor}"
   " "
-  "  ${aqua}${bold}NPM${nocolor}"
-  "    n -i     - Install Packages"
-  "    n -ul    - Update Packages List"
+  "   ${aqua}${bold}Tools${nocolor}"
   " "
-  "  ${aqua}${bold}VS Code${nocolor}"
-  "    vs -i    - Install Packages"
-  "    vs -ul   - Update Packages List"
+  "     ${orange}${bold}dot --u-spl    : Update System Packages List${nocolor}"
+  "     ${orange}${bold}dot --u-npl    : Update NPM Packages List${nocolor}"
+  "     ${orange}${bold}dot --u-vse    : Update VS Code Extensions List${nocolor}"
   " "
-  "${purple}${bold}SYSTEM${nocolor}"
-  "    sys -mnt - Mount Partition"
+  "     ${purple}${bold}dot -u         : Update Dotfiles${nocolor}"
   " "
-  "    ${orange}${bold}dot -u   - Update Dotfiles${nocolor}"
-  "    ${orange}${bold}sys -c   - Complete System Setup${nocolor}"
+  " ${green}${bold}S y s t e m${nocolor}"
+  " "
+  "   ${aqua}${bold}Tools${nocolor}"
+  " "
+  "     ${orange}${bold}sys --i-spl    : Install System Packages${nocolor}"
+  "     ${orange}${bold}sys --r-spl    : Uninstall System Packages${nocolor}"
+  "     ${orange}${bold}sys --mnt      : Mount Partition${nocolor}"
+  "     ${orange}${bold}sys --c-omz    : Configure Oh My Zsh${nocolor}"
+  "     ${orange}${bold}sys --i-npl    : Install NPM Packages${nocolor}"
+  "     ${orange}${bold}sys --i-vse    : Install VS Code Extensions${nocolor}"
+
+  " "
+  "     ${purple}${bold}sys -c         : Complete System Setup${nocolor}"
+  " "
 )
 
 : '
@@ -37,7 +41,7 @@ declare OPTIONS=(
 '
 _showSetupOptions() {
   echo
-  echo "${orange}${bold}-------------------- DOTFILES OPTIONS --------------------${nocolor}"
+  echo "${orange}${bold}-------------------- D O T F I L E S   O P T I O N S --------------------${nocolor}"
   echo
   printf '%s\n' "${aqua}${bold}${OPTIONS[@]}${nocolor}"
   echo
@@ -48,7 +52,7 @@ _showSetupOptions() {
   @return string
 '
 _question() {
-  read -p "Escolha uma opção: " option
+  read -p "Select an option: " option
   echo "$option"
 }
 
@@ -59,22 +63,22 @@ _question() {
 '
 _runTask() {
   case $option in
-    # System
-    'p -i') _installPkgs;;
-    'p -r') _uninstallPkgs;;
-    'p -ul') _updatePkgList;;
-    'omz -c') _configureOhMyZsh;;
-    'sys -mnt') _mountPartition;;
+    # Dotfiles
+    'dot --u-spl') _updatePkgList;;
+    'dot --u-npl') _updateNpmPkgList;;
+    'dot --u-vse') _updateCodeExtensions;;
+
     "dot -u") _configure "copy";;
+
+    # System
+    'sys --i-spl') _installPkgs;;
+    'sys --r-spl') _uninstallPkgs;;
+    'sys --mnt') _mountPartition;;
+    'sys --c-omz') _configureOhMyZsh;;
+    'sys --i-npl') _installNpmPkgs;;
+    'sys --i-vse') _installCodeExtensions;;
+
     "sys -c") _configureSys;;
-
-    # NPM
-    'n -i') _installNpmPkgs;;
-    'n -ul') _updateNpmPkgList;;
-
-    # VS Code
-    'vs -i') _installCodeExtensions;;
-    'vs -ul') _updateCodeExtensions;;
 
     *) echo "${red}${bold}Invalid option!${nocolor}";;
   esac
