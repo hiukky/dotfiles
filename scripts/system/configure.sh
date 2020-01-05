@@ -122,7 +122,7 @@ _execTask() {
   @method _copyFilesToDotfiles
   @return void
   @params {string} $1 path
-  @params {string} $2 folder
+  @params {string} $2 folder | files
   @params {string} $3 de
   @params {string} $4 type
 '
@@ -166,7 +166,7 @@ _copyFilesToDotfiles() {
   @method _copyFilesToSystem
   @return void
   @params {string} $1 path
-  @params {string} $2 folder
+  @params {string} $2 folder | files
   @params {string} $3 de
   @params {string} $4 type
 '
