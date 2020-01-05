@@ -27,3 +27,18 @@
     </tr>
   </table>
 </div>
+
+<div>
+  <h2>CLI</h2>
+
+  <h3>Warning!!</h3>
+  This tool is under development, and something functional in my machines! All saved configurations such as package list, etc are my settings, and if you want to install it, follow at your own risk! (Tested in VM and the same distro without problems).
+  <br><br>
+  These are the options of my CLI at the moment ... feel free to test it and share your PR. : )
+
+  <div align="center">
+    <img src="https://github.com/hiukky/dotfiles/blob/master/assets/cli.png"/>
+  </div>
+
+  <br>
+</div>
