@@ -93,8 +93,8 @@ _configureSys() {
   _configure "config"
 
   # Configure ZSH
-  _configureOhMyZsh
-
+  _configureOhMyZsh &
+  sleep 5
   echo
   echo "${green}${bold} System Configuration completed.! ${nocolor}"
   echo "${orange}${bold} Restarting... ${nocolor}"
