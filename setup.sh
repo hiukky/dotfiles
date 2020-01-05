@@ -6,6 +6,7 @@ source "${BASE_DIR}/scripts/utils/colors.sh"
 source "${BASE_DIR}/scripts/packages/manager.sh"
 source "${BASE_DIR}/scripts/system/mnt.sh"
 source "${BASE_DIR}/scripts/system/configure.sh"
+source "${BASE_DIR}/scripts/system/ohMyZsh.sh"
 
 # CLI
 declare -a OPTIONS=(
@@ -90,34 +91,31 @@ _runTask() {
 '
 _configureSys() {
   # Remove outdated packages
-  _uninstallPkgs
+  # _uninstallPkgs
 
   # Install personal packages
-  _installPkgs
+  # _installPkgs
 
   # Install NPM Packages
-  _installNpmPkgs
+  # _installNpmPkgs
 
   # Install VS Code extensions
-  _installCodeExtensions
+  # _installCodeExtensions
 
   # Mount partition
-  _mountPartition
-
-  # Configure ZSH
-  _configureOhMyZsh
+  # _mountPartition
 
   # Copy dotfiles
-  _configure "config"
+  # _configure "config"
 
   # Configure ZSH
   _configureOhMyZsh &
-  sleep 5
+  sleep 10
   echo
   echo "${green}${bold} System Configuration completed.! ${nocolor}"
   echo "${orange}${bold} Restarting... ${nocolor}"
   sleep 4
-  reboot
+  # reboot
 }
 
 : '
