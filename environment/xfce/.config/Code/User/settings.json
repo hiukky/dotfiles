@@ -1,8 +1,11 @@
 {
     "workbench.colorTheme": "Andromeda",
     "workbench.iconTheme": "material-icon-theme",
+    "editor.fontFamily": "Fira Code",
+    "editor.fontLigatures": true,
     "editor.fontSize": 16,
-    "editor.fontWeight": "800",
+    "editor.fontWeight": "700",
     "git.autofetch": true,
-    "git.enableSmartCommit": true
+    "git.enableSmartCommit": true,
+    "terminal.integrated.fontFamily": "monospace"
 }

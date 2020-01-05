@@ -123,6 +123,7 @@ numlockx
 openresolv
 orage
 os-prober
+otf-fira-code
 p7zip
 pamac-gtk
 pamac-snap-plugin
@@ -159,6 +160,7 @@ thunar-volman
 timeshift
 tlp
 trizen
+ttf-fira-code
 ttf-inconsolata
 ttf-indic-otf
 tumbler
