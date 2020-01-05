@@ -1,0 +1,7 @@
+code --install-extension dotcypress.vscode-jane
+code --install-extension EditorConfig.EditorConfig
+code --install-extension EliverLara.andromeda
+code --install-extension esbenp.prettier-vscode
+code --install-extension fraincs.future-of-code
+code --install-extension maixiaojie.git-emoji
+code --install-extension PKief.material-icon-theme

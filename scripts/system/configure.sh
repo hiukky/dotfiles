@@ -69,12 +69,28 @@ _configure() {
   done <<< "$(echo $directories | jq -r),"
 
   # Files
-  local files="$(echo ${CONFIG} | jq -r '.files')"
-  files=(${files//[\,\"\]\[]/""})
+  local files="$(echo ${CONFIG} | jq -r '.files'| jq -r 'map("\(.path):\(.files_name)")' | jq '.[]')"
 
-  if [[ -n ${files} ]]; then
-    for file in ${files[@]}; do
-      _execTask $action $path $folder $de "file"
+  while read -r obj; do
+    IFS=':' read -r path files_name <<< $obj
+
+    files_name=(${files_name//[\,\"\]\[]/' '})
+
+    if [[ -n $path ]] && [[ -n $files_name ]]; then
+      for file_name in "${files_name[@]}"; do
+        _execTask $action $path $file_name $de "file"
+      done
+    fi
+
+  done <<< "$(echo $files | jq -r),"
+
+  # Dotfiles
+  local dotfiles="$(echo ${CONFIG} | jq -r '.dotfiles')"
+  dotfiles=(${dotfiles//[\,\"\]\[]/""})
+
+  if [[ -n ${dotfiles} ]]; then
+    for file in ${dotfiles[@]}; do
+      _execTask $action $path $file $de "dotfile"
     done
   fi
 }
@@ -82,18 +98,22 @@ _configure() {
 : '
   @method _configure
   @return void
-  @params {string} action - [copy | config]
-  @params {string} path
-  @params {string} folder
-  @params {string} de
-  @params {string} type
+  @params {string} $1 action - [copy | config]
+  @params {string} $2 path
+  @params {string} $3 folder | files
+  @params {string} $4 de
+  @params {string} $5 type
 '
 _execTask() {
+  local action="$1"
+  local path="$2"
+  local folderOrFiles="$3"
+  local de="$4"
   local type="$5"
 
   case $action in
-    "copy") _copyFilesToDotfiles $path $folder $de $type;;
-    "config") _copyFilesToSystem $path $folder $de $type;;
+    "copy") _copyFilesToDotfiles $path $folderOrFiles $de $type;;
+    "config") _copyFilesToSystem $path $folderOrFiles $de $type;;
     *) echo "${red}${bold}Invalid option!${nocolor}";;
   esac
 }
@@ -101,10 +121,10 @@ _execTask() {
 : '
   @method _copyFilesToDotfiles
   @return void
-  @params {string} path
-  @params {string} folder
-  @params {string} de
-  @params {string} type
+  @params {string} $1 path
+  @params {string} $2 folder
+  @params {string} $3 de
+  @params {string} $4 type
 '
 _copyFilesToDotfiles() {
   : '
@@ -112,25 +132,32 @@ _copyFilesToDotfiles() {
 
     @example dir "/home/hiukky/Documentos/Github/dotfiles/temp/.config/xfce4"
   '
+  local path="$1"
+  local de="$3"
+  local type="$4"
 
   case $type in
-    'dir')
-      if [[ -d "${BASE_DIR}/environment/${de}/${path}/${folder}" ]]; then
-        rm -rf ${BASE_DIR}/environment/${de}/${path}/${folder}
+    'dir' | 'file')
+      local folderOrFiles="$2"
+
+      if [[ -d "${BASE_DIR}/environment/${de}/${path}/${folderOrFiles}" ]]; then
+        rm -rf ${BASE_DIR}/environment/${de}/${path}/${folderOrFiles}
       fi
 
       # Copy new settings
       mkdir -p ${BASE_DIR}/environment/${de}/${path}
-      cp -avr ~/${path}/${folder} ${BASE_DIR}/environment/${de}/${path}
+      cp -avr ~/${path}/${folderOrFiles} ${BASE_DIR}/environment/${de}/${path}
     ;;
 
-    'file')
-      if [[ -f "${BASE_DIR}/environment/${de}/${file}" ]]; then
-        rm -rf ${BASE_DIR}/environment/${de}/${file}
+    'dotfile')
+      local dotfile="$2"
+
+      if [[ -f "${BASE_DIR}/environment/${de}/${dotfile}" ]]; then
+        rm -rf ${BASE_DIR}/environment/${de}/${dotfile}
       fi
 
       # Copy new settings
-      cp -avr ~/${file} ${BASE_DIR}/environment/${de}
+      cp -avr ~/${dotfile} ${BASE_DIR}/environment/${de}
     ;;
   esac
 }
@@ -138,10 +165,10 @@ _copyFilesToDotfiles() {
 : '
   @method _copyFilesToSystem
   @return void
-  @params {string} path
-  @params {string} folder
-  @params {string} de
-  @params {string} type
+  @params {string} $1 path
+  @params {string} $2 folder
+  @params {string} $3 de
+  @params {string} $4 type
 '
 _copyFilesToSystem() {
   : '
@@ -149,19 +176,27 @@ _copyFilesToSystem() {
 
     @example dir "/home/hiukky/.config/xfce4"
   '
+  local path="$1"
+  local de="$3"
+  local type="$4"
+
     case $type in
-    'dir')
-      if [[ -d "~/${path}/${folder}" ]]; then
-        rm -rf ~/${path}/${folder}
+    'dir' | 'file')
+      local folderOrFiles="$2"
+
+      if [[ -d "~/${path}/${folderOrFiles}" ]]; then
+        rm -rf ~/${path}/${folderOrFiles}
       fi
 
       # Copy new settings
-      cp -avr ${BASE_DIR}/environment/${de}/${path}/${folder} ~/${path}
+      cp -avr ${BASE_DIR}/environment/${de}/${path}/${folderOrFiles} ~/${path}
     ;;
 
-    'file')
-      if [[ -f "~/${file}" ]]; then
-        rm -rf ~/${file}
+    'dotfile')
+      local dotfile="$2"
+
+      if [[ -f "~/${dotfile}" ]]; then
+        rm -rf ~/${dotfile}
       fi
 
       # Copy new settings
@@ -191,7 +226,7 @@ _downloadOhMyZsh() {
   if [[ -d ~/.oh-my-zsh ]]; then
     sudo rm -rf ~/.oh-my-zsh
   fi
-  
+
   sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 }
 

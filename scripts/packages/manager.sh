@@ -12,7 +12,7 @@ sudo sed -i 's/#EnableAUR/EnableAUR/g' /etc/pamac.conf
 _installPkgs() {
   sudo pacman -Sy
 
-  local PACKAGES=$(<${BASE_DIR}/scripts/packages/list-install.txt)
+  local PACKAGES=$(<${BASE_DIR}/scripts/packages/system-install.txt)
 
   echo
   echo "${aqua}${bold} Installing Packages...${nocolor}"
@@ -48,6 +48,7 @@ _uninstallPkgs() {
 
   echo
   echo "${green}${bold} Uninstalled Packages! ${nocolor}"
+  echo
   sudo pacman -Sy
 }
 
@@ -62,10 +63,11 @@ _updatePkgList() {
   echo "${aqua}${bold} Updating Package List...${nocolor}"
 
   # System
-  comm -23 <(pacman -Qqett | sort) <(pacman -Qqg base -g base-devel | sort | uniq) > "${BASE_DIR}/scripts/packages/list-install.txt"
+  comm -23 <(pacman -Qqett | sort) <(pacman -Qqg base -g base-devel | sort | uniq) > "${BASE_DIR}/scripts/packages/system-install.txt"
   sleep 2
   echo
   echo "${green}${bold} Updated list! ${nocolor}"
+  echo
 }
 
 
@@ -73,10 +75,10 @@ _updatePkgList() {
 _installNpmPkgs() {
   sudo pacman -Sy
 
-  local PACKAGES=$(<${BASE_DIR}/scripts/packages/npm-install.txt)
+  local PACKAGES=$(<${BASE_DIR}/scripts/packages/npm-global.txt)
 
   echo
-  echo "${orange}${bold} INSTALLING NPM PACKAGES...${nocolor}"
+  echo "${aqua}${bold} Installing Packages...${nocolor}"
 
   if [[ PACKAGES ]]; then
     local npm=$(pacman -Q npm)
@@ -90,6 +92,7 @@ _installNpmPkgs() {
 
   echo
   echo "${green}${bold} Uninstalled Packages! ${nocolor}"
+  echo
 }
 
 : '
@@ -103,8 +106,41 @@ _updateNpmPkgList() {
   npm="$(echo ${npm//'├──'/''})"
   npm="$(echo ${npm//'└──'/''})"
 
-  printf '%s\n' ${npm} > "${BASE_DIR}/scripts/packages/npm-install.txt"
+  printf '%s\n' ${npm} > "${BASE_DIR}/scripts/packages/npm-global.txt"
   sleep 2
   echo
   echo "${green}${bold} Updated list! ${nocolor}"
+  echo
+}
+
+## VSCODE
+: '
+ @method _installCodeExtensions
+ @return void
+'
+_installCodeExtensions() {
+  local PACKAGES=$(<${BASE_DIR}/scripts/packages/vscode-extensions.txt)
+
+  if [[ -n "${PACKAGES[@]}" ]]; then
+    for ext in "${PACKAGES[@]}"; do
+      $ext
+    done
+  fi
+
+  sleep 3
+  echo
+  echo "${green}${bold} Installed Extensions! ${nocolor}"
+  echo
+}
+
+: '
+ @method _updateCodeExtensions
+ @return void
+'
+_updateCodeExtensions() {
+  code --list-extensions | xargs -L 1 echo code --install-extension > "${BASE_DIR}/scripts/packages/vscode-extensions.txt"
+  sleep 2
+  echo
+  echo "${green}${bold} Updated list! ${nocolor}"
+  echo
 }

@@ -1,0 +1,8 @@
+{
+    "workbench.colorTheme": "Andromeda",
+    "workbench.iconTheme": "material-icon-theme",
+    "editor.fontSize": 16,
+    "editor.fontWeight": "800",
+    "git.autofetch": true,
+    "git.enableSmartCommit": true
+}

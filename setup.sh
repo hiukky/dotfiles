@@ -18,7 +18,11 @@ declare OPTIONS=(
   " "
   "  ${aqua}${bold}NPM${nocolor}"
   "    n -i     - Install Packages"
-  "    n -u     - Update Packages List"
+  "    n -ul    - Update Packages List"
+  " "
+  "  ${aqua}${bold}VS Code${nocolor}"
+  "    vs -i    - Install Packages"
+  "    vs -ul   - Update Packages List"
   " "
   "${purple}${bold}SYSTEM${nocolor}"
   "    sys -mnt - Mount Partition"
@@ -66,7 +70,11 @@ _runTask() {
 
     # NPM
     'n -i') _installNpmPkgs;;
-    'n -u') _updateNpmPkgList;;
+    'n -ul') _updateNpmPkgList;;
+
+    # VS Code
+    'vs -i') _installCodeExtensions;;
+    'vs -ul') _updateCodeExtensions;;
 
     *) echo "${red}${bold}Invalid option!${nocolor}";;
   esac
@@ -86,8 +94,14 @@ _configureSys() {
   # Install NPM Packages
   _installNpmPkgs
 
+  # Install VS Code extensions
+  _installCodeExtensions
+
   # Mount partition
   _mountPartition
+
+  # Configure ZSH
+  _configureOhMyZsh
 
   # Copy dotfiles
   _configure "config"

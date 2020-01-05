@@ -14,5 +14,12 @@
     }
   ],
 
-  "files": [".face", ".gitconfig", ".profile", ".xinitrc", ".zshrc"]
+  "files": [
+    {
+      "path": ".config/Code/User",
+      "files_name": ["settings.json"]
+    }
+  ],
+
+  "dotfiles": [".face", ".gitconfig", ".profile", ".xinitrc", ".zshrc"]
 }
