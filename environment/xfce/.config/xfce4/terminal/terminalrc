@@ -2,7 +2,7 @@
 MiscAlwaysShowTabs=FALSE
 MiscBell=FALSE
 MiscBordersDefault=FALSE
-MiscCursorBlinks=FALSE
+MiscCursorBlinks=TRUE
 MiscCursorShape=TERMINAL_CURSOR_SHAPE_IBEAM
 MiscDefaultGeometry=80x24
 MiscInheritGeometry=FALSE
@@ -15,7 +15,7 @@ MiscTabCloseButtons=TRUE
 MiscTabCloseMiddleClick=TRUE
 MiscTabPosition=GTK_POS_TOP
 MiscHighlightUrls=TRUE
-ScrollingLines=999999
+ScrollingLines=999997
 BackgroundDarkness=0,700000
 ScrollingOnOutput=FALSE
 MiscBellUrgent=FALSE
@@ -29,8 +29,8 @@ MiscSlimTabs=FALSE
 MiscNewTabAdjacent=TRUE
 MiscSearchDialogOpacity=100
 MiscShowUnsafePasteDialog=TRUE
-ScrollingBar=TERMINAL_SCROLLBAR_NONE
 FontName=Fira Code Bold 12
 BackgroundMode=TERMINAL_BACKGROUND_TRANSPARENT
 ColorBackground=#1d1d26262d2d
+ScrollingBar=TERMINAL_SCROLLBAR_NONE
 
