@@ -1,5 +1,8 @@
 @adonisjs/cli@4.0.12
+create-react-app@3.3.0
 node-gyp@6.0.1
 npm@6.13.4
+npm-check-updates@4.0.1
 semver@6.3.0
+typescript@3.7.4
 yarn@1.21.1
