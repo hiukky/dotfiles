@@ -91,22 +91,22 @@ _runTask() {
 '
 _configureSys() {
   # Remove outdated packages
-  # _uninstallPkgs
+  _uninstallPkgs
 
   # Install personal packages
-  # _installPkgs
+  _installPkgs
 
   # Install NPM Packages
-  # _installNpmPkgs
+  _installNpmPkgs
 
   # Install VS Code extensions
-  # _installCodeExtensions
+  _installCodeExtensions
 
   # Mount partition
-  # _mountPartition
+  _mountPartition
 
   # Copy dotfiles
-  # _configure "config"
+  _configure "config"
 
   # Configure ZSH
   _configureOhMyZsh &
