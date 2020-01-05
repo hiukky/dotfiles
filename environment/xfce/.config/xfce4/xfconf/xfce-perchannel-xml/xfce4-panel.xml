@@ -3,7 +3,7 @@
 <channel name="xfce4-panel" version="1.0">
   <property name="panels" type="uint" value="1">
     <property name="panel-0" type="empty">
-      <property name="position" type="string" value="p=6;x=1280;y=16"/>
+      <property name="position" type="string" value="p=6;x=1280;y=10"/>
       <property name="length" type="uint" value="100"/>
       <property name="position-locked" type="bool" value="false"/>
       <property name="plugin-ids" type="array">
@@ -37,7 +37,7 @@
     </property>
     <property name="plugin-9" type="string" value="pulseaudio">
       <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
-      <property name="mpris-players" type="string" value="chrome.instance1038;chrome.instance1108;chrome.instance1110;chrome.instance1122;chrome.instance1137;chrome.instance1179;chrome.instance1290;chrome.instance1331;chrome.instance1359;chrome.instance15833;chrome.instance1652;chrome.instance20906;chrome.instance4451;spotify"/>
+      <property name="mpris-players" type="string" value="chrome.instance1038;chrome.instance1108;chrome.instance1110;chrome.instance1122;chrome.instance1137;chrome.instance1153;chrome.instance1179;chrome.instance1290;chrome.instance1331;chrome.instance1359;chrome.instance15833;chrome.instance1652;chrome.instance20906;chrome.instance4451;spotify"/>
     </property>
     <property name="plugin-8" type="string" value="whiskermenu"/>
     <property name="plugin-5" type="string" value="clock"/>
