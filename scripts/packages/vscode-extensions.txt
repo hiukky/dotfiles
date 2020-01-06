@@ -1,4 +1,6 @@
+code --install-extension dbaeumer.vscode-eslint
 code --install-extension dotcypress.vscode-jane
+code --install-extension eamodio.gitlens
 code --install-extension EditorConfig.EditorConfig
 code --install-extension EliverLara.andromeda
 code --install-extension esbenp.prettier-vscode
