@@ -33,6 +33,7 @@ galculator-gtk2
 gcolor2
 gimp
 gksu-polkit
+glances
 gnome-icon-theme
 gnome-keyring
 gnome-python
