@@ -36,6 +36,12 @@ declare -a OPTIONS=(
   " "
 )
 
+# DE's
+declare ENVS=(
+  "[de -x] - xfce"
+  "[de -g] - gnome"
+)
+
 : '
   @method _showSetupOptions
   return void
@@ -49,12 +55,44 @@ _showSetupOptions() {
 }
 
 : '
-  @method _question
+  @method _showDEOptions
+  return void
+'
+_showDEOptions() {
+  echo
+  printf '%s\n' "${green}${bold}${ENVS[@]}${nocolor}"
+  echo
+}
+
+: '
+  @method _selectOption
   @return string
 '
-_question() {
+_selectOption() {
   read -p "Select an option: " option
   echo "$option"
+}
+
+: '
+  @method _selectDE
+  @return string
+'
+_selectDE() {
+  read -p "Select your DE: " de
+
+  if [[ "${ENVS[*]}" != *"[${de}]"* ]]; then
+    echo
+    echo "${red}${bold}Invalid option!${nocolor}"
+    read -p "Select your DE: " de
+  fi
+
+  case $de in
+    'de -x') de='xfce';;
+    'de -g') de='gnome';;
+    *) exit
+  esac
+
+  echo "$de"
 }
 
 : '
@@ -63,13 +101,16 @@ _question() {
  @return void
 '
 _runTask() {
+  _showDEOptions
+  local de=$( _selectDE )
+
   case $option in
     # Dotfiles
     'dot --u-spl') _updatePkgList;;
     'dot --u-npl') _updateNpmPkgList;;
     'dot --u-vse') _updateCodeExtensions;;
 
-    "dot -u") _updateDotfiles;;
+    "dot -u") _updateDotfiles $de;;
 
     # System
     'sys --i-spl') _installPkgs;;
@@ -79,7 +120,7 @@ _runTask() {
     'sys --i-npl') _installNpmPkgs;;
     'sys --i-vse') _installCodeExtensions;;
 
-    "sys -c") _configureSys;;
+    "sys -c") _configureSys $de;;
 
     *) echo "${red}${bold}Invalid option!${nocolor}";;
   esac
@@ -88,10 +129,11 @@ _runTask() {
 : '
   @method _updateDotfiles
   @return void
+  @param {string} de
 '
 _updateDotfiles() {
   # Copy config
-  _configure "copy"
+  _configure "copy" $de
 
   # Update system packages list
   _updatePkgList
@@ -111,6 +153,7 @@ _updateDotfiles() {
 : '
   @method _configureSys
   @return void
+  @param {string} de
 '
 _configureSys() {
   # Remove outdated packages
@@ -129,7 +172,7 @@ _configureSys() {
   _mountPartition
 
   # Copy dotfiles
-  _configure "config"
+  _configure "config" $de
 
   # Configure ZSH
   _configureOhMyZsh &
@@ -147,12 +190,12 @@ _configureSys() {
 '
 _init() {
   _showSetupOptions
-  local option=$( _question )
+  local option=$( _selectOption )
 
   if [[ "${OPTIONS[*]}" != *"$option"* ]]; then
     echo
     echo "${red}${bold}Invalid option!${nocolor}"
-    option=$( _question )
+    option=$( _selectOption )
   fi
 
   _runTask $option

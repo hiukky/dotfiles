@@ -1,54 +1,17 @@
 #! /bin/bash
 source "${BASE_DIR}/scripts/utils/colors.sh"
 
-# DE's
-declare ENVS=(
-  "[de -x] - xfce"
-  "[de -g] - gnome"
-)
 
-: '
-  @method _showDEOptions
-  return void
-'
-_showDEOptions() {
-  echo
-  printf '%s\n' "${green}${bold}${ENVS[@]}${nocolor}"
-  echo
-}
-
-: '
-  @method _selectDE
-  @return string
-'
-_selectDE() {
-  read -p "Select your DE: " de
-
-  if [[ "${ENVS[*]}" != *"[${de}]"* ]]; then
-    echo
-    echo "${red}${bold}Invalid option!${nocolor}"
-    read -p "Select your DE: " de
-  fi
-
-  case $de in
-    'de -x') de='xfce';;
-    'de -g') de='gnome';;
-    *) exit
-  esac
-
-  echo "$de"
-}
 
 : '
   @method _configure
   @return void
   @params {string} action - [copy | config]
+  @params {string} de
 '
 _configure() {
   local action=$1
-
-  _showDEOptions
-  local de=$( _selectDE )
+  local de=$2
 
   declare CONFIG=$(<"${BASE_DIR}/environment/${de}/config.json")
 
