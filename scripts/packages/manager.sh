@@ -21,7 +21,7 @@ _installSystemPkgs() {
   echo "${aqua}${bold} Installing Packages...${nocolor}"
 
   # Manjaro and AUR
-  if [[ PACKAGES ]]; then
+  if [[ -n "${PACKAGES_SNAP}" ]]; then
     local tz=$(pacman -Q trizen)
 
     if [[ -z $tz ]]; then
@@ -33,7 +33,7 @@ _installSystemPkgs() {
   fi
 
   # Snap
-  if [[ PACKAGES_SNAP ]]; then
+  if [[ -n "${PACKAGES_SNAP}" ]]; then
     sudo install ${PACKAGES_SNAP[@]}
   fi
 
@@ -55,12 +55,12 @@ _uninstallSystemPkgs() {
   echo "${aqua}${bold} Uninstalling Packages...${nocolor}"
 
   # Manjaro and AUR
-  if [[ PACKAGES ]]; then
+  if [[ -n "${PACKAGES}" ]]; then
     sudo pamac remove ${PACKAGES[@]} --no-confirm
   fi
 
   # Snap
-  if [[ PACKAGES_SNAP ]]; then
+  if [[ -n "${PACKAGES_SNAP}" ]]; then
     sudo snap remove ${PACKAGES_SNAP[@]}
   fi
 
@@ -114,7 +114,7 @@ _installNpmPkgs() {
   echo
   echo "${aqua}${bold} Installing Packages...${nocolor}"
 
-  if [[ PACKAGES ]]; then
+  if [[ -n "${PACKAGES}" ]]; then
     local npm=$(pacman -Q npm)
 
     if [[ -z $npm ]]; then
@@ -162,7 +162,7 @@ _installCodeExtensions() {
   local de=$1
   local PACKAGES=$(<${BASE_DIR}/environment/${de}/packages/vscode-extensions.txt)
 
-  if [[ -n "${PACKAGES[@]}" ]]; then
+  if [[ -n "${PACKAGES}" ]]; then
     for ext in "${PACKAGES[@]}"; do
       $ext
     done
