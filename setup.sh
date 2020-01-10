@@ -106,15 +106,15 @@ _runTask() {
 
   case $option in
     # Dotfiles
-    'dot --u-spl') _updatePkgList $de;;
+    'dot --u-spl') _updateSystemPkgList $de;;
     'dot --u-npl') _updateNpmPkgList $de;;
     'dot --u-vse') _updateCodeExtensions $de;;
 
     "dot -u") _updateDotfiles $de;;
 
     # System
-    'sys --i-spl') _installPkgs $de;;
-    'sys --r-spl') _uninstallPkgs $de;;
+    'sys --i-spl') _installSystemPkgs $de;;
+    'sys --r-spl') _uninstallSystemPkgs $de;;
     'sys --mnt') _mountPartition ;;
     'sys --c-omz') _configureOhMyZsh $de;;
     'sys --i-npl') _installNpmPkgs $de;;
@@ -138,7 +138,7 @@ _updateDotfiles() {
   _configure "copy" $de
 
   # Update system packages list
-  _updatePkgList $de
+  _updateSystemPkgList $de
 
   # Update NPM packages list
   _updateNpmPkgList $de
@@ -161,10 +161,10 @@ _configureSys() {
   local de=$1
 
   # Remove outdated packages
-  _uninstallPkgs $de
+  _uninstallSystemPkgs $de
 
   # Install personal packages
-  _installPkgs $de
+  _installSystemPkgs $de
 
   # Install NPM Packages
   _installNpmPkgs $de

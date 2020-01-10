@@ -6,19 +6,21 @@ sudo sed -i 's/#EnableAUR/EnableAUR/g' /etc/pamac.conf
 
 ## SYSTEM
 : '
- @method _installPkgs
+ @method _installSystemPkgs
  @return void
  @params {string} de
 '
-_installPkgs() {
+_installSystemPkgs() {
   sudo pacman -Sy
 
   local de=$1
-  local PACKAGES=$(<${BASE_DIR}/environment/${de}/packages/system-install.txt)
+  local PACKAGES=$(<${BASE_DIR}/environment/${de}/packages/manjaro-install.txt)
+  local PACKAGES_SNAP=$(<${BASE_DIR}/environment/${de}/packages/snap-install.txt)
 
   echo
   echo "${aqua}${bold} Installing Packages...${nocolor}"
 
+  # Manjaro and AUR
   if [[ PACKAGES ]]; then
     local tz=$(pacman -Q trizen)
 
@@ -30,24 +32,36 @@ _installPkgs() {
 	  sudo pacman -S --noconfirm ${PACKAGES[@]}
   fi
 
+  # Snap
+  if [[ PACKAGES_SNAP ]]; then
+    sudo install ${PACKAGES_SNAP[@]}
+  fi
+
   echo
   echo "${green}${bold} System packages installed! ${nocolor}"
 }
 
 : '
- @method _uninstallPkgs
+ @method _uninstallSystemPkgs
  @return void
  @params {string} de
 '
-_uninstallPkgs() {
+_uninstallSystemPkgs() {
   local de=$1
   local PACKAGES=$(<${BASE_DIR}/environment/${de}/packages/list-uninstall.txt)
+  local PACKAGES_SNAP=$(<${BASE_DIR}/environment/${de}/packages/snap-uninstall.txt)
 
   echo
   echo "${aqua}${bold} Uninstalling Packages...${nocolor}"
 
+  # Manjaro and AUR
   if [[ PACKAGES ]]; then
     sudo pamac remove ${PACKAGES[@]} --no-confirm
+  fi
+
+  # Snap
+  if [[ PACKAGES_SNAP ]]; then
+    sudo snap remove ${PACKAGES_SNAP[@]}
   fi
 
   echo
@@ -57,11 +71,11 @@ _uninstallPkgs() {
 }
 
 : '
- @method _updatePkgList
+ @method _updateSystemPkgList
  @return void
  @params {string} de
 '
-_updatePkgList() {
+_updateSystemPkgList() {
   sudo pacman -Sy
 
   local de=$1
@@ -71,7 +85,12 @@ _updatePkgList() {
 
   _creatDirIfNoExists $de
 
-  comm -23 <(pacman -Qqett | sort) <(pacman -Qqg base -g base-devel | sort | uniq) > "${BASE_DIR}/environment/${de}/packages/system-install.txt"
+  # Manjaro and AUR
+  comm -23 <(pacman -Qqett | sort) <(pacman -Qqg base -g base-devel | sort | uniq) > "${BASE_DIR}/environment/${de}/packages/manjaro-install.txt"
+
+  # Snap
+  snap list | while read c1 c2; do echo $c1; done > "${BASE_DIR}/environment/${de}/packages/snap-install.txt"
+
   sleep 2
   echo
   echo "${green}${bold} System updated package list! ${nocolor}"
@@ -173,7 +192,7 @@ _updateCodeExtensions() {
 }
 
 : '
- @method _updateCodeExtensions
+ @method _creatDirIfNoExists
  @return void
  @params {string} de
 '
