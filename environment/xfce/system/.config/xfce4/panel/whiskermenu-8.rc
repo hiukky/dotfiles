@@ -1,5 +1,5 @@
 favorites=exo-terminal-emulator.desktop,exo-file-manager.desktop,exo-web-browser.desktop,exo-mail-reader.desktop
-recent=com.github.ronnydo.colorpicker.desktop,flameshot.desktop,designer.desktop,mousepad.desktop,xfce-ui-settings.desktop,exo-file-manager.desktop,exo-mail-reader.desktop,exo-terminal-emulator.desktop,xfce-settings-manager.desktop,xfce4-settings-editor.desktop
+recent=timeshift-gtk.desktop,exo-file-manager.desktop,com.github.ronnydo.colorpicker.desktop,flameshot.desktop,designer.desktop,mousepad.desktop,xfce-ui-settings.desktop,exo-mail-reader.desktop,exo-terminal-emulator.desktop,xfce-settings-manager.desktop
 button-title=Aplicações
 button-icon=/usr/share/icons/whiskermenu-manjaro.svg
 button-single-row=false

@@ -106,19 +106,19 @@ _runTask() {
 
   case $option in
     # Dotfiles
-    'dot --u-spl') _updatePkgList;;
-    'dot --u-npl') _updateNpmPkgList;;
-    'dot --u-vse') _updateCodeExtensions;;
+    'dot --u-spl') _updatePkgList $de;;
+    'dot --u-npl') _updateNpmPkgList $de;;
+    'dot --u-vse') _updateCodeExtensions $de;;
 
     "dot -u") _updateDotfiles $de;;
 
     # System
-    'sys --i-spl') _installPkgs;;
-    'sys --r-spl') _uninstallPkgs;;
-    'sys --mnt') _mountPartition;;
-    'sys --c-omz') _configureOhMyZsh;;
-    'sys --i-npl') _installNpmPkgs;;
-    'sys --i-vse') _installCodeExtensions;;
+    'sys --i-spl') _installPkgs $de;;
+    'sys --r-spl') _uninstallPkgs $de;;
+    'sys --mnt') _mountPartition ;;
+    'sys --c-omz') _configureOhMyZsh $de;;
+    'sys --i-npl') _installNpmPkgs $de;;
+    'sys --i-vse') _installCodeExtensions $de;;
 
     "sys -c") _configureSys $de;;
 
@@ -132,17 +132,19 @@ _runTask() {
   @param {string} de
 '
 _updateDotfiles() {
+  local de=$1
+
   # Copy config
   _configure "copy" $de
 
   # Update system packages list
-  _updatePkgList
+  _updatePkgList $de
 
   # Update NPM packages list
-  _updateNpmPkgList
+  _updateNpmPkgList $de
 
   # Update VS code extensions
-  _updateCodeExtensions
+  _updateCodeExtensions $de
 
   sleep 10
   echo
@@ -156,17 +158,19 @@ _updateDotfiles() {
   @param {string} de
 '
 _configureSys() {
+  local de=$1
+
   # Remove outdated packages
-  _uninstallPkgs
+  _uninstallPkgs $de
 
   # Install personal packages
-  _installPkgs
+  _installPkgs $de
 
   # Install NPM Packages
-  _installNpmPkgs
+  _installNpmPkgs $de
 
   # Install VS Code extensions
-  _installCodeExtensions
+  _installCodeExtensions $de
 
   # Mount partition
   _mountPartition

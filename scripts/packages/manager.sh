@@ -8,11 +8,13 @@ sudo sed -i 's/#EnableAUR/EnableAUR/g' /etc/pamac.conf
 : '
  @method _installPkgs
  @return void
+ @params {string} de
 '
 _installPkgs() {
   sudo pacman -Sy
 
-  local PACKAGES=$(<${BASE_DIR}/scripts/packages/system-install.txt)
+  local de=$1
+  local PACKAGES=$(<${BASE_DIR}/environment/${de}/packages/system-install.txt)
 
   echo
   echo "${aqua}${bold} Installing Packages...${nocolor}"
@@ -35,9 +37,11 @@ _installPkgs() {
 : '
  @method _uninstallPkgs
  @return void
+ @params {string} de
 '
 _uninstallPkgs() {
-  local PACKAGES=$(<${BASE_DIR}/scripts/packages/list-uninstall.txt)
+  local de=$1
+  local PACKAGES=$(<${BASE_DIR}/environment/${de}/packages/list-uninstall.txt)
 
   echo
   echo "${aqua}${bold} Uninstalling Packages...${nocolor}"
@@ -55,15 +59,19 @@ _uninstallPkgs() {
 : '
  @method _updatePkgList
  @return void
+ @params {string} de
 '
 _updatePkgList() {
   sudo pacman -Sy
 
+  local de=$1
+
   echo
   echo "${aqua}${bold} Updating Package List...${nocolor}"
 
-  # System
-  comm -23 <(pacman -Qqett | sort) <(pacman -Qqg base -g base-devel | sort | uniq) > "${BASE_DIR}/scripts/packages/system-install.txt"
+  _creatDirIfNoExists $de
+
+  comm -23 <(pacman -Qqett | sort) <(pacman -Qqg base -g base-devel | sort | uniq) > "${BASE_DIR}/environment/${de}/packages/system-install.txt"
   sleep 2
   echo
   echo "${green}${bold} System updated package list! ${nocolor}"
@@ -72,10 +80,17 @@ _updatePkgList() {
 
 
 ## NPM
+: '
+ @method _installNpmPkgs
+ @return void
+ @params {string} de
+'
 _installNpmPkgs() {
+  local de=$1
+
   sudo pacman -Sy
 
-  local PACKAGES=$(<${BASE_DIR}/scripts/packages/npm-global.txt)
+  local PACKAGES=$(<${BASE_DIR}/environment/${de}/packages/npm-global.txt)
 
   echo
   echo "${aqua}${bold} Installing Packages...${nocolor}"
@@ -98,15 +113,20 @@ _installNpmPkgs() {
 : '
  @method _updateNpmPkgList
  @return void
+ @params {string} de
 '
 _updateNpmPkgList() {
+  local de=$1
+
   # NPM | aplly "\├──|\/usr\/lib|\└──" lol
   local npm=$(npm list -g --depth 0)
   npm="$(echo ${npm//'/usr/lib'/''})"
   npm="$(echo ${npm//'├──'/''})"
   npm="$(echo ${npm//'└──'/''})"
 
-  printf '%s\n' ${npm} > "${BASE_DIR}/scripts/packages/npm-global.txt"
+  _creatDirIfNoExists $de
+
+  printf '%s\n' ${npm} > "${BASE_DIR}/environment/${de}/packages/npm-global.txt"
   sleep 2
   echo
   echo "${green}${bold} NPM updated package list! ${nocolor}"
@@ -117,9 +137,11 @@ _updateNpmPkgList() {
 : '
  @method _installCodeExtensions
  @return void
+ @params {string} de
 '
 _installCodeExtensions() {
-  local PACKAGES=$(<${BASE_DIR}/scripts/packages/vscode-extensions.txt)
+  local de=$1
+  local PACKAGES=$(<${BASE_DIR}/environment/${de}/packages/vscode-extensions.txt)
 
   if [[ -n "${PACKAGES[@]}" ]]; then
     for ext in "${PACKAGES[@]}"; do
@@ -136,11 +158,29 @@ _installCodeExtensions() {
 : '
  @method _updateCodeExtensions
  @return void
+ @params {string} de
 '
 _updateCodeExtensions() {
-  code --list-extensions | xargs -L 1 echo code --install-extension > "${BASE_DIR}/scripts/packages/vscode-extensions.txt"
+  local de=$1
+
+  _creatDirIfNoExists $de
+
+  code --list-extensions | xargs -L 1 echo code --install-extension > "${BASE_DIR}/environment/${de}/packages/vscode-extensions.txt"
   sleep 2
   echo
   echo "${green}${bold} VS Code extension list updated! ${nocolor}"
   echo
+}
+
+: '
+ @method _updateCodeExtensions
+ @return void
+ @params {string} de
+'
+_creatDirIfNoExists() {
+  local de=$1
+
+  if [[ ! -d "${BASE_DIR}/environment/${de}/packages" ]]; then
+    mkdir -p ${BASE_DIR}/environment/${de}/packages
+  fi
 }

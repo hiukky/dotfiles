@@ -1,8 +1,6 @@
 #! /bin/bash
 source "${BASE_DIR}/scripts/utils/colors.sh"
 
-
-
 : '
   @method _configure
   @return void
@@ -103,24 +101,24 @@ _copyFilesToDotfiles() {
     'dir' | 'file')
       local folderOrFiles="$2"
 
-      if [[ -d "${BASE_DIR}/environment/${de}/${path}/${folderOrFiles}" ]]; then
-        rm -rf ${BASE_DIR}/environment/${de}/${path}/${folderOrFiles}
+      if [[ -d "${BASE_DIR}/environment/${de}/system/${path}/${folderOrFiles}" ]]; then
+        rm -rf ${BASE_DIR}/environment/${de}/system/${path}/${folderOrFiles}
       fi
 
       # Copy new settings
-      mkdir -p ${BASE_DIR}/environment/${de}/${path}
-      cp -avr ~/${path}/${folderOrFiles} ${BASE_DIR}/environment/${de}/${path}
+      mkdir -p ${BASE_DIR}/environment/${de}/system/${path}
+      cp -avr ~/${path}/${folderOrFiles} ${BASE_DIR}/environment/${de}/system/${path}
     ;;
 
     'dotfile')
       local dotfile="$2"
 
-      if [[ -f "${BASE_DIR}/environment/${de}/${dotfile}" ]]; then
-        rm -rf ${BASE_DIR}/environment/${de}/${dotfile}
+      if [[ -f "${BASE_DIR}/environment/${de}/system/${dotfile}" ]]; then
+        rm -rf ${BASE_DIR}/environment/${de}/system/${dotfile}
       fi
 
       # Copy new settings
-      cp -avr ~/${dotfile} ${BASE_DIR}/environment/${de}
+      cp -avr ~/${dotfile} ${BASE_DIR}/environment/${de}/system
     ;;
   esac
 }
@@ -152,7 +150,7 @@ _copyFilesToSystem() {
       fi
 
       # Copy new settings
-      cp -avr ${BASE_DIR}/environment/${de}/${path}/${folderOrFiles} ~/${path}
+      cp -avr ${BASE_DIR}/environment/${de}/system/${path}/${folderOrFiles} ~/${path}
     ;;
 
     'dotfile')
@@ -163,7 +161,7 @@ _copyFilesToSystem() {
       fi
 
       # Copy new settings
-      cp -avr ${BASE_DIR}/environment/${de}/${file} ~/
+      cp -avr ${BASE_DIR}/environment/${de}/system/${file} ~/
     ;;
   esac
 }

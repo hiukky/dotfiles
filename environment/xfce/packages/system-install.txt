@@ -141,6 +141,7 @@ pulseaudio-zeroconf
 python2-wnck
 python-reportlab
 qpdfview
+redis
 reiserfsprogs
 samba
 sassc

@@ -37,12 +37,14 @@
     </property>
     <property name="plugin-9" type="string" value="pulseaudio">
       <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
-      <property name="mpris-players" type="string" value="chrome.instance1038;chrome.instance1108;chrome.instance1110;chrome.instance1122;chrome.instance1137;chrome.instance1141;chrome.instance1153;chrome.instance1179;chrome.instance1290;chrome.instance1331;chrome.instance1359;chrome.instance15833;chrome.instance1652;chrome.instance20906;chrome.instance4451;spotify"/>
+      <property name="mpris-players" type="string" value="chrome.instance1038;chrome.instance1086;chrome.instance1089;chrome.instance1091;chrome.instance1108;chrome.instance1110;chrome.instance1122;chrome.instance1137;chrome.instance1141;chrome.instance1153;chrome.instance1179;chrome.instance1290;chrome.instance1331;chrome.instance1359;chrome.instance15833;chrome.instance1652;chrome.instance20906;chrome.instance4451;spotify"/>
     </property>
     <property name="plugin-8" type="string" value="whiskermenu"/>
     <property name="plugin-5" type="string" value="clock"/>
     <property name="plugin-1" type="string" value="systray">
       <property name="names-ordered" type="array">
+        <value type="string" value="ora"/>
+        <value type="string" value="xfce terminal"/>
         <value type="string" value="flameshot"/>
         <value type="string" value="vmware-tray"/>
         <value type="string" value="notas"/>
