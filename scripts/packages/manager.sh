@@ -34,7 +34,7 @@ _installSystemPkgs() {
 
   # Snap
   if [[ -n "${PACKAGES_SNAP}" ]]; then
-    sudo install ${PACKAGES_SNAP[@]}
+    sudo snap install ${PACKAGES_SNAP[@]}
   fi
 
   echo
