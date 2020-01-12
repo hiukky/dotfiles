@@ -86,7 +86,8 @@ _updateSystemPkgList() {
   _creatDirIfNoExists $de
 
   # Manjaro and AUR
-  comm -23 <(pacman -Qqett | sort) <(pacman -Qqg base -g base-devel | sort | uniq) > "${BASE_DIR}/environment/${de}/packages/manjaro-install.txt"
+  comm -23 <(pacman -Qqe | sort) <(pacman -Qqg base -g base-devel | sort | uniq) > "${BASE_DIR}/environment/${de}/packages/manjaro-install.txt"
+
 
   # Snap
   local snap=$(snap list | while read c1 c2; do echo $c1; done;)
