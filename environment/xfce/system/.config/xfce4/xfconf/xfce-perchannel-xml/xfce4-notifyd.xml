@@ -15,6 +15,7 @@
       <value type="string" value="org.manjaro.pamac.manager"/>
       <value type="string" value="Package Manager"/>
       <value type="string" value="Spotify"/>
+      <value type="string" value="uGet"/>
       <value type="string" value="Xfce volume control"/>
       <value type="string" value="Xfce4-notifyd settings"/>
       <value type="string" value="xfce4-power-manager"/>
