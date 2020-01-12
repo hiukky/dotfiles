@@ -26,10 +26,10 @@ declare -a OPTIONS=(
   " "
   "     ${orange}${bold}sys --i-spl    : Install System Packages${nocolor}"
   "     ${orange}${bold}sys --r-spl    : Uninstall System Packages${nocolor}"
-  "     ${orange}${bold}sys --mnt      : Mount Partition${nocolor}"
   "     ${orange}${bold}sys --c-omz    : Configure Oh My Zsh${nocolor}"
   "     ${orange}${bold}sys --i-npl    : Install NPM Packages${nocolor}"
   "     ${orange}${bold}sys --i-vse    : Install VS Code Extensions${nocolor}"
+  "     ${orange}${bold}sys --mnt      : Mount Partition${nocolor}"
 
   " "
   "     ${purple}${bold}sys -c         : Complete System Setup${nocolor}"
@@ -115,10 +115,10 @@ _runTask() {
     # System
     'sys --i-spl') _installSystemPkgs $de;;
     'sys --r-spl') _uninstallSystemPkgs $de;;
-    'sys --mnt') _mountPartition ;;
     'sys --c-omz') _configureOhMyZsh $de;;
     'sys --i-npl') _installNpmPkgs $de;;
     'sys --i-vse') _installCodeExtensions $de;;
+    'sys --mnt') _mountPartition ;;
 
     "sys -c") _configureSys $de;;
 
