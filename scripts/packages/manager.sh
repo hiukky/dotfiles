@@ -18,7 +18,7 @@ _installSystemPkgs() {
   local PACKAGES_SNAP=$(<${BASE_DIR}/environment/${de}/packages/snap-install.txt)
 
   echo
-  echo "${aqua}${bold} Installing Packages...${nocolor}"
+  echo "${aqua}${bold} Installing system packages...${nocolor}"
 
   # Manjaro and AUR
   if [[ -n "${PACKAGES_SNAP}" ]]; then
@@ -52,7 +52,7 @@ _uninstallSystemPkgs() {
   local PACKAGES_SNAP=$(<${BASE_DIR}/environment/${de}/packages/snap-uninstall.txt)
 
   echo
-  echo "${aqua}${bold} Uninstalling Packages...${nocolor}"
+  echo "${aqua}${bold} Uninstalling packages...${nocolor}"
 
   # Manjaro and AUR
   if [[ -n "${PACKAGES}" ]]; then
@@ -81,7 +81,7 @@ _updateSystemPkgList() {
   local de=$1
 
   echo
-  echo "${aqua}${bold} Updating Package List...${nocolor}"
+  echo "${aqua}${bold} Updating system package list...${nocolor}"
 
   _creatDirIfNoExists $de
 
@@ -89,7 +89,9 @@ _updateSystemPkgList() {
   comm -23 <(pacman -Qqett | sort) <(pacman -Qqg base -g base-devel | sort | uniq) > "${BASE_DIR}/environment/${de}/packages/manjaro-install.txt"
 
   # Snap
-  snap list | while read c1 c2; do echo $c1; done > "${BASE_DIR}/environment/${de}/packages/snap-install.txt"
+  local snap=$(snap list | while read c1 c2; do echo $c1; done;)
+  snap="$(echo ${snap//'Name'/''})"
+  printf '%s\n' ${snap} > "${BASE_DIR}/environment/${de}/packages/snap-install.txt"
 
   sleep 2
   echo
@@ -112,7 +114,7 @@ _installNpmPkgs() {
   local PACKAGES=$(<${BASE_DIR}/environment/${de}/packages/npm-global.txt)
 
   echo
-  echo "${aqua}${bold} Installing Packages...${nocolor}"
+  echo "${aqua}${bold} Installing NPM packages...${nocolor}"
 
   if [[ -n "${PACKAGES}" ]]; then
     local npm=$(pacman -Q npm)
