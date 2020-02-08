@@ -1,6 +1,5 @@
 favorites=exo-terminal-emulator.desktop,exo-file-manager.desktop,exo-web-browser.desktop,exo-mail-reader.desktop
-recent=anbox-anbox-com-android-calculator2.desktop,xfce-session-settings.desktop,woeusbgui.desktop,spotify_spotify.desktop,timeshift-gtk.desktop,exo-file-manager.desktop,com.github.ronnydo.colorpicker.desktop,flameshot.desktop,designer.desktop
-button-title=Aplicações
+recent=ora_ora.desktop,google-chrome.desktop,anbox-anbox-com-android-calculator2.desktop,electrum.desktop,stacer.desktop,flameshot.desktop,firefox.desktop,org.kde.ktorrent.desktop,exo-file-manager.desktop,exo-terminal-emulator.desktop
 button-icon=/usr/share/icons/whiskermenu-manjaro.svg
 button-single-row=false
 show-button-title=false
