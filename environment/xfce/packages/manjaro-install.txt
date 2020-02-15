@@ -63,6 +63,7 @@ gcolor2
 ghostscript
 gimp
 git
+gitflow-avh
 gksu-polkit
 glances
 glibc
@@ -208,6 +209,7 @@ psmisc
 pulseaudio-bluetooth
 pulseaudio-ctl
 pulseaudio-zeroconf
+putty
 python2-gconf
 python2-wnck
 python-pillow
@@ -216,6 +218,7 @@ python-pyqt5
 python-reportlab
 qpdfview
 redis
+redis-desktop-manager
 reiserfsprogs
 rsync
 samba
