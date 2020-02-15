@@ -1,5 +1,5 @@
 favorites=exo-terminal-emulator.desktop,exo-file-manager.desktop,exo-web-browser.desktop,exo-mail-reader.desktop
-recent=ora_ora.desktop,google-chrome.desktop,anbox-anbox-com-android-calculator2.desktop,electrum.desktop,stacer.desktop,flameshot.desktop,firefox.desktop,org.kde.ktorrent.desktop,exo-file-manager.desktop,exo-terminal-emulator.desktop
+recent=putty.desktop,telegramdesktop.desktop,xfce-wmtweaks-settings.desktop,xfce-wm-settings.desktop,xfce-ui-settings.desktop,xfburn.desktop,com.github.ronnydo.colorpicker.desktop,ora_ora.desktop,stacer.desktop,exo-file-manager.desktop
 button-icon=/usr/share/icons/whiskermenu-manjaro.svg
 button-single-row=false
 show-button-title=false
@@ -20,8 +20,8 @@ position-commands-alternate=false
 position-categories-alternate=true
 stay-on-focus-out=false
 confirm-session-command=true
-menu-width=509
-menu-height=681
+menu-width=497
+menu-height=635
 menu-opacity=99
 command-settings=xfce4-settings-manager
 show-command-settings=true

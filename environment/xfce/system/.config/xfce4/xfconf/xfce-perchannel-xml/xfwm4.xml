@@ -27,7 +27,7 @@
     <property name="inactive_opacity" type="int" value="100"/>
     <property name="maximized_offset" type="int" value="0"/>
     <property name="move_opacity" type="int" value="100"/>
-    <property name="placement_ratio" type="int" value="60"/>
+    <property name="placement_ratio" type="int" value="81"/>
     <property name="placement_mode" type="string" value="center"/>
     <property name="popup_opacity" type="int" value="100"/>
     <property name="mousewheel_rollup" type="bool" value="true"/>
@@ -53,9 +53,9 @@
     <property name="snap_to_border" type="bool" value="false"/>
     <property name="snap_to_windows" type="bool" value="false"/>
     <property name="snap_width" type="int" value="30"/>
-    <property name="theme" type="string" value="Numani"/>
+    <property name="theme" type="string" value="Matcha-azul"/>
     <property name="title_alignment" type="string" value="center"/>
-    <property name="title_font" type="string" value="Noto Sans 10"/>
+    <property name="title_font" type="string" value="Fira Code Bold 10"/>
     <property name="title_horizontal_offset" type="int" value="0"/>
     <property name="title_shadow_active" type="string" value="false"/>
     <property name="title_shadow_inactive" type="string" value="false"/>
@@ -68,7 +68,7 @@
     <property name="workspace_count" type="int" value="2"/>
     <property name="wrap_cycle" type="bool" value="true"/>
     <property name="wrap_layout" type="bool" value="true"/>
-    <property name="wrap_resistance" type="int" value="10"/>
+    <property name="wrap_resistance" type="int" value="5"/>
     <property name="wrap_windows" type="bool" value="true"/>
     <property name="wrap_workspaces" type="bool" value="false"/>
     <property name="workspace_names" type="array">
@@ -77,7 +77,7 @@
       <value type="string" value="Workspace 3"/>
       <value type="string" value="Workspace 4"/>
     </property>
-    <property name="tile_on_move" type="bool" value="true"/>
+    <property name="tile_on_move" type="bool" value="false"/>
     <property name="titleless_maximize" type="bool" value="false"/>
     <property name="cycle_preview" type="bool" value="true"/>
     <property name="cycle_tabwin_mode" type="int" value="0"/>

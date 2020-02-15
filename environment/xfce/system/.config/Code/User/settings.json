@@ -13,10 +13,4 @@
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true,
     },
-    "[javascriptreact]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-    },
-    "[typescriptreact]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    }
 }

@@ -1,12 +1,14 @@
- 
 /**********************
  * Whisker menu *
  **********************/
- window#whiskermenu-window scrolledwindow scrollbar {
+window#whiskermenu-window scrolledwindow scrollbar {
   border-color: #ffffff;
 }
 
-window#whiskermenu-window scrolledwindow scrollbar.overlay-indicator:not(.dragging):not(.hovering) slider {
+window#whiskermenu-window
+  scrolledwindow
+  scrollbar.overlay-indicator:not(.dragging):not(.hovering)
+  slider {
   background-color: #ffffff;
 }
 
@@ -31,16 +33,16 @@ window#whiskermenu-window scrolledwindow scrollbar trough {
 }
 
 window#whiskermenu-window {
-  background-color: transparent;
+  background-color: rgba(24, 39, 57, 1);
   color: #ffffff;
   border-radius: 20px;
 }
 
 window#whiskermenu-window > frame {
-  background-color: rgba(25, 32, 42, 1);
+  background-color: rgba(24, 39, 57, 1);
   border-radius: 20px;
   padding: 10px;
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 window#whiskermenu-window > frame > border {
@@ -59,27 +61,26 @@ window#whiskermenu-window button {
 }
 
 window#whiskermenu-window button:hover {
-  background-color: rgba(238, 116, 74, .3);
+  background-color: rgba(255, 255, 255, 0.1);
   color: #ffffff;
   border: 0;
 }
 
-window#whiskermenu-window button:checked, window#whiskermenu-window button:active {
-  background-color: rgba(238, 116, 74, .5);
+window#whiskermenu-window button:checked,
+window#whiskermenu-window button:active {
+  background-color: rgba(255, 255, 255, 0.3);
   color: #ffffff;
-  border-color: #6F63E1;
 }
 
 window#whiskermenu-window button:disabled {
-  color: rgba(255, 255, 255, .60);
+  color: rgba(255, 255, 255, 0.6);
   border-color: rgba(0, 0, 0, 0.15);
-  background-color: #e17055;
 }
 
 window#whiskermenu-window entry {
-  background-color: rgba(25, 32, 42, 1);
+  background-color: rgba(24, 39, 57, 1);
   color: #ffffff;
-  border-color: rgba(52, 64, 83, .7);
+  border-color: rgba(52, 64, 83, 0.7);
   border-radius: 30px;
   padding: 8px 12px 8px 12px;
   margin-bottom: 10px;
@@ -90,7 +91,7 @@ window#whiskermenu-window entry image {
 }
 
 window#whiskermenu-window entry:focus {
-  border-color: rgba(238, 116, 74, .7);
+  border-color: rgba(255, 255, 255, 0.7);
 }
 
 window#whiskermenu-window entry:focus image {
@@ -98,16 +99,16 @@ window#whiskermenu-window entry:focus image {
 }
 
 window#whiskermenu-window entry:disabled {
-  border-color: rgba(52, 64, 83, .5);
+  border-color: rgba(52, 64, 83, 0.5);
   background-color: rgba(27, 34, 36, 0.45);
 }
 
 window#whiskermenu-window entry:disabled image {
-  color: rgba(198, 205, 203, 0.45);
+  color: #ffffff;
 }
 
 window#whiskermenu-window scrolledwindow {
-  background-color: rgba(25, 32, 42, 1);
+  background-color: rgba(24, 39, 57, 1);
   border: none;
 }
 
@@ -118,7 +119,7 @@ window#whiskermenu-window scrolledwindow treeview.view {
 }
 
 window#whiskermenu-window scrolledwindow treeview.view:selected:hover {
-  background-color: rgba(238, 116, 74, .3);
+  background-color: rgba(255, 255, 255, 0.2);
   color: #ffffff;
   border-radius: 50px;
 }
