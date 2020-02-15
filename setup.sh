@@ -7,6 +7,7 @@ source "${BASE_DIR}/scripts/packages/manager.sh"
 source "${BASE_DIR}/scripts/system/mnt.sh"
 source "${BASE_DIR}/scripts/system/configure.sh"
 source "${BASE_DIR}/scripts/system/ohMyZsh.sh"
+source "${BASE_DIR}/scripts/system/redis.sh"
 
 # CLI
 declare -a OPTIONS=(
@@ -25,10 +26,11 @@ declare -a OPTIONS=(
   "   ${aqua}${bold}Tools${nocolor}"
   " "
   "     ${orange}${bold}sys --i-spl    : Install System Packages${nocolor}"
-  "     ${orange}${bold}sys --r-spl    : Uninstall System Packages${nocolor}"
-  "     ${orange}${bold}sys --c-omz    : Configure Oh My Zsh${nocolor}"
   "     ${orange}${bold}sys --i-npl    : Install NPM Packages${nocolor}"
   "     ${orange}${bold}sys --i-vse    : Install VS Code Extensions${nocolor}"
+  "     ${orange}${bold}sys --r-spl    : Uninstall System Packages${nocolor}"
+  "     ${orange}${bold}sys --c-omz    : Configure Oh My Zsh${nocolor}"
+  "     ${orange}${bold}sys --c-rds    : Configure the Redis Server${nocolor}"
   "     ${orange}${bold}sys --mnt      : Mount Partition${nocolor}"
 
   " "
@@ -118,7 +120,8 @@ _runTask() {
     'sys --c-omz') _configureOhMyZsh $de;;
     'sys --i-npl') _installNpmPkgs $de;;
     'sys --i-vse') _installCodeExtensions $de;;
-    'sys --mnt') _mountPartition ;;
+    'sys --c-rds') _configureRedis;;
+    'sys --mnt') _mountPartition;;
 
     "sys -c") _configureSys $de;;
 
@@ -177,6 +180,9 @@ _configureSys() {
 
   # Copy dotfiles
   _configure "config" $de
+
+  # Start Redis Server
+  _configureRedis
 
   # Configure ZSH
   _configureOhMyZsh &
