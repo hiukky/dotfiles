@@ -1,29 +1,37 @@
 import os
 from colorama import Fore, Style
-import scripts
 
-print(f'\n{Fore.YELLOW} ------------------ DOTFILES ------------------ \n')
-print(f'{Fore.BLUE} dt -i redis         -> Install Redis Server\n')
+from scripts import redis, omz
 
 
-def _execFunction(option: str):
-    options = {
-        'dt -i redis': scripts.redis._install,
-    }
+class Setup():
+    def __init__(self):
+        self.option = ''
+        self.options = {
+            'dt -i redis': redis._install,
+            'dt -i omz': omz._install
+        }
 
-    if option in options:
-        options[option]()
-    else:
-        print('Invalid option.')
+        self._boot()
+
+    def _boot(self):
+        print(f'\n{Fore.YELLOW} ------------------ DOTFILES ------------------ \n')
+        print(
+            f'{Fore.YELLOW} dt -i redis {Style.RESET_ALL}         -> Install Redis Server')
+        print(
+            f'{Fore.YELLOW} dt -i omz {Style.RESET_ALL}           -> Install Oh My Zsh\n')
+
+        try:
+            while not self.option or not self.option in self.options:
+                self._question()
+
+            self.options[self.option]()
+        except:
+            exit()
+
+    def _question(self):
+        self.option = input(
+            f'{Fore.YELLOW} Select an option: {Style.RESET_ALL}')
 
 
-def _init():
-    option = ''
-
-    while not option:
-        option = input(f'{Fore.MAGENTA} Select an option: {Style.RESET_ALL}')
-
-    _execFunction(option)
-
-
-_init()
+Setup()
