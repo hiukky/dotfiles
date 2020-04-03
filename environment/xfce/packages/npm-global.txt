@@ -1,9 +1,0 @@
-@adonisjs/cli@4.0.12
-create-react-app@3.3.1
-node-gyp@6.1.0
-npm@6.13.7
-npm-check-updates@4.0.1
-react-native-cli@2.0.1
-semver@7.1.2
-typescript@3.7.5
-yarn@1.22.0

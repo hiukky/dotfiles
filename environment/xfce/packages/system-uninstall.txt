@@ -1,5 +1,0 @@
-thunderbird
-pidgin
-hplip
-hexchat
-xfce4-taskmanager
