@@ -17,7 +17,7 @@ class Setup:
             "i omz": omz._install,
             "i -pkg npm": packages._writeNpmPkgList,
             "u -pkg sys": packages._writeSystemPkgList,
-            "u -pkg -all sys": packages._writeAll,
+            "u -pkg -all": packages._writeAll,
         }
 
         self._boot()
@@ -37,7 +37,7 @@ class Setup:
             f"{Fore.GREEN} u -pkg sys {Style.RESET_ALL}         -> Update System packages list"
         )
         print(
-            f"{Fore.GREEN} u -pkg -all sys {Style.RESET_ALL}    -> Update All packages list\n"
+            f"{Fore.GREEN} u -pkg -all {Style.RESET_ALL}        -> Update All packages list\n"
         )
 
         try:
