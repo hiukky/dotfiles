@@ -1,0 +1,13 @@
+
+android-studio
+chromium-ffmpeg
+core
+core18
+discord
+gnome-3-28-1804
+gtk-common-themes
+ngrok
+opera-beta
+ora
+slack
+snapd
