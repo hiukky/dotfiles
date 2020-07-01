@@ -18,9 +18,9 @@ def _writeFile(name: str, data: str):
 
 
 def _writeNpmPkgList():
-    print(f"\n{Fore.BLUE} N P M\n")
+    print(f"\n{Fore.CYAN} N P M\n")
 
-    print(f"{Fore.MAGENTA} Updating NPM Package List...\n")
+    print(f"{Fore.WHITE} Updating NPM Package List ...\n")
 
     _writeFile(
         "npm-global.txt",
@@ -31,13 +31,13 @@ def _writeNpmPkgList():
         ),
     )
 
-    print(f"{Fore.GREEN} Updated package list.")
+    print(f"{Fore.GREEN} Done!")
 
 
 def _writeSystemPkgList():
-    print(f"\n{Fore.BLUE} S Y S T E M   P A C K A G E S\n")
+    print(f"\n{Fore.CYAN} S Y S T E M   P A C K A G E S\n")
 
-    print(f"{Fore.MAGENTA} Updating System Package List ...\n")
+    print(f"{Fore.WHITE} Updating System Package List ...\n")
 
     _writeFile(
         "pamac.txt",
@@ -59,7 +59,7 @@ def _writeSystemPkgList():
         .replace("Name", ""),
     )
 
-    print(f"{Fore.GREEN} Updated package list.")
+    print(f"{Fore.GREEN} Done!")
 
 
 def _writeAll():

@@ -5,18 +5,18 @@ from colorama import Fore, Style
 
 
 def _install():
-    print(f"\n{Fore.BLUE} O H  M Y  Z S H\n")
+    print(f"\n{Fore.CYAN} O H  M Y  Z S H\n")
 
     _omz()
     _znit()
     _theme()
     _setShell()
 
-    print(f"{Fore.GREEN} Oh My Zsh running...")
+    print(f"{Fore.GREEN} Done!")
 
 
 def _omz():
-    print(f"{Fore.MAGENTA} Installing Oh My Zsh...")
+    print(f"{Fore.WHITE} Installing Oh My Zsh ...")
 
     if os.path.isdir("~/.oh-my-zsh"):
         os.system("sudo rm -rf ~/.oh-my-zsh")
@@ -26,7 +26,7 @@ def _omz():
 
 
 def _znit():
-    print(f"{Fore.MAGENTA} Installing Znit...")
+    print(f"{Fore.WHITE} Installing Znit ...")
 
     os.system(
         'sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"'
@@ -34,7 +34,7 @@ def _znit():
 
 
 def _theme():
-    print(f"{Fore.MAGENTA} Installing Spaceship theme...")
+    print(f"{Fore.WHITE} Installing Spaceship theme ...")
 
     if os.path.isdir("$ZSH_CUSTOM/themes/spaceship-prompt"):
         os.system('sudo rm -rf "$ZSH_CUSTOM/themes/spaceship-prompt"')
