@@ -13,6 +13,7 @@ b43-fwcutter
 bash-completion
 bauh
 blueman
+brave
 btrfs-progs
 bzip2
 cantarell-fonts
@@ -83,6 +84,7 @@ gvfs-smb
 haveged
 hexchat
 htop
+hub
 inetutils
 insomnia
 intel-ucode
@@ -164,6 +166,7 @@ networkmanager-openvpn
 networkmanager-pptp
 networkmanager-vpnc
 nfs-utils
+nginx
 nodejs
 noto-fonts
 noto-fonts-cjk
