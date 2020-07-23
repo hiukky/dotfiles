@@ -9,5 +9,6 @@ gtk-common-themes
 ngrok
 opera-beta
 ora
+robo3t-snap
 slack
 snapd
