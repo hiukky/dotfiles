@@ -1,6 +1,0 @@
-[user]
-	signingkey = D6C2FAFE89DDBBB7
-	name = Romullo
-	email = developermarsh@gmail.com
-[commit]
-	gpgsign = true
