@@ -1,0 +1,4 @@
+[Added Associations]
+text/plain=mousepad.desktop;visual-studio-code.desktop;
+text/css=visual-studio-code.desktop;
+application/x-yaml=visual-studio-code.desktop;

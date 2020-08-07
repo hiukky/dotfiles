@@ -1,0 +1,71 @@
+#!/bin/bash
+# By @hiukky http://hiukky.com
+
+sudo pacman -S figlet lolcat --needed --noconfirm &>/dev/null
+
+figlet Dotsync | lolcat
+
+echo
+declare -a OPTIONS=(
+    $'Initialize new machine configuration.'
+    $'Configure from existing dotfiles. \n'
+)
+
+_dot() {
+  /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@
+}
+
+_init() {
+  if [ ! -d "$HOME/.dotfiles" ]; then
+    echo $'\n Initializing dotfiles configuration ...\n' | lolcat
+
+    git init --bare $HOME/.dotfiles
+    alias dot='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+    _dot config --local status.showUntrackedFiles no
+    echo "alias dot='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'" >> $HOME/.zshrc
+  else
+    echo $'\n Dotfiles already booted! \n' | lolcat
+    exit 0
+  fi
+
+  echo $'\n Done!! \n' | lolcat
+}
+
+_sync() {
+  if [ ! -d "$HOME/.dotfiles" ]; then
+    git clone --bare git@github.com:hiukky/dotfiles.git $HOME/.dotfiles
+    mkdir -p .config-bck
+    _dot checkout
+  fi
+
+  if [ $? = 0 ]; then
+    echo $'\n Dotfiles checked! \n' | lolcat
+
+    else
+      echo $'\n Backing up ...\n' | lolcat
+      _dot checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} mv {} .config-bck/{}
+  fi
+
+  _dot checkout
+  _dot config status.showUntrackedFiles no
+
+  echo
+}
+
+_menu() {
+  PS3=$'Select an option: '
+
+  select option in "${OPTIONS[@]}"
+  do
+    case "$REPLY" in
+      1)
+        _init
+        break;;
+      2)
+        _sync
+        break;;
+      esac
+  done   
+}
+
+_menu
