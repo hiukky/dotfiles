@@ -11,7 +11,7 @@ declare -a OPTIONS=(
     'Configure from existing dotfiles.'
     'Sync NPM packages.'
     'Sync System packages.'
-    $'Sync All packages. \n'
+    $'Sync All packages.'
 )
 
 _dot() {
@@ -56,7 +56,7 @@ _sync() {
 }
 
 _menu() {
-  PS3=$'Select an option: '
+  PS3=$'\n Select an option: '
 
   select option in "${OPTIONS[@]}"
   do

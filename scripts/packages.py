@@ -23,7 +23,7 @@ def _syncNpmPkgs():
     print(f"{Fore.WHITE} Updating NPM Package List ...\n")
 
     _writeFile(
-        "npm-global.txt",
+        "npm-global",
         re.sub(
             r"\├──|\/usr\/lib|\└──",
             "",
@@ -40,9 +40,9 @@ def _syncSystemPkgs():
     print(f"{Fore.WHITE} Updating System Package List ...\n")
 
     _writeFile(
-        "pamac.txt",
+        "pamac",
         subprocess.Popen(
-            "comm -23 <(pacman -Qqe | sort) <(pacman -Qqg base -g base-devel | sort | uniq)",
+            "comm -23 <(pacman -Qqe | sort) <(pacman -Qqg base -g base-devel  2>/dev/null | sort | uniq)",
             shell=True,
             executable="/bin/bash",
             stdout=subprocess.PIPE,
@@ -53,7 +53,7 @@ def _syncSystemPkgs():
     )
 
     _writeFile(
-        "snap.txt",
+        "snap",
         os.popen("snap list | while read c1 c2; do echo $c1; done;")
         .read()
         .replace("Name", ""),
