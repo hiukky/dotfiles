@@ -7,8 +7,11 @@ figlet Dotsync | lolcat
 
 echo
 declare -a OPTIONS=(
-    $'Initialize new machine configuration.'
-    $'Configure from existing dotfiles. \n'
+    'Initialize new machine configuration.'
+    'Configure from existing dotfiles.'
+    'Sync NPM packages.'
+    'Sync System packages.'
+    $'Sync All packages. \n'
 )
 
 _dot() {
@@ -64,8 +67,17 @@ _menu() {
       2)
         _sync
         break;;
+      3)
+        python -c 'import scripts.packages; scripts.packages._syncNpmPkgs()'
+        break;;
+      4)
+        python -c 'import scripts.packages; scripts.packages._syncSystemPkgs()'
+        break;;
+      5)
+        python -c 'import scripts.packages; scripts.packages._syncAllPkgs()'
+        break;;
       esac
-  done   
+  done
 }
 
 _menu

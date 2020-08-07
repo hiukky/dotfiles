@@ -1,0 +1,4 @@
+
+core18
+snapd
+spotify
