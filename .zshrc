@@ -4,8 +4,6 @@ export PATH=$HOME/.bin:$PATH
 # Path to your oh-my-zsh installation.
 export ZSH="/home/hiukky/.oh-my-zsh"
 
-export ZSH="/home/hiukky/.oh-my-zsh"
-
 # Term colors
 export TERM='xterm-256color'
 
