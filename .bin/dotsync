@@ -11,7 +11,8 @@ declare -a OPTIONS=(
     'Configure from existing dotfiles.'
     'Sync NPM packages.'
     'Sync System packages.'
-    $'Sync All packages.'
+    'Sync All packages.'
+    'Install Redis Server.'
 )
 
 _dot() {
@@ -75,6 +76,9 @@ _menu() {
         break;;
       5)
         python -c 'import scripts.packages; scripts.packages._syncAllPkgs()'
+        break;;
+      6)
+        python -c 'import scripts.redis; scripts.redis._install()'
         break;;
       esac
   done
