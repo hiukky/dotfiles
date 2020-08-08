@@ -1,12 +1,15 @@
 alacritty
 alsa-utils
 base
+bat
 chromium
+exa
 figlet
 git
 glances
 grimshot-git
 grub
+gucharmap
 htop
 linux
 linux-firmware
@@ -19,7 +22,6 @@ nodejs
 noto-fonts-emoji
 npm
 openssh
-otf-font-awesome
 python-pip
 rsync
 snapd
@@ -28,6 +30,7 @@ telegram-desktop
 thunar
 tmux
 ttf-fira-code
+ttf-nerd-fonts-symbols
 ulauncher
 visual-studio-code-bin
 waybar
