@@ -1,5 +1,6 @@
 alacritty
 alsa-utils
+azote
 base
 bat
 chromium
@@ -11,6 +12,7 @@ grimshot-git
 grub
 gucharmap
 htop
+imagemagick
 linux
 linux-firmware
 lolcat
@@ -23,6 +25,7 @@ noto-fonts-emoji
 npm
 openssh
 python-pip
+redis
 rsync
 snapd
 sway
