@@ -32,7 +32,7 @@ client.background       #ffffff
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg /home/hiukky/Pictures/Wallpapers/bg.png fill
+output * bg $HOME/Pictures/Wallpapers/bg.jpg fill
 #
 # Example configuration:
 #
@@ -77,7 +77,7 @@ input * xkb_numlock enabled
 #
     # Start alacritty + tmux
     bindsym $mod+Shift+Return exec $term -e $SHELL -i -c tmux
-    
+
     # Start a alacritty
     bindsym $mod+Return exec $term
 

@@ -1,79 +1,93 @@
 [
-  {
-    "layer": "top",
-    "position": "top",
-    "height": 20,
-    "modules-left": ["sway/workspaces", "sway/mode", "custom/media"],
-    "modules-center": ["sway/window"],
-    "modules-right": ["tray"],
-    "sway/workspaces": {
-      "disable-scroll": true,
-      "all-outputs": true,
-      "format": "{icon}",
-      "format-icons": {
-        "1": "",
-        "2": "",
-        "3": "",
-        "4": "",
-        "5": "",
-        "urgent": "",
-        "focused": "",
-        "default": ""
-      }
+    {
+        "layer": "top",
+        "position": "top",
+        "height": 20,
+        "modules-left": ["sway/workspaces", "sway/mode", "custom/media"],
+        "modules-center": ["sway/window"],
+        "modules-right": ["tray"],
+        "sway/workspaces": {
+            "disable-scroll": true,
+            "all-outputs": true,
+            "format": "{icon}",
+            "format-icons": {
+                "1": "",
+                "2": "",
+                "3": "",
+                "4": "",
+                "5": "",
+                "urgent": "",
+                "focused": "",
+                "default": ""
+            }
+        },
+        "sway/mode": {
+            "format": "<span style=\"italic\">{}</span>"
+        },
+        "tray": {
+            "icon-size": 13,
+            "spacing": 10
+        }
     },
-    "sway/mode": {
-      "format": "<span style=\"italic\">{}</span>"
-    },
-    "tray": {
-      "icon-size": 13,
-      "spacing": 10
+    {
+        "layer": "bottom",
+        "position": "bottom",
+        "height": 20,
+        "modules-left": ["disk", "cpu", "memory", "network"],
+        "modules-center": ["custom/weather"],
+        "modules-right": ["custom/pacman", "clock#time", "clock#date"],
+        "sway/mode": {
+            "format": "<span style=\"italic\">{}</span>"
+        },
+        "clock#date": {
+            "timezone": "America/Sao_Paulo",
+            "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+            "format": "{:%Y-%m-%d}  "
+        },
+        "clock#time": {
+            "interval": 1,
+            "format": "{:%H:%M:%S}  ",
+            "max-length": 25
+        },
+        "cpu": {
+            "interval": 5,
+            "format": "  {usage}% ({load})",
+            "states": {
+                "warning": 70,
+                "critical": 90
+            }
+        },
+        "memory": {
+            "interval": 5,
+            "format": "  {}%",
+            "states": {
+                "warning": 70,
+                "critical": 90
+            }
+        },
+        "network": {
+            "format-wifi": "{essid} ({signalStrength}%) ",
+            "format-ethernet": "  {ipaddr}/{cidr}",
+            "format-linked": "{ifname} (No IP) ",
+            "format-disconnected": "Disconnected ⚠",
+            "format-alt": "{ifname}: {ipaddr}/{cidr}"
+        },
+        "disk": {
+            "interval": 30,
+            "format": " {total}",
+            "path": "/"
+        },
+        "custom/pacman": {
+            "format": "{}  ",
+            "interval": 3600,
+            "exec": "pacman -Qq | wc -l",
+            "exec-if": "exit 0",
+            "on-click": "termite -e 'sudo pacman -Syu'; pkill -SIGRTMIN+8 waybar", // update system
+            "signal": 8
+        },
+        "custom/weather": {
+            "exec": "curl 'https://wttr.in/?format=3'",
+            "interval": 3600
+        }
     }
-  },
-  {
-    "layer": "bottom",
-    "position": "bottom",
-    "height": 20,
-    "modules-left": ["cpu", "memory", "disk", "network"],
-    "modules-center": ["custom/weather"],
-    "modules-right": ["custom/pacman", "clock"],
-    "sway/mode": {
-      "format": "<span style=\"italic\">{}</span>"
-    },
-    "clock": {
-      "timezone": "America/Sao_Paulo",
-      "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-      "format-alt": "{:%Y-%m-%d}"
-    },
-    "cpu": {
-      "format": "{usage}% ",
-      "tooltip": false
-    },
-    "memory": {
-      "format": "{}% "
-    },
-    "network": {
-      "format-wifi": "{essid} ({signalStrength}%) ",
-      "format-ethernet": "{ipaddr}/{cidr} ",
-      "format-linked": "{ifname} (No IP) ",
-      "format-disconnected": "Disconnected ⚠",
-      "format-alt": "{ifname}: {ipaddr}/{cidr}"
-    },
-    "disk": {
-      "interval": 30,
-      "format": "{total}        {used}        {free}  ",
-      "path": "/"
-    },
-    "custom/pacman": {
-      "format": "{}  ",
-      "interval": 3600,
-      "exec": "pacman -Qq | wc -l",
-      "exec-if": "exit 0",
-      "on-click": "termite -e 'sudo pacman -Syu'; pkill -SIGRTMIN+8 waybar", // update system
-      "signal": 8
-    },
-    "custom/weather": {
-      "exec": "curl 'https://wttr.in/?format=1'",
-      "interval": 3600
-    }
-  }
 ]
