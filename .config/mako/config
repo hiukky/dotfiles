@@ -1,0 +1,57 @@
+# mako config file
+# read the manual for further explanation
+#
+
+# set font and size
+font=Nerd Fonts Mono Noto Sans 10
+
+# set background color
+background-color=#121212
+
+# set maximum number of visible notifications to N
+max-visible=4
+
+# arrange notifications at the specified layer
+layer=top
+
+# show notifications at the specified position on the screen
+anchor=top-right
+
+# set text color
+text-color=#FFFFFFFF
+
+# set height
+height=150
+
+# set width
+width=300
+
+# set margin
+margin=20
+
+# setting padding
+padding=16
+
+# set popup border size to N pixels
+border-size=1
+
+# border color
+border-color=#121212
+
+# set popup corner radius N pixels
+border-radius=3
+
+# [dis/en]able icons
+icons=1
+
+# set maximum icon size to N pixels
+max-icon-size=32
+
+# [dis/en]able pango markup
+markup=0
+
+# [dis/en]able actions
+actions=1
+
+# set the default timeout to N milliseconds
+default-timeout=5000
