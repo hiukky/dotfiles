@@ -33,7 +33,13 @@
         "layer": "bottom",
         "position": "bottom",
         "height": 20,
-        "modules-left": ["disk", "cpu", "memory", "network"],
+        "modules-left": [
+            "disk",
+            "cpu",
+            "memory",
+            "custom/net-up",
+            "custom/net-down"
+        ],
         "modules-center": ["custom/weather"],
         "modules-right": ["custom/pacman", "clock#time", "clock#date"],
         "sway/mode": {
@@ -65,17 +71,18 @@
                 "critical": 90
             }
         },
-        "network": {
-            "format-wifi": "{essid} ({signalStrength}%) ",
-            "format-ethernet": "  {ipaddr}/{cidr}",
-            "format-linked": "{ifname} (No IP) ",
-            "format-disconnected": "Disconnected ⚠",
-            "format-alt": "{ifname}: {ipaddr}/{cidr}"
-        },
         "disk": {
             "interval": 30,
             "format": " {total}",
             "path": "/"
+        },
+        "custom/net-up": {
+            "exec": "$HOME/.bin/netspeed -up",
+            "format": "  {}"
+        },
+        "custom/net-down": {
+            "exec": "$HOME/.bin/netspeed -down",
+            "format": "  {}"
         },
         "custom/pacman": {
             "format": "{}  ",

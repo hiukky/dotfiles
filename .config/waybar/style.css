@@ -64,6 +64,8 @@ window#waybar.chromium {
 #tray,
 #mode,
 #disk,
+#custom-net-up,
+#custom-net-down,
 #custom-pacman {
     padding: 0 10px;
     margin: 0 4px;
@@ -83,26 +85,6 @@ window#waybar.chromium {
 
 label:focus {
     background-color: #000000;
-}
-
-#cpu {
-    color: #ffffff;
-}
-
-#memory {
-    color: #ffffff;
-}
-
-#disk {
-    color: #ffffff;
-}
-
-#network {
-    color: #ffffff;
-}
-
-#custom-pacman {
-    color: #ffffff;
 }
 
 #tray {
