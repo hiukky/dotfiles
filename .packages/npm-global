@@ -1,8 +1,8 @@
 
- @adonisjs/cli@4.0.12
- create-react-app@3.4.1
- eslint@7.6.0
- node-gyp@7.0.0
- npm@6.14.7
- npm-check-updates@7.0.3
- yarn@1.22.4
++-- @adonisjs/cli@4.0.12
++-- create-react-app@3.4.1
++-- eslint@7.6.0
++-- node-gyp@7.0.0
++-- npm@6.14.7
++-- npm-check-updates@7.0.3
+`-- yarn@1.22.4

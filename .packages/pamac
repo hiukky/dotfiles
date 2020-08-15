@@ -16,6 +16,7 @@ imagemagick
 linux
 linux-firmware
 lolcat
+mako
 mousepad
 nano
 neofetch
@@ -27,6 +28,7 @@ openssh
 python-pip
 redis
 rsync
+slack-desktop
 snapd
 sway
 telegram-desktop
