@@ -79,6 +79,7 @@ plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
+source ~/.zshrc_private
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -103,6 +104,7 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+alias dot='/usr/bin/git --git-dir=/home/hiukky/.dotfiles/ --work-tree=/home/hiukky'
 
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
@@ -119,4 +121,3 @@ autoload -Uz _zinit
 ### End of Zinit's installer chunk
 zinit light zsh-users/zsh-autosuggestions
 zinit light zdharma/fast-syntax-highlighting
-alias dot='/usr/bin/git --git-dir=/home/hiukky/.dotfiles/ --work-tree=/home/hiukky'
