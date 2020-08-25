@@ -1,9 +1,12 @@
 alacritty
 alsa-utils
 azote
+balena-etcher
 base
 bat
 chromium
+deepin-boot-maker
+electron
 exa
 figlet
 git
@@ -26,6 +29,7 @@ noto-fonts-emoji
 npm
 openssh
 python-pip
+python-virtualenv
 redis
 rsync
 slack-desktop
@@ -37,6 +41,7 @@ tmux
 ttf-fira-code
 ttf-nerd-fonts-symbols
 ulauncher
+unzip
 visual-studio-code-bin
 waybar
 wl-clipboard
@@ -44,4 +49,5 @@ xdg-user-dirs
 xorg-server-xwayland
 yarn
 yay
+zip
 zsh
