@@ -15,7 +15,7 @@ font:
 # Colors
 colors:
   primary:
-    background: "#22252f"
+    background: "#121212"
     foreground: "#a29bfe"
     dim_foreground: "#8f8d88"
     bright_foreground: "#d9d9d9"
