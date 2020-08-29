@@ -4,3 +4,5 @@
 	email = developermarsh@gmail.com
 [commit]
 	gpgsign = true
+[core]
+	editor = nano
