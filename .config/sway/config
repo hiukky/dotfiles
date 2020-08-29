@@ -14,7 +14,7 @@ set $down j
 set $up k
 set $right l
 # Your preferred terminal emulator
-set $term alacritty
+set $term kitty
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
@@ -75,10 +75,10 @@ input * xkb_numlock enabled
 #
 # Basics:
 #
-    # Start alacritty + tmux
+    # Start kitty + tmux
     bindsym $mod+Shift+Return exec $term -e $SHELL -i -c tmux
 
-    # Start a alacritty
+    # Start a kitty
     bindsym $mod+Return exec $term
 
     # Kill focused window

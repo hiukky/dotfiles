@@ -5,7 +5,7 @@ export PATH=$HOME/.bin:$PATH
 export ZSH="/home/hiukky/.oh-my-zsh"
 
 # Term colors
-export TERM='xterm-256color'
+export TERM='xterm-kitty'
 
 # Startship
 eval "$(starship init zsh)"
