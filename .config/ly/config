@@ -1,46 +1,50 @@
 # animation enabled
-animate = true
+#animate = false
+#animate = true
 
 # the active animation (only animation '0' available for now)
 #animation = 0
 
 # the char used to mask the password
-asterisk = *
+#asterisk = *
+#asterisk = o
 
 # background color id
-bg = red
+#bg = 0
 
 # blank main box
-blank_box = true
+#blank_box = true
 
 # erase password input on failure
-blank_password = true
+#blank_password = false
+#blank_password = true
 
 # console path
-console_dev = /dev/console
+#console_dev = /dev/console
 
 # input active by default on startup
-default_input = 2
+#default_input = 2
 
 # foreground color id
-fg = 9
+#fg = 9
 
 # remove main box borders
-hide_borders = false
+#hide_borders = false
+#hide_borders = true
 
 # number of visible chars on an input
-input_len = 34
+#input_len = 34
 
 # active language
-lang = en
-lang = pt
+#lang = en
+#lang = fr
 
 # load the saved desktop and login
-load = true
+#load = true
 
 # main box margins
-margin_box_h = 2
-margin_box_v = 1
+#margin_box_h = 2
+#margin_box_v = 1
 
 # total input sizes
 #max_desktop_len = 100
@@ -60,7 +64,7 @@ margin_box_v = 1
 #restart_cmd = /sbin/shutdown -r now
 
 # save the current desktop and login as defaults
-save = true
+#save = true
 
 # file in which to save and load the default desktop and login
 #save_file = /etc/ly/save
@@ -72,7 +76,7 @@ save = true
 #shutdown_cmd = /sbin/shutdown -a now
 
 # terminal reset command (tput is faster)
-#term_reset_cmd = /usr/bin/tput reset
+term_reset_cmd = /usr/bin/tput reset; /usr/bin/printf '%b' '\e]P7F1E9C7\e]P017181C\ec'
 
 # tty in use
 #tty = 2
