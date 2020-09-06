@@ -10,11 +10,13 @@ exa
 figlet
 git
 glances
+google-chrome-dev
 grimshot-git
 grub
 gucharmap
 htop
 imagemagick
+insomnia
 kitty
 linux
 linux-firmware
@@ -28,6 +30,7 @@ nodejs
 noto-fonts-emoji
 npm
 openssh
+paley
 pulseaudio-alsa
 python-pip
 python-virtualenv
@@ -38,6 +41,7 @@ slack-desktop
 snapd
 sway
 telegram-desktop
+thunar
 tmux
 ttf-cascadia-code
 ttf-fira-code

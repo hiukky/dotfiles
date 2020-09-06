@@ -1,11 +1,12 @@
 
-+-- @adonisjs/cli@4.0.12
-+-- create-react-app@3.4.1
-+-- electron-app@1.0.0
-+-- eslint@7.6.0
-+-- node-gyp@7.1.0
-+-- npm@6.14.7
-+-- npm-check-updates@7.0.3
-+-- semver@7.3.2
-+-- vercel@20.0.0
-`-- yarn@1.22.5
+ @adonisjs/cli@4.0.12
+ create-react-app@3.4.1
+ electron-app@1.0.0
+ eslint@7.6.0
+ node-gyp@7.1.0
+ npm@6.14.7
+ npm-check-updates@7.0.3
+ semver@7.3.2
+ vercel@20.0.0
+ vsce@1.79.5
+ yarn@1.22.5

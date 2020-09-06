@@ -65,6 +65,10 @@
     <td>File manager</td>
     <td>Ranger</td>
   </tr>
+<tr>
+    <td>Notification</td>
+    <td>Mako</td>
+  </tr>
 </table>
 
 <h2>Dotsync</h2>
