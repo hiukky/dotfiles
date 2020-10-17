@@ -3,7 +3,12 @@
 
 sudo pacman -S figlet lolcat --needed --noconfirm &>/dev/null
 
-declare -a OPTIONS_MENU=(
+declare -a OPTIONS_DEFAULT=(
+    ' m - Menu'
+    ' e - Exit'
+)
+
+declare -a OPTIONS_MENU+=(
     'Dots'
     'Packages'
     'Others'
@@ -74,11 +79,25 @@ _menuHeader() {
 
   figlet Dotsync | lolcat
 
- if [ -n "$1" ]; then
-   _colorfy $'\n'"$1"$'\n'
- fi
+  printf '%s\n'  $'\n'"${OPTIONS_DEFAULT[@]}"$'\n'
 
-  PS3=$'\n Select an option: '
+  if [ -n "$1" ]; then
+    _colorfy $'\n'"$1"$'\n'
+  fi
+
+  PS3=$'\nSelect an option: '
+}
+
+_menuDefaultActions() {
+    case "$REPLY" in
+      'e'|'E')
+        exit
+        break;;
+
+      'm'|'M')
+        _menu
+        break;;
+    esac
 }
 
 _menuDots() {
@@ -93,6 +112,8 @@ _menuDots() {
       2)
         _sync
         break;;
+      *)
+        _menuDefaultActions
       esac
   done
 }
@@ -113,6 +134,8 @@ _menuPkgs() {
       3)
         python -c 'import scripts.packages; scripts.packages._syncAllPkgs()'
         break;;
+      *)
+        _menuDefaultActions
       esac
   done
 }
@@ -126,6 +149,8 @@ _menuOthers() {
       1)
         python -c 'import scripts.redis; scripts.redis._install()'
         break;;
+      *)
+        _menuDefaultActions
       esac
   done
 }
@@ -145,6 +170,8 @@ _menu() {
       3)
         _menuOthers
         break;;
+      *)
+        _menuDefaultActions
       esac
   done
 }
