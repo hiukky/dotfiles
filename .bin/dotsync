@@ -1,19 +1,32 @@
 #!/bin/bash
-# By @hiukky http://hiukky.com
+# By @hiukky https://hiukky.com
 
 sudo pacman -S figlet lolcat --needed --noconfirm &>/dev/null
 
-figlet Dotsync | lolcat
+declare -a OPTIONS_MENU=(
+    'Dots'
+    'Packages'
+    'Others'
+)
 
-echo
-declare -a OPTIONS=(
+declare -a OPTIONS_DOTS=(
     'Initialize new machine configuration.'
     'Configure from existing dotfiles.'
+)
+
+declare -a OPTIONS_PKGS=(
     'Sync NPM packages.'
     'Sync System packages.'
     'Sync All packages.'
+)
+
+declare -a OPTIONS_OTHERS=(
     'Install Redis Server.'
 )
+
+_colorfy() {
+    echo "$1" | lolcat
+}
 
 _dot() {
   /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@
@@ -21,18 +34,18 @@ _dot() {
 
 _init() {
   if [ ! -d "$HOME/.dotfiles" ]; then
-    echo $'\n Initializing dotfiles configuration ...\n' | lolcat
+    _colorfy $'\n Initializing dotfiles configuration ...\n'
 
     git init --bare $HOME/.dotfiles
     alias dot='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
     _dot config --local status.showUntrackedFiles no
     echo "alias dot='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'" >> $HOME/.zshrc
   else
-    echo $'\n Dotfiles already booted! \n' | lolcat
+    _colorfy $'\n Dotfiles already booted! \n'
     exit 0
   fi
 
-  echo $'\n Done!! \n' | lolcat
+  _colorfy $'\n Done!! \n'
 }
 
 _sync() {
@@ -43,10 +56,10 @@ _sync() {
   fi
 
   if [ $? = 0 ]; then
-    echo $'\n Dotfiles checked! \n' | lolcat
+    _colorfy $'\n Dotfiles checked! \n'
 
     else
-      echo $'\n Backing up ...\n' | lolcat
+      _colorfy $'\n Backing up ...\n'
       _dot checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} mv {} .config-bck/{}
   fi
 
@@ -56,10 +69,22 @@ _sync() {
   echo
 }
 
-_menu() {
-  PS3=$'\n Select an option: '
+_menuHeader() {
+  clear
 
-  select option in "${OPTIONS[@]}"
+  figlet Dotsync | lolcat
+
+ if [ -n "$1" ]; then
+   _colorfy $'\n'"$1"$'\n'
+ fi
+
+  PS3=$'\n Select an option: '
+}
+
+_menuDots() {
+  _menuHeader "- D O T S"
+
+  select option in "${OPTIONS_DOTS[@]}"
   do
     case "$REPLY" in
       1)
@@ -68,17 +93,57 @@ _menu() {
       2)
         _sync
         break;;
-      3)
+      esac
+  done
+}
+
+_menuPkgs() {
+  _menuHeader "- P A C K A G E S"
+
+
+  select option in "${OPTIONS_PKGS[@]}"
+  do
+    case "$REPLY" in
+      1)
         python -c 'import scripts.packages; scripts.packages._syncNpmPkgs()'
         break;;
-      4)
+      2)
         python -c 'import scripts.packages; scripts.packages._syncSystemPkgs()'
         break;;
-      5)
+      3)
         python -c 'import scripts.packages; scripts.packages._syncAllPkgs()'
         break;;
-      6)
+      esac
+  done
+}
+
+_menuOthers() {
+  _menuHeader "- O T H E R S"
+
+  select option in "${OPTIONS_OTHERS[@]}"
+  do
+    case "$REPLY" in
+      1)
         python -c 'import scripts.redis; scripts.redis._install()'
+        break;;
+      esac
+  done
+}
+
+_menu() {
+  _menuHeader
+
+  select option in "${OPTIONS_MENU[@]}"
+  do
+    case "$REPLY" in
+      1)
+        _menuDots
+        break;;
+      2)
+        _menuPkgs
+        break;;
+      3)
+        _menuOthers
         break;;
       esac
   done
