@@ -229,7 +229,7 @@ gaps outer 10
 smart_gaps on
 
 ###
-bindsym $mod+Print exec bash -c 'grim -c "$HOME/Pictures/Screenshots/screenshot- $(date +"%d-%m-%Y %H:%M:%S").png" - | wl-copy'
+bindsym $mod+Print exec bash -c 'grim -g "$(slurp)" "$HOME/Pictures/Screenshots/screenshot- $(date +"%d-%m-%Y %H:%M:%S").png" - | wl-copy'
 bindsym Print exec bash -c 'grimshot screen area "$HOME/Pictures/Screenshots/screenshot- $(date +"%d-%m-%Y %H:%M:%S").png" - | wl-copy'
 
 include /etc/sway/config.d/*
