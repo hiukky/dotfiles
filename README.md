@@ -1,8 +1,8 @@
-<h1 align="center">Sway Dotfiles</h1>
+<h1 align="center">.dotfiles</h1>
 
 <p align="center">
   <a href="https://www.archlinux.org/download/">
-    <img alt="Arch Linux" src="https://img.shields.io/badge/OS-Arch%20Linux-%2307b?style=for-the-badge" />
+    <img alt="Arch Linux" src="https://img.shields.io/badge/OS-Arch%20Linux-%2307b?style=for-the-badge&colorA=1C1D27" />
   </a>
 </p>
 
@@ -13,22 +13,23 @@
 <p align="center">
   <br>
   <a href="https://swaywm.org/ ">
-    <img alt="Sway" src="https://img.shields.io/badge/WM-Sway-%23FB9F4A?style=for-the-badge" />
+    <img alt="Sway" src="https://img.shields.io/badge/WM-Sway-F4D194?style=for-the-badge&colorA=1C1D27" />
   </a>
   <a href="https://www.zsh.org/">
-    <img alt="Zsh" src="https://img.shields.io/badge/Shell-ZSH-%23FB6449?style=for-the-badge" />
+    <img alt="Zsh" src="https://img.shields.io/badge/Shell-ZSH-921646?style=for-the-badge&colorA=1C1D27" />
   </a>
   <a href="https://github.com/nullgemm/ly">
-    <img alt="Ly" src="https://img.shields.io/badge/DM-LY-%23273238?style=for-the-badge" />
+    <img alt="Ly" src="https://img.shields.io/badge/DM-LY-1C1D27?style=for-the-badge&colorA=1C1D27" />
   </a>
   <a href="https://github.com/kovidgoyal/kitty">
-    <img alt="Kitty" src="https://img.shields.io/badge/Terminal-Kitty-%2308C5A1?style=for-the-badge" />
+    <img alt="Kitty" src="https://img.shields.io/badge/Terminal-Kitty-BB529B?style=for-the-badge&colorA=1C1D27" />
   </a>
   <a href="https://github.com/hiukky/flate ">
-    <img alt="Theme" src="https://img.shields.io/badge/Theme-Flate-%232AE18D?style=for-the-badge" />
+    <img alt="Theme" src="https://img.shields.io/badge/Theme-Flate-23d18c?style=for-the-badge&colorA=1C1D27" />
   </a>
-  <a href="https://github.com/alacritty/alacritty">
-    <img alt="Alacritty" src="https://img.shields.io/badge/LICENSE-MIT-%23EA194C?style=for-the-badge" />
+  <a href="https://github.com/hiukky/dotfiles/blob/master/LICENSE">
+    <img alt="License" src="https://img.shields.io/badge/LICENSE-MIT-362E6F?style=for-the-badge&colorA=1C1D27
+    " />
   </a>
 </p>
 
@@ -65,19 +66,12 @@
     <td>File manager</td>
     <td>Ranger</td>
   </tr>
-<tr>
+  <tr>
     <td>Notification</td>
     <td>Mako</td>
   </tr>
+  <tr>
+    <td>Bars</td>
+    <td>Waybar</td>
+  </tr>
 </table>
-
-<h2>Dotsync</h2>
-<p>
-    A simple executable with automated features to assist in maintaining dotfiles and configuring the system.
-</p>
-
-<br/>
-
-<div align="center">
-  <img alt="Setup" src=".assets/cli.png"/>
-</div>
