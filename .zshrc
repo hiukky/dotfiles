@@ -121,3 +121,5 @@ autoload -Uz _zinit
 ### End of Zinit's installer chunk
 zinit light zsh-users/zsh-autosuggestions
 zinit light zdharma/fast-syntax-highlighting
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/local/bin/bitcomplete bit
