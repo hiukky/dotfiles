@@ -28,8 +28,7 @@
     <img alt="Theme" src="https://img.shields.io/badge/Theme-Flate-23d18c?style=for-the-badge&colorA=1C1D27" />
   </a>
   <a href="https://github.com/hiukky/dotfiles/blob/master/LICENSE">
-    <img alt="License" src="https://img.shields.io/badge/LICENSE-MIT-362E6F?style=for-the-badge&colorA=1C1D27
-    " />
+    <img alt="License" src="https://img.shields.io/badge/LICENSE-MIT-6E63BF?style=for-the-badge&colorA=1C1D27" />
   </a>
 </p>
 
