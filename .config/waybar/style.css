@@ -7,31 +7,18 @@
 }
 
 window#waybar {
-    background-color: transparent;
     color: #ffffff;
     transition-property: background-color;
     transition-duration: 0.5s;
+    opacity: 0.5;
 }
 
-window#waybar.hidden {
-    opacity: 0.2;
+window#waybar.top {
+    background-color: #16171e;
 }
 
-window#waybar.empty {
-    background-color: transparent;
-}
-
-window#waybar.solo {
-    background-color: transparent;
-}
-
-window#waybar.termite {
-    background-color: transparent;
-}
-
-window#waybar.chromium {
-    background-color: transparent;
-    border: none;
+window#waybar.bottom {
+    background-color: #16171e;
 }
 
 #workspaces button {
@@ -69,10 +56,6 @@ window#waybar.chromium {
 #custom-pacman {
     padding: 0 10px;
     margin: 0 4px;
-    color: #ffffff;
-}
-
-#clock {
     color: #ffffff;
 }
 

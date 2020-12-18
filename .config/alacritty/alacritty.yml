@@ -1,57 +1,32 @@
 # scrolling
 scrolling:
-  history: 10000
-
+    history: 10000
 # Font
 font:
-  normal:
-    family: "Fira Code"
-    style: Regular
-
-  bold:
-    family: "Fira Code"
-    style: Bold
-
-# Colors
+    normal:
+        family: "Fira Code"
+        style: Regular
+    bold:
+        family: "Fira Code"
+        style: Bold
+"404": Not Found
 colors:
-  primary:
-    background: "#121212"
-    foreground: "#a29bfe"
-    dim_foreground: "#8f8d88"
-    bright_foreground: "#d9d9d9"
-    dim_background: "#202020"
-    bright_background: "#3a3a3a"
-
-  cursor:
-    text: "#22252f"
-    cursor: "#d9d9d9"
-
-  normal:
-    black: "#1c1c1c"
-    red: "#e84855"
-    green: "#6bf178"
-    yellow: "#ffe066"
-    blue: "#4834d4"
-    magenta: "#a29bfe"
-    cyan: "#00cecb"
-    white: "#e9dbdb"
-
-  bright:
-    black: "#636363"
-    red: "#e84855"
-    green: "#6bf178"
-    yellow: "#ffe066"
-    blue: "#4834d4"
-    magenta: "#a29bfe"
-    cyan: "#00cecb"
-    white: "#e9dbdb"
-
-  dim:
-    black: "#232323"
-    red: "#74423f"
-    green: "#5e6547"
-    yellow: "#8b7653"
-    blue: "#556b79"
-    magenta: "#6e4962"
-    cyan: "#5c8482"
-    white: "#828282"
+    primary:
+        background: '#0d1117'
+        foreground: '#ffffff'
+        dim_foreground: '#8f8d88'
+        bright_foreground: '#e9dbdb'
+        dim_background: '#8f8d88'
+        bright_background: '#8f8d88'
+    cursor:
+        text: '#424b54'
+        cursor: '#e9dbdb'
+    normal:
+        black: '#000000'
+        red: '#e84855'
+        green: '#23d18c'
+        yellow: '#ffe066'
+        blue: '#5677FC'
+        magenta: '#a29bfe'
+        cyan: '#23d18c'
+        white: '#ffffff'

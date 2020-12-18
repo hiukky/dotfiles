@@ -9,6 +9,7 @@ blkmenu
 brave-bin
 dbeaver
 discord
+docker
 drawio-desktop-bin
 electron
 exa
@@ -47,6 +48,7 @@ noto-fonts-emoji
 npm
 ntfs-3g
 obfs4proxy
+openntpd
 openssh
 paley
 pavucontrol
@@ -86,8 +88,8 @@ wget
 wl-clipboard
 xdg-user-dirs
 xfce4-terminal
-xorg-server-xwayland
 xorg-xhost
+xorg-xwayland
 yarn
 yay
 zip

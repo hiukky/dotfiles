@@ -2,7 +2,7 @@
     {
         "layer": "top",
         "position": "top",
-        "height": 20,
+        "height": 25,
         "modules-left": ["sway/workspaces", "sway/mode", "custom/media"],
         "modules-center": ["sway/window"],
         "modules-right": ["tray"],
@@ -32,14 +32,8 @@
     {
         "layer": "bottom",
         "position": "bottom",
-        "height": 20,
-        "modules-left": [
-            "disk",
-            "cpu",
-            "memory",
-            "custom/net-up",
-            "custom/net-down"
-        ],
+        "height": 25,
+        "modules-left": ["disk", "cpu", "memory"],
         "modules-center": ["custom/weather"],
         "modules-right": ["custom/pacman", "clock#time", "clock#date"],
         "sway/mode": {

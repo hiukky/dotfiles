@@ -34,6 +34,10 @@ def _syncNpmPkgs():
     print(f"{Fore.GREEN} Done!")
 
 
+def _installNpmPkgs():
+    print(f"\n{Fore.CYAN} N P M\n")
+
+
 def _syncSystemPkgs():
     print(f"\n{Fore.CYAN} S Y S T E M   P A C K A G E S\n")
 

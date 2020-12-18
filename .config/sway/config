@@ -22,7 +22,7 @@ set $menu ulauncher | xargs swaymsg exec --
 
 ### Theme
 # class                 border      backgr.     text     indicator  child_border
-client.focused          #f38375     #f38375     #f38375  #f38375    #f38375
+client.focused          #23d18c     #23d18c     #23d18c  #23d18c    #23d18c
 client.focused_inactive #22252f     #22252f     #22252f  #22252f    #22252f
 client.unfocused        #22252f     #22252f     #22252f  #22252f    #22252f
 client.urgent           #e84855     #e84855     #ebdbb2  #e84855    #e84855

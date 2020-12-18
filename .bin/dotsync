@@ -4,29 +4,42 @@
 sudo pacman -S figlet lolcat --needed --noconfirm &>/dev/null
 
 declare -a OPTIONS_DEFAULT=(
-    ' m - Menu'
-    ' e - Exit'
+    ' m - menu'
+    ' b - back'
+    ' e - exit'
 )
 
-declare -a OPTIONS_MENU+=(
-    'Dots'
-    'Packages'
-    'Others'
+declare -a OPTIONS_MENU=(
+    '- dots'
+    '- packages'
 )
 
 declare -a OPTIONS_DOTS=(
-    'Initialize new machine configuration.'
-    'Configure from existing dotfiles.'
+    '- initialize new machine configuration'
+    '- configure from existing dotfiles'
 )
 
 declare -a OPTIONS_PKGS=(
-    'Sync NPM packages.'
-    'Sync System packages.'
-    'Sync All packages.'
+    '- synchronize packages'
+    '- install packages'
 )
 
-declare -a OPTIONS_OTHERS=(
-    'Install Redis Server.'
+declare -a OPTIONS_PKGS_SYNC=(
+    '- npm packages'
+    '- system packages'
+    '- all packages'
+)
+
+declare -a OPTIONS_PKGS_INSTALL=(
+    '- npm packages'
+    '- system packages'
+    '- developer packages'
+    '- all packages'
+)
+
+declare -a OPTIONS_PKGS_INSTALL_DEVELOPER=(
+    '- redis server'
+    '- all packages'
 )
 
 _colorfy() {
@@ -79,9 +92,13 @@ _menuHeader() {
 
   figlet Dotsync | lolcat
 
-  printf '%s\n'  $'\n'"${OPTIONS_DEFAULT[@]}"$'\n'
+  if [ $2 ]; then
+    printf '%s\n'  $'\n'"${OPTIONS_DEFAULT[2]}"$'\n'
+  else
+    printf '%s\n'  $'\n'"${OPTIONS_DEFAULT[@]}"$'\n'
+  fi
 
-  if [ -n "$1" ]; then
+  if [ "$1" != null ]; then
     _colorfy $'\n'"$1"$'\n'
   fi
 
@@ -96,6 +113,10 @@ _menuDefaultActions() {
 
       'm'|'M')
         _menu
+        break;;
+
+      'b'|'B')
+         $1
         break;;
     esac
 }
@@ -113,7 +134,7 @@ _menuDots() {
         _sync
         break;;
       *)
-        _menuDefaultActions
+        _menuDefaultActions _menu
       esac
   done
 }
@@ -121,8 +142,26 @@ _menuDots() {
 _menuPkgs() {
   _menuHeader "- P A C K A G E S"
 
-
   select option in "${OPTIONS_PKGS[@]}"
+  do
+    case "$REPLY" in
+      1)
+        _menuPkgsSync
+        break;;
+      2)
+        _menuPkgsInstall
+        break;;
+      *)
+        _menuDefaultActions _menu
+      esac
+  done
+}
+
+_menuPkgsSync() {
+  _menuHeader "- P A C K A G E S > Sync"
+
+
+  select option in "${OPTIONS_PKGS_SYNC[@]}"
   do
     case "$REPLY" in
       1)
@@ -135,28 +174,57 @@ _menuPkgs() {
         python -c 'import scripts.packages; scripts.packages._syncAllPkgs()'
         break;;
       *)
-        _menuDefaultActions
+        _menuDefaultActions _menuPkgs
       esac
   done
 }
 
-_menuOthers() {
-  _menuHeader "- O T H E R S"
+_menuPkgsInstall() {
+  _menuHeader "- P A C K A G E S > Install"
 
-  select option in "${OPTIONS_OTHERS[@]}"
+
+  select option in "${OPTIONS_PKGS_INSTALL[@]}"
+  do
+    case "$REPLY" in
+      1)
+        python -c 'import scripts.packages; scripts.packages._installNpmPkgs()'
+        break;;
+      2)
+        python -c 'import scripts.packages; scripts.packages._installSystemPkgs()'
+        break;;
+      3)
+        _menuPkgsInstallDeveloper
+        break;;
+      4)
+        python -c 'import scripts.packages; scripts.packages._installAllPkgs()'
+        break;;
+      *)
+        _menuDefaultActions _menuPkgs
+      esac
+  done
+}
+
+_menuPkgsInstallDeveloper() {
+  _menuHeader "- P A C K A G E S > Install > Developer"
+
+
+  select option in "${OPTIONS_PKGS_INSTALL_DEVELOPER[@]}"
   do
     case "$REPLY" in
       1)
         python -c 'import scripts.redis; scripts.redis._install()'
         break;;
+      2)
+        python -c 'import scripts.packages; scripts.packages._installDeveloperPkgs()'
+        break;;
       *)
-        _menuDefaultActions
+        _menuDefaultActions _menuPkgsInstall
       esac
   done
 }
 
 _menu() {
-  _menuHeader
+  _menuHeader null false
 
   select option in "${OPTIONS_MENU[@]}"
   do
@@ -166,9 +234,6 @@ _menu() {
         break;;
       2)
         _menuPkgs
-        break;;
-      3)
-        _menuOthers
         break;;
       *)
         _menuDefaultActions
