@@ -1,12 +1,8 @@
-# mako config file
-# read the manual for further explanation
-#
-
 # set font and size
 font=Nerd Fonts Mono Noto Sans 10
 
 # set background color
-background-color=#121212
+background-color=#0d1117
 
 # set maximum number of visible notifications to N
 max-visible=4
@@ -18,7 +14,7 @@ layer=top
 anchor=top-right
 
 # set text color
-text-color=#FFFFFFFF
+text-color=#FFFFFF
 
 # set height
 height=150
@@ -36,7 +32,7 @@ padding=16
 border-size=1
 
 # border color
-border-color=#121212
+border-color=#23d18c
 
 # set popup corner radius N pixels
 border-radius=3

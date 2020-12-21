@@ -1,94 +1,95 @@
 [
-    {
-        "layer": "top",
-        "position": "top",
-        "height": 25,
-        "modules-left": ["sway/workspaces", "sway/mode", "custom/media"],
-        "modules-center": ["sway/window"],
-        "modules-right": ["tray"],
-        "sway/workspaces": {
-            "disable-scroll": true,
-            "all-outputs": true,
-            "format": "{icon}",
-            "format-icons": {
-                "1": "",
-                "2": "",
-                "3": "",
-                "4": "",
-                "5": "",
-                "urgent": "",
-                "focused": "",
-                "default": ""
-            }
-        },
-        "sway/mode": {
-            "format": "<span style=\"italic\">{}</span>"
-        },
-        "tray": {
-            "icon-size": 13,
-            "spacing": 10
-        }
+  {
+    "layer": "top",
+    "position": "top",
+    "height": 30,
+    "modules-left": [
+      "disk",
+      "cpu",
+      "memory"
+    ],
+    "modules-center": [
+      "custom/weather"
+    ],
+    "modules-right": [
+      "clock#time",
+      "clock#date"
+    ],
+    "custom/weather": {
+      "exec": "curl 'https://wttr.in/?format=3'",
+      "interval": 3600
     },
-    {
-        "layer": "bottom",
-        "position": "bottom",
-        "height": 25,
-        "modules-left": ["disk", "cpu", "memory"],
-        "modules-center": ["custom/weather"],
-        "modules-right": ["custom/pacman", "clock#time", "clock#date"],
-        "sway/mode": {
-            "format": "<span style=\"italic\">{}</span>"
-        },
-        "clock#date": {
-            "timezone": "America/Sao_Paulo",
-            "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-            "format": "{:%Y-%m-%d}  "
-        },
-        "clock#time": {
-            "interval": 1,
-            "format": "{:%H:%M:%S}  ",
-            "max-length": 25
-        },
-        "cpu": {
-            "interval": 5,
-            "format": "  {usage}% ({load})",
-            "states": {
-                "warning": 70,
-                "critical": 90
-            }
-        },
-        "memory": {
-            "interval": 5,
-            "format": "  {}%",
-            "states": {
-                "warning": 70,
-                "critical": 90
-            }
-        },
-        "disk": {
-            "interval": 30,
-            "format": " {total}",
-            "path": "/"
-        },
-        "custom/net-up": {
-            "exec": "$HOME/.bin/netspeed -up",
-            "format": "  {}"
-        },
-        "custom/net-down": {
-            "exec": "$HOME/.bin/netspeed -down",
-            "format": "  {}"
-        },
-        "custom/pacman": {
-            "format": "{}  ",
-            "interval": 3600,
-            "exec": "pacman -Qq | wc -l",
-            "exec-if": "exit 0",
-            "on-click": "termite -e 'sudo pacman -Syu'; pkill -SIGRTMIN+8 waybar", // update system
-            "signal": 8
-        },
-        "custom/weather": {
-            "exec": "curl 'https://wttr.in/?format=3'",
-            "interval": 3600
-        }
+    "clock#date": {
+      "timezone": "America/Sao_Paulo",
+      "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+      "format": "{:%Y-%m-%d}  "
+    },
+    "clock#time": {
+      "interval": 1,
+      "format": "{:%H:%M:%S}  ",
+      "max-length": 25
+    },
+    "cpu": {
+      "interval": 5,
+      "format": "  {usage}% ({load})",
+      "states": {
+        "warning": 70,
+        "critical": 90
+      }
+    },
+    "memory": {
+      "interval": 5,
+      "format": "  {}%",
+      "states": {
+        "warning": 70,
+        "critical": 90
+      }
+    },
+    "disk": {
+      "interval": 30,
+      "format": " {total}",
+      "path": "/"
     }
+  },
+  {
+    "layer": "bottom",
+    "position": "bottom",
+    "height": 30,
+    "modules-left": [
+      "custom/pacman"
+    ],
+    "modules-center": [
+      "sway/workspaces"
+    ],
+    "modules-right": [
+      "tray"
+    ],
+    "sway/workspaces": {
+      "disable-scroll": true,
+      "all-outputs": true,
+      "format": "{icon}",
+      "format-icons": {
+        "1": "",
+        "2": "",
+        "3": "",
+        "4": "",
+        "5": "",
+        "urgent": "",
+        "focused": "",
+        "default": ""
+      }
+    },
+    "tray": {
+      "icon-size": 13,
+      "spacing": 10
+    },
+    "custom/pacman": {
+      "format": "  {}",
+      "interval": 3600,
+      "exec": "pacman -Qq | wc -l",
+      "exec-if": "exit 0",
+      "on-click": "termite -e 'sudo pacman -Syu'; pkill -SIGRTMIN+8 waybar",
+      "signal": 8
+    }
+  }
 ]
