@@ -1,8 +1,8 @@
 <h1 align="center">.dotfiles</h1>
 
 <p align="center">
-  <a href="https://www.archlinux.org/download/">
-    <img alt="Arch Linux" src="https://img.shields.io/badge/OS-Arch%20Linux-%2307b?style=for-the-badge&colorA=1C1D27" />
+  <a href="https://github.com/unaveos">
+    <img alt="UnaveOS" src="https://img.shields.io/badge/OS-Unave%20OS-23d18c?style=for-the-badge&colorA=0d1117" />
   </a>
 </p>
 
@@ -13,22 +13,22 @@
 <p align="center">
   <br>
   <a href="https://swaywm.org/ ">
-    <img alt="Sway" src="https://img.shields.io/badge/WM-Sway-F4D194?style=for-the-badge&colorA=1C1D27" />
+    <img alt="Sway" src="https://img.shields.io/badge/WM-Sway-F4D194?style=for-the-badge&colorA=0d1117" />
   </a>
   <a href="https://www.zsh.org/">
-    <img alt="Zsh" src="https://img.shields.io/badge/Shell-ZSH-921646?style=for-the-badge&colorA=1C1D27" />
+    <img alt="Zsh" src="https://img.shields.io/badge/Shell-ZSH-921646?style=for-the-badge&colorA=0d1117" />
   </a>
   <a href="https://github.com/nullgemm/ly">
-    <img alt="Ly" src="https://img.shields.io/badge/DM-LY-1C1D27?style=for-the-badge&colorA=1C1D27" />
+    <img alt="Ly" src="https://img.shields.io/badge/DM-LY-0d1117?style=for-the-badge&colorA=0d1117" />
   </a>
   <a href="https://github.com/kovidgoyal/kitty">
-    <img alt="Kitty" src="https://img.shields.io/badge/Terminal-Kitty-BB529B?style=for-the-badge&colorA=1C1D27" />
+    <img alt="Kitty" src="https://img.shields.io/badge/Terminal-Kitty-BB529B?style=for-the-badge&colorA=0d1117" />
   </a>
   <a href="https://github.com/hiukky/flate ">
-    <img alt="Theme" src="https://img.shields.io/badge/Theme-Flate-23d18c?style=for-the-badge&colorA=1C1D27" />
+    <img alt="Theme" src="https://img.shields.io/badge/Theme-Flate-23d18c?style=for-the-badge&colorA=0d1117" />
   </a>
   <a href="https://github.com/hiukky/dotfiles/blob/master/LICENSE">
-    <img alt="License" src="https://img.shields.io/badge/LICENSE-MIT-6E63BF?style=for-the-badge&colorA=1C1D27" />
+    <img alt="License" src="https://img.shields.io/badge/LICENSE-MIT-6E63BF?style=for-the-badge&colorA=0d1117" />
   </a>
 </p>
 
