@@ -6,3 +6,7 @@
 	gpgsign = true
 [core]
 	editor = nano
+[color]
+	ui = auto
+[credentials]
+	helper = store
