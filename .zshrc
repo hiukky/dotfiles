@@ -1,11 +1,14 @@
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/.bin:$PATH:$HOME/.local/bin
 
+# GnuPG
+export GPG_TTY=$(tty)
+
 # Path to your oh-my-zsh installation.
 export ZSH="/home/hiukky/.oh-my-zsh"
 
 # Term colors
-export TERM='xterm-kitty'
+export TERM='kitty'
 
 # Startship
 eval "$(starship init zsh)"
