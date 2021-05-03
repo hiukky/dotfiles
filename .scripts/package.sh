@@ -19,6 +19,7 @@ declare -a ARCH=(
     mousepad
     grim
     slurp
+    ansible
 )
 
 declare -a AUR=(
