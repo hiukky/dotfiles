@@ -20,6 +20,7 @@ declare -a ARCH=(
     grim
     slurp
     ansible
+    aws-cli
 )
 
 declare -a AUR=(
