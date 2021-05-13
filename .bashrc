@@ -27,4 +27,5 @@ if [ "$TERM" = "linux" ]; then
     echo -en "\e]PFdedede" #white
     clear
 fi
+
 complete -C /usr/local/bin/bitcomplete bit

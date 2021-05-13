@@ -3,7 +3,6 @@
 set -eE
 
 declare -a ARCH=(
-    nodejs
     npm
     yarn
     thunar
@@ -21,6 +20,7 @@ declare -a ARCH=(
     slurp
     ansible
     aws-cli
+    python2
 )
 
 declare -a AUR=(
