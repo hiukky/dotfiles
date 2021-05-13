@@ -21,6 +21,8 @@ declare -a ARCH=(
     ansible
     aws-cli
     python2
+    deno
+    wf-recorder
 )
 
 declare -a AUR=(
@@ -39,6 +41,8 @@ declare -a NPM=(
     vercel
     npm-check-updates
     yalc
+    vsce
+    typescript
 )
 
 printf "\n\nPACKAGES"
