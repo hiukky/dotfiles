@@ -35,6 +35,7 @@ declare -a AUR=(
     telegram-desktop-bin
     grimshot
     wl-clipboard
+    robo3t-bin
 )
 
 declare -a NPM=(
