@@ -5,6 +5,8 @@ set -eE
 declare -a ARCH=(
     npm
     yarn
+    bind
+    vault
     thunar
     tumbler
     ttf-cascadia-code
@@ -13,6 +15,7 @@ declare -a ARCH=(
     vagrant
     net-tools
     transmission-gtk
+    terraform
     discord
     vlc
     mousepad
@@ -21,6 +24,7 @@ declare -a ARCH=(
     ansible
     aws-cli
     python2
+    packer
     deno
     wf-recorder
 )
