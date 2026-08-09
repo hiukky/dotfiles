@@ -1,0 +1,24 @@
+#!/bin/bash
+set -euo pipefail
+
+# Windows Terminal's settings.json lives on the Windows side, read by the
+# Windows Terminal process -- it can't be a normal $HOME dotfile under WSL.
+if ! grep -qi microsoft /proc/version 2>/dev/null; then
+  exit 0
+fi
+
+WIN_PROFILE="$(wslpath "$(cmd.exe /c "echo %USERPROFILE%" 2>/dev/null | tr -d '\r\n')")"
+
+CANDIDATES=(
+  "$WIN_PROFILE/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json"
+  "$WIN_PROFILE/AppData/Local/Packages/Microsoft.WindowsTerminalPreview_8wekyb3d8bbwe/LocalState/settings.json"
+  "$WIN_PROFILE/AppData/Local/Microsoft/Windows Terminal/settings.json"
+)
+
+for dest in "${CANDIDATES[@]}"; do
+  dir="$(dirname "$dest")"
+  [ -d "$dir" ] || continue
+  cat > "$dest" <<'EOF'
+{{ template "windows-terminal-settings.json" . }}
+EOF
+done

@@ -1,0 +1,4 @@
+[data]
+    name = {{ promptStringOnce . "name" "Full name" "Romullo" | quote }}
+    email = {{ promptStringOnce . "email" "Git email" "developermarsh@gmail.com" | quote }}
+    signingKey = {{ promptStringOnce . "signingKey" "GPG signing key ID (blank disables commit signing)" "D6C2FAFE89DDBBB7" | quote }}

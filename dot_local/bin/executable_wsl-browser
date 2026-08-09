@@ -1,0 +1,5 @@
+#!/bin/bash
+# Opens a URL via Windows' default browser from inside WSL, so OAuth/device
+# flows (gh, glab, claude auth login, etc.) reuse existing sessions/cookies
+# instead of trying (and failing) to open a browser on the Linux side.
+exec powershell.exe -NoProfile -Command "Start-Process '$1'"

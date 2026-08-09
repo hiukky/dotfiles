@@ -1,0 +1,6 @@
+[tools]
+node = "latest"
+rust = "latest"
+bun = "latest"
+glow = "latest"
+rtk = "latest"

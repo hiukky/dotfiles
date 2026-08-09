@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=WSL Browser
+Comment=Opens URLs via Windows' default browser
+Exec=wsl-browser %u
+Type=Application
+Terminal=false
+NoDisplay=true
+MimeType=x-scheme-handler/http;x-scheme-handler/https;

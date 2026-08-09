@@ -1,0 +1,315 @@
+# ──────────────────────────────────────────────
+# PATH (must come first: zinit, mise, kubectl, kind, herdr, claude,
+# starship etc. all install into ~/.local/bin)
+# ──────────────────────────────────────────────
+export PATH="$HOME/.local/bin:$PATH"
+
+# ──────────────────────────────────────────────
+# Default editor
+# ──────────────────────────────────────────────
+export EDITOR="nvim"
+export VISUAL="nvim"
+
+# ──────────────────────────────────────────────
+# Browser (opens URLs via Windows' default browser, not a Linux one)
+# ──────────────────────────────────────────────
+export BROWSER="wsl-browser"
+
+# ──────────────────────────────────────────────
+# Claude Code
+# ──────────────────────────────────────────────
+#export CLAUDE_CODE_AUTO_COMPACT_WINDOW=400000
+
+# ──────────────────────────────────────────────
+# Zinit bootstrap
+# ──────────────────────────────────────────────
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+source "${ZINIT_HOME}/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+# ──────────────────────────────────────────────
+# Plugins (zinit)
+# ──────────────────────────────────────────────
+
+# Syntax highlighting (must come before autosuggestions)
+zinit light zdharma-continuum/fast-syntax-highlighting
+
+# Autosuggestions (Fish-like)
+zinit light zsh-users/zsh-autosuggestions
+
+# Extra completions
+zinit light zsh-users/zsh-completions
+
+# History substring search (up/down arrow filters by what you typed)
+zinit light zsh-users/zsh-history-substring-search
+
+# Improved vi mode
+zinit light jeffreytse/zsh-vi-mode
+
+# fzf-tab: replaces the default completion menu with fzf
+zinit light Aloxaf/fzf-tab
+
+# z / autojump (smart cd)
+zinit light agkozak/zsh-z
+
+# Copy command output with Ctrl+O
+zinit light reegnz/jq-zsh-plugin
+
+# Notification when a long-running command finishes
+zinit light MichaelAquilina/zsh-you-should-use
+
+# ──────────────────────────────────────────────
+# Oh-My-Zsh libs (via zinit snippets)
+# ──────────────────────────────────────────────
+zinit snippet OMZL::git.zsh
+zinit snippet OMZL::history.zsh
+zinit snippet OMZL::key-bindings.zsh
+zinit snippet OMZL::completion.zsh
+
+# ──────────────────────────────────────────────
+# Oh-My-Zsh plugins (via zinit snippets)
+# ──────────────────────────────────────────────
+zinit snippet OMZP::git
+zinit snippet OMZP::docker-compose
+zinit snippet OMZP::npm
+zinit snippet OMZP::node
+zinit snippet OMZP::extract       # extract <file>, unpacks any archive format
+zinit snippet OMZP::sudo          # ESC ESC, prepends sudo to the last command
+zinit snippet OMZP::command-not-found
+
+# ──────────────────────────────────────────────
+# Completions
+# ──────────────────────────────────────────────
+autoload -Uz compinit
+compinit -d ~/.cache/zcompdump
+
+# Completion style
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'  # case-insensitive
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza --tree --color=always $realpath 2>/dev/null || ls $realpath'
+zstyle ':fzf-tab:complete:*' fzf-preview 'bat --color=always --style=numbers $realpath 2>/dev/null || cat $realpath 2>/dev/null || ls $realpath'
+
+# kubectl completion (works both for "kubectl" and the "k" alias)
+if command -v kubectl >/dev/null 2>&1; then
+  source <(kubectl completion zsh)
+  compdef k=kubectl
+fi
+
+# ──────────────────────────────────────────────
+# History
+# ──────────────────────────────────────────────
+HISTFILE=~/.zsh_history
+HISTSIZE=100000
+SAVEHIST=100000
+setopt HIST_IGNORE_ALL_DUPS    # no duplicates
+setopt HIST_IGNORE_SPACE       # lines starting with a space aren't saved
+setopt HIST_REDUCE_BLANKS
+setopt SHARE_HISTORY           # share history across sessions
+setopt INC_APPEND_HISTORY      # append to history immediately
+
+# ──────────────────────────────────────────────
+# Key bindings
+# ──────────────────────────────────────────────
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+bindkey '^P' history-substring-search-up
+bindkey '^N' history-substring-search-down
+
+# ──────────────────────────────────────────────
+# FZF
+# ──────────────────────────────────────────────
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
+export FZF_DEFAULT_OPTS='
+  --height 40%
+  --layout=reverse
+  --border=rounded
+  --preview-window=right:50%:wrap
+  --color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8
+  --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc
+  --color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8
+'
+export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range=:200 {}'"
+export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
+
+# ──────────────────────────────────────────────
+# Aliases
+# ──────────────────────────────────────────────
+# ls → eza
+alias ls='eza --icons --group-directories-first'
+alias ll='eza -la --icons --group-directories-first --git'
+alias lt='eza --tree --icons --level=2 --group-directories-first'
+alias llt='eza --tree --icons --level=3 --group-directories-first'
+
+# cat → bat
+alias cat='bat --style=auto'
+
+# fd
+alias find='fd'
+
+# grep → ripgrep
+alias grep='rg'
+
+# git
+alias g='git'
+alias gs='git status -sb'
+alias ga='git add'
+alias gaa='git add -A'
+alias gc='git commit -m'
+alias gca='git commit --amend --no-edit'
+alias gp='git push'
+alias gpf='git push --force-with-lease'
+alias gpl='git pull --rebase'
+alias gl='git log --oneline --graph --decorate'
+alias gll='git log --graph --pretty="%C(yellow)%h%C(reset) %C(blue)%ar%C(reset) %C(white)%s%C(reset) %C(dim)%an%C(reset)"'
+alias gd='git diff'
+alias gds='git diff --staged'
+alias gco='git checkout'
+alias gcb='git checkout -b'
+alias grb='git rebase'
+alias gst='git stash'
+alias gstp='git stash pop'
+alias gundo='git reset --soft HEAD~1'   # undo last commit, keep the files
+alias gnuke='git reset --hard HEAD'     # discard all local changes
+
+# docker
+alias d='docker'
+alias dps='docker ps'
+alias dpsa='docker ps -a'
+alias di='docker images'
+alias dex='docker exec -it'
+alias dlog='docker logs -f'
+alias dstop='docker stop $(docker ps -q)'          # stop all containers
+alias dclean='docker system prune -af --volumes'   # wipe everything (images, volumes, cache)
+alias dc='docker compose'
+alias dcu='docker compose up -d'
+alias dcd='docker compose down'
+alias dcr='docker compose restart'
+alias dcl='docker compose logs -f'
+alias dcb='docker compose up -d --build'
+
+# npm / node
+alias ni='npm install'
+alias nid='npm install -D'
+alias nig='npm install -g'
+alias nr='npm run'
+alias nrd='npm run dev'
+alias nrb='npm run build'
+alias nrt='npm run test'
+alias nrl='npm run lint'
+alias nlg='npm list -g --depth=0'
+alias ncu='npx npm-check-updates -i'   # interactively update deps
+
+# pnpm
+alias pi='pnpm install'
+alias pr='pnpm run'
+alias prd='pnpm dev'
+alias prb='pnpm build'
+alias prt='pnpm test'
+
+# navigation
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias ~='cd ~'
+
+# utilities
+alias h='history | fzf'
+alias ports='ss -tulpn'
+alias myip='curl -s https://ipinfo.io/ip'
+alias reload='source ~/.zshrc'
+alias zshconfig='${EDITOR:-nano} ~/.zshrc'
+alias mkcd='_(){ mkdir -p "$1" && cd "$1"; }; _'   # mkdir + cd
+alias serve='python3 -m http.server'                # simple http server
+alias json='python3 -m json.tool'                   # pretty-print piped json
+
+# kubernetes
+alias k="kubectl"
+ke() {
+  kubectl -n kube-system exec -it etcd-devops-lab-control-plane -- sh -c "ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key $*"
+}
+
+# ──────────────────────────────────────────────
+# Autosuggestions config
+# ──────────────────────────────────────────────
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+ZSH_AUTOSUGGEST_USE_ASYNC=true
+bindkey '^ ' autosuggest-accept   # Ctrl+Space accepts the suggestion
+
+# ──────────────────────────────────────────────
+# bat como manpager
+# ──────────────────────────────────────────────
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export MANROFFOPT="-c"
+
+# ──────────────────────────────────────────────
+# PATH extras
+# ──────────────────────────────────────────────
+# batcat -> bat (Ubuntu ships it as batcat)
+[ -f /usr/bin/batcat ] && alias bat='batcat' && alias cat='batcat --style=auto'
+# fdfind -> fd (Ubuntu ships it as fdfind)
+[ -f /usr/bin/fdfind ] && alias fd='fdfind'
+
+# ──────────────────────────────────────────────
+# Mise (version manager: node, python, etc)
+# ──────────────────────────────────────────────
+eval "$(mise activate zsh)"
+
+# ──────────────────────────────────────────────
+# Starship prompt
+# ──────────────────────────────────────────────
+eval "$(starship init zsh)"
+
+# Web: Edge on Windows (use the wrapper script under WSL; calling msedge.exe directly raises a FormatException in flutter doctor)
+export CHROME_EXECUTABLE="$HOME/.local/bin/msedge-for-flutter-wsl"
+
+# Java
+export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"
+export PATH="$PATH:$JAVA_HOME/bin"
+
+# Android SDK (on Windows, accessed from WSL2)
+export ANDROID_HOME="/mnt/c/Users/hiukk/AppData/Local/Android/Sdk"
+export ANDROID_SDK_ROOT="$ANDROID_HOME"
+export PATH="$PATH:$ANDROID_HOME/platform-tools"
+export PATH="$PATH:$ANDROID_HOME/emulator"
+export PATH="$PATH:$ANDROID_HOME/build-tools/36.1.0"
+export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin"
+
+# ADB: use the Windows executable to avoid version conflicts under WSL2
+alias adb="$ANDROID_HOME/platform-tools/adb.exe"
+
+# Flutter
+export PATH="$HOME/.flutter/bin:$PATH"
+export PATH="$PATH":"$HOME/.pub-cache/bin"
+
+# ──────────────────────────────────────────────
+# GnuPG: keep TTY correct for pinentry (signing from terminal / IDE)
+# ──────────────────────────────────────────────
+export GPG_TTY=$(tty)
+autoload -Uz add-zsh-hook
+_gpg_tty_update() {
+  export GPG_TTY=$(tty)
+  gpg-connect-agent updatestartuptty /bye >/dev/null 2>&1 || true
+}
+add-zsh-hook precmd _gpg_tty_update
+
+## [Completion]
+## Completion scripts setup. Remove the following line to uninstall
+[[ -f /home/hiukky/.dart-cli-completion/zsh-config.zsh ]] && . /home/hiukky/.dart-cli-completion/zsh-config.zsh || true
+## [/Completion]
+
+
+# kimi-code
+export PATH="/home/hiukky/.kimi-code/bin:$PATH"
+
+# opencode
+export PATH=/home/hiukky/.opencode/bin:$PATH
+
+# Rust
+export PATH="$HOME/.cargo/bin:$PATH"

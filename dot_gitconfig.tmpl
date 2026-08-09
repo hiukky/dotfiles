@@ -1,0 +1,12 @@
+[user]
+{{- if .signingKey }}
+	signingkey = {{ .signingKey }}
+{{- end }}
+	name = {{ .name }}
+	email = {{ .email }}
+[commit]
+	gpgsign = {{ if .signingKey }}true{{ else }}false{{ end }}
+[core]
+	editor = nvim
+[gpg]
+	program = gpg
