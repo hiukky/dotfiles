@@ -5,13 +5,22 @@
 export PATH="$HOME/.local/bin:$PATH"
 
 # ──────────────────────────────────────────────
-# Auto-abrir programa em abas novas do herdr (ex: Ctrl+. -> aba com nvim)
-# Precisa vir cedo e usar exec + unset pra não recursar num :terminal do nvim
+# Auto-launch a program in new herdr tabs (e.g. Ctrl+. -> tab with nvim)
+# Must run early, and use exec + unset so it doesn't recurse into a nvim :terminal
 # ──────────────────────────────────────────────
 if [ -n "$HERDR_AUTOSTART" ]; then
   __herdr_autostart_cmd="$HERDR_AUTOSTART"
   unset HERDR_AUTOSTART
   exec "$__herdr_autostart_cmd"
+fi
+
+# Report the current cwd to herdr's spaces sidebar (see [ui.sidebar.spaces] in config.toml)
+if [ -n "$HERDR_ENV" ]; then
+  __herdr_report_cwd() {
+    herdr workspace report-metadata "$HERDR_WORKSPACE_ID" --source zsh-cwd --token "cwd=${PWD/#$HOME/~}" >/dev/null 2>&1
+  }
+  chpwd_functions+=(__herdr_report_cwd)
+  __herdr_report_cwd
 fi
 
 # ──────────────────────────────────────────────

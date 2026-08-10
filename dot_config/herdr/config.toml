@@ -1,42 +1,32 @@
 
 [keys]
-# mantido em ctrl+b por escolha; isso significa que o "início de linha" do
-# nvim em modo insert (ctrl+b) não é alcançável dentro do herdr — use 0/^
-# no modo normal do vim como alternativa nativa.
+# kept on ctrl+b by choice; this means nvim's insert-mode "start of line"
+# (ctrl+b) is unreachable inside herdr — use 0/^ in normal mode instead.
 prefix = "ctrl+b"
 
-# esquerda/direita = abas (a ação mais frequente do fluxo agente+nvim)
+# left/right = tabs (the most frequent action in the agent+nvim workflow)
 previous_tab = "prefix+left"
 next_tab = "prefix+right"
 
-# cima/baixo = spaces (workspaces)
+# up/down = spaces (workspaces)
 previous_workspace = "prefix+up"
 next_workspace = "prefix+down"
 
 [[keys.command]]
-# ctrl+period direto não é confiável (terminais clássicos não distinguem
-# ctrl+. de um "." puro); atrás do prefix a tecla seguinte é sempre sem
-# modificador, então não tem essa ambiguidade.
+# direct ctrl+period isn't reliable (classic terminals can't distinguish
+# ctrl+. from a bare "."); behind the prefix the next key is always
+# unmodified, so there's no such ambiguity.
 key = "prefix+period"
 type = "shell"
 command = "herdr tab create --env HERDR_AUTOSTART=nvim --focus"
-description = "nova aba já com nvim aberto"
-
-# herdr-file-viewer plugin keybindings
-[[keys.command]]
-key = "prefix+f"
-type = "plugin_action"
-command = "herdr-file-viewer.open-file-viewer"
-description = "open file viewer in split"
-
-[[keys.command]]
-key = "prefix+shift+f"
-type = "plugin_action"
-command = "herdr-file-viewer.open-file-viewer-tab"
-description = "open file viewer in tab"
+description = "new tab with nvim already open"
 
 [ui]
 show_agent_labels_on_pane_borders = false
+
+[ui.sidebar.spaces]
+# $cwd is reported by a zsh (chpwd) hook in .zshrc, it's not a herdr builtin
+rows = [["state_icon", "workspace"], ["$cwd"]]
 
 [theme]
 name = "gruvbox"
