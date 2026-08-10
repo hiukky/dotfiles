@@ -1,4 +1,27 @@
 
+[keys]
+# mantido em ctrl+b por escolha; isso significa que o "início de linha" do
+# nvim em modo insert (ctrl+b) não é alcançável dentro do herdr — use 0/^
+# no modo normal do vim como alternativa nativa.
+prefix = "ctrl+b"
+
+# esquerda/direita = abas (a ação mais frequente do fluxo agente+nvim)
+previous_tab = "prefix+left"
+next_tab = "prefix+right"
+
+# cima/baixo = spaces (workspaces)
+previous_workspace = "prefix+up"
+next_workspace = "prefix+down"
+
+[[keys.command]]
+# ctrl+period direto não é confiável (terminais clássicos não distinguem
+# ctrl+. de um "." puro); atrás do prefix a tecla seguinte é sempre sem
+# modificador, então não tem essa ambiguidade.
+key = "prefix+period"
+type = "shell"
+command = "herdr tab create --env HERDR_AUTOSTART=nvim --focus"
+description = "nova aba já com nvim aberto"
+
 # herdr-file-viewer plugin keybindings
 [[keys.command]]
 key = "prefix+f"
@@ -11,3 +34,10 @@ key = "prefix+shift+f"
 type = "plugin_action"
 command = "herdr-file-viewer.open-file-viewer-tab"
 description = "open file viewer in tab"
+
+[ui]
+show_agent_labels_on_pane_borders = false
+
+[theme]
+name = "gruvbox"
+auto_switch = false

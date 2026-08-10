@@ -5,6 +5,16 @@
 export PATH="$HOME/.local/bin:$PATH"
 
 # ──────────────────────────────────────────────
+# Auto-abrir programa em abas novas do herdr (ex: Ctrl+. -> aba com nvim)
+# Precisa vir cedo e usar exec + unset pra não recursar num :terminal do nvim
+# ──────────────────────────────────────────────
+if [ -n "$HERDR_AUTOSTART" ]; then
+  __herdr_autostart_cmd="$HERDR_AUTOSTART"
+  unset HERDR_AUTOSTART
+  exec "$__herdr_autostart_cmd"
+fi
+
+# ──────────────────────────────────────────────
 # Default editor
 # ──────────────────────────────────────────────
 export EDITOR="nvim"
@@ -211,6 +221,9 @@ alias pr='pnpm run'
 alias prd='pnpm dev'
 alias prb='pnpm build'
 alias prt='pnpm test'
+
+# herdr
+alias up='herdr'
 
 # navigation
 alias ..='cd ..'
