@@ -17,4 +17,5 @@ sudo apt-get install -y \
   fzf \
   gh \
   glab \
-  tree
+  tree \
+  jq
