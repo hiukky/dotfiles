@@ -1,6 +1,10 @@
 <h1 align="center">.dotfiles</h1>
 
 <p align="center">
+  <img src=".assets/banner.png" alt="banner" width="100%" style="border-radius: 12px;" />
+</p>
+
+<p align="center">
   <a href="https://www.chezmoi.io">
     <img alt="chezmoi" src="https://img.shields.io/badge/chezmoi-managed-1a1a1a?style=for-the-badge&colorA=1a1a1a" />
   </a>
