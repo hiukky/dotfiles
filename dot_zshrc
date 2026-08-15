@@ -283,6 +283,12 @@ export MANROFFOPT="-c"
 # ──────────────────────────────────────────────
 eval "$(mise activate zsh)"
 
+# bun itself comes from mise above, but `bun install -g <pkg>` (e.g.
+# ccstatusline) still installs into bun's own ~/.bun/install/global and
+# symlinks bins into ~/.bun/bin -- mise doesn't put that on PATH, so it
+# needs its own export or globally-installed bun packages silently 404.
+export PATH="$HOME/.bun/bin:$PATH"
+
 # ──────────────────────────────────────────────
 # Starship prompt
 # ──────────────────────────────────────────────
