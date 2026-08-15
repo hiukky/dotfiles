@@ -3,7 +3,7 @@
 # chezmoi and init/update this dotfiles repo.
 #
 # Usage (from a normal, non-elevated PowerShell):
-#   irm https://get.hiukky.com/setup.ps1 | iex
+#   irm https://hiukky.com/setup.ps1 | iex
 #
 # Known limitation: if this is the very first time WSL/virtualization features
 # are enabled on this machine, Windows may require a restart partway through.
@@ -20,7 +20,7 @@ function Test-Admin {
 
 if (-not (Test-Admin)) {
     Write-Host "Installing WSL requires administrator rights -- relaunching elevated (accept the UAC prompt)..."
-    $bootstrapUrl = "https://get.hiukky.com/setup.ps1"
+    $bootstrapUrl = "https://hiukky.com/setup.ps1"
     Start-Process powershell -Verb RunAs -ArgumentList "-NoExit", "-Command", "irm $bootstrapUrl | iex"
     exit
 }
@@ -53,4 +53,4 @@ Write-Host "Launching $distro to finish setup and bootstrap dotfiles..."
 Write-Host "(On first launch, $distro will ask you to create your Linux username/password.)"
 Write-Host ""
 
-wsl.exe -d $distro -- sh -c '$(curl -fsLS https://get.hiukky.com/setup.sh)'
+wsl.exe -d $distro -- sh -c '$(curl -fsLS https://hiukky.com/setup.sh)'

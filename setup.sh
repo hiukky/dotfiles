@@ -5,7 +5,7 @@
 # which of the two to use.
 #
 # Usage:
-#   sh -c "$(curl -fsLS https://get.hiukky.com/setup.sh)"
+#   sh -c "$(curl -fsLS https://hiukky.com/setup.sh)"
 
 set -e
 

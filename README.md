@@ -26,13 +26,13 @@
 **🐧 Linux / WSL**
 
 ```sh
-sh -c "$(curl -fsLS https://get.hiukky.com/setup.sh)"
+sh -c "$(curl -fsLS https://hiukky.com/setup.sh)"
 ```
 
 **🪟 Windows** (works even with no WSL yet), from a normal PowerShell:
 
 ```powershell
-irm https://get.hiukky.com/setup.ps1 | iex
+irm https://hiukky.com/setup.ps1 | iex
 ```
 
 Same command every time on either OS: first run bootstraps everything from scratch, later runs just pull and apply updates.
