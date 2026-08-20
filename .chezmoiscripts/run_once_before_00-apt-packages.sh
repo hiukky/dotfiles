@@ -10,6 +10,7 @@ sudo apt-get install -y \
   ca-certificates \
   gnupg \
   build-essential \
+  bubblewrap \
   eza \
   bat \
   fd-find \

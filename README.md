@@ -46,7 +46,7 @@ Automated, idempotent provisioning of the whole environment, Linux and Windows a
 - ✏️ **Editor:** `neovim` (default `$EDITOR`)
 - ⚙️ **Runtimes:** `node`, `rust`, `bun`, `flutter`, all via `mise`
 - 🐳 **Containers:** `docker`, `kubectl`, `kind`
-- 🤖 **AI:** `claude` (Claude Code), `herdr`, `ollama`
+- 🤖 **AI:** `claude`, `codex`, `herdr`
 - 🔑 **Accounts:** fresh SSH key per machine plus `gh`/`glab`/`claude` login
 - 🪟 **Windows (host, via WSL):** VirtualBox, Android SDK, Discord, Notion, Steam, Spotify, Teams, VLC, CapCut, Chrome, and more
 - 🔄 **WSL ⇄ Windows:** Nerd Font, `.wslconfig`, and Windows Terminal `settings.json` kept in sync
