@@ -28,4 +28,19 @@ return {
       },
     },
   },
+
+  {
+    "HakonHarnes/img-clip.nvim",
+    event = "VeryLazy",
+    opts = {
+      default = {
+        -- creates the dir next to the current file if it doesn't exist yet
+        dir_path = "assets/images",
+        use_absolute_path = false,
+      },
+    },
+    keys = {
+      { "<leader>p", "<cmd>PasteImage<cr>", desc = "paste image from clipboard" },
+    },
+  },
 }

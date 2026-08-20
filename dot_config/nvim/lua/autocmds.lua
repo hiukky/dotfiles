@@ -1,6 +1,6 @@
 require "nvchad.autocmds"
 
--- Abre a árvore de arquivos sozinha quando o nvim é iniciado numa pasta (ex: `nvim .`)
+-- Auto-open the file tree when nvim starts in a directory (e.g. `nvim .`)
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function(data)
     if vim.fn.isdirectory(data.file) ~= 1 then

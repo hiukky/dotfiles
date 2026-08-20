@@ -25,9 +25,14 @@ require("lazy").setup({
   { import = "plugins" },
 }, lazy_config)
 
--- load theme
-dofile(vim.g.base46_cache .. "defaults")
-dofile(vim.g.base46_cache .. "statusline")
+-- load theme (NVIM_VANILLA=1 skips NvChad's theme/statusline, falling back
+-- to nvim's own built-in look; LSP/completion/plugins still load normally)
+if vim.env.NVIM_VANILLA ~= "1" then
+  dofile(vim.g.base46_cache .. "defaults")
+  dofile(vim.g.base46_cache .. "statusline")
+else
+  vim.o.termguicolors = true
+end
 
 require "options"
 require "autocmds"

@@ -5,8 +5,8 @@ require "nvchad.options"
 local o = vim.o
 -- o.cursorlineopt ='both' -- to enable cursorline!
 
--- Recarrega o buffer sozinho quando o arquivo muda no disco (essencial pra
--- acompanhar edições feitas por um agente em outra aba/painel do herdr).
+-- Auto-reload the buffer when the file changes on disk (essential for
+-- following edits made by an agent in another herdr tab/pane).
 o.autoread = true
 vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
   pattern = "*",
@@ -14,8 +14,8 @@ vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHo
 })
 vim.api.nvim_create_autocmd("FileChangedShellPost", {
   pattern = "*",
-  command = 'echohl WarningMsg | echo "Arquivo recarregado (mudou fora do nvim)" | echohl None',
+  command = 'echohl WarningMsg | echo "File reloaded (changed outside nvim)" | echohl None',
 })
 
--- Clipboard do sistema, pra copiar/colar entre o nvim e outros paineis/apps
+-- System clipboard, so copy/paste works between nvim and other panes/apps
 o.clipboard = "unnamedplus"
