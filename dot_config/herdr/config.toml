@@ -1,3 +1,4 @@
+onboarding = false
 
 [keys]
 # kept on ctrl+b by choice; this means nvim's insert-mode "start of line"
@@ -21,9 +22,16 @@ type = "shell"
 command = "herdr tab create --env HERDR_AUTOSTART=nvim --focus"
 description = "new tab with nvim already open"
 
+[[keys.command]]
+key = "prefix+e"
+type = "plugin_action"
+command = "codetree.open"
+description = "open codetree explorer"
+
 [ui]
 show_agent_labels_on_pane_borders = false
 
+agent_panel_sort = "spaces"
 [ui.sidebar.spaces]
 # $cwd is reported by a zsh (chpwd) hook in .zshrc, it's not a herdr builtin
 rows = [["state_icon", "workspace"], ["$cwd"]]
