@@ -42,7 +42,7 @@ Same command every time on either OS: first run bootstraps everything from scrat
 Automated, idempotent provisioning of the whole environment, Linux and Windows alike.
 
 - 🐚 **Shell:** `zsh`, `zinit`, `starship`
-- 🧰 **CLI:** `eza`, `bat`, `ripgrep`, `fd`, `fzf`, `tree`, `gh`, `glab`, `glow`, `rtk`
+- 🧰 **CLI:** `eza`, `bat`, `ripgrep`, `fd`, `fzf`, `tree`, `gh`, `glab`, `glow`, `rtk`, `asciinema`
 - ⚙️ **Runtimes:** `node`, `rust`, `bun`, `flutter`, all via `mise`
 - 🐳 **Containers:** `docker`, `kubectl`, `kind`
 - 🤖 **AI:** `claude`, `codex`, `uze` (built from source at `~/uze`)

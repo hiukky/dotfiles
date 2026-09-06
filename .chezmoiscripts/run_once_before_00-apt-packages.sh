@@ -19,4 +19,5 @@ sudo apt-get install -y \
   gh \
   glab \
   tree \
-  jq
+  jq \
+  asciinema
