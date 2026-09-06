@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Portable guidance for any coding agent working in this repository.
 
 ## What this repo is
 
@@ -36,7 +36,7 @@ chezmoi maps source filenames to target paths using prefixes/suffixes. This mapp
 - `private_dot_foo` → `~/.foo` applied with mode `0600`
 - `executable_foo` → `foo` with the executable bit set
 - `foo.tmpl` → rendered as a Go template before being written
-- `.chezmoiignore` lists source-relative target paths to never apply (currently `README.md`, `LICENSE`, `CLAUDE.md`, so the repo's own docs aren't written into `$HOME`)
+- `.chezmoiignore` lists source-relative target paths to never apply (currently `README.md`, `LICENSE`, `AGENTS.md`, `CLAUDE.md`, plus `setup.sh`/`setup.ps1`, so the repo's own docs and bootstrap entry points aren't written into `$HOME`)
 - `.chezmoiroot`, if added later, would rebase the source root to a subdirectory (not currently used; the repo root is the source root)
 
 When adding a new dotfile, prefer `chezmoi add <path>` over manually creating the encoded filename, so the encoding matches what chezmoi expects.

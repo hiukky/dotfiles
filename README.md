@@ -60,7 +60,7 @@ Automated, idempotent provisioning of the whole environment, Linux and Windows a
 | `chezmoi apply` | Apply changes to `$HOME` |
 | `chezmoi update` | Pull the latest changes and apply |
 
-📄 Full breakdown of conventions and design decisions: [`CLAUDE.md`](./CLAUDE.md).
+📄 Full breakdown of conventions and design decisions: [`AGENTS.md`](./AGENTS.md).
 
 ## 💻 My setup
 
