@@ -10,6 +10,7 @@ sudo apt-get install -y \
   ca-certificates \
   gnupg \
   build-essential \
+  vim \
   bubblewrap \
   eza \
   bat \

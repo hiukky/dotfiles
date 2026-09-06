@@ -8,6 +8,9 @@
   <a href="https://www.chezmoi.io">
     <img alt="chezmoi" src="https://img.shields.io/badge/chezmoi-managed-1a1a1a?style=for-the-badge&colorA=1a1a1a" />
   </a>
+  <a href="https://uze.hiukky.com">
+    <img alt="uze" src="https://img.shields.io/badge/agents-uze-1a1a1a?style=for-the-badge&colorA=1a1a1a" />
+  </a>
   <a href="https://www.zsh.org/">
     <img alt="zsh" src="https://img.shields.io/badge/shell-zsh-1a1a1a?style=for-the-badge&logo=gnubash&logoColor=white&colorA=1a1a1a" />
   </a>
@@ -43,9 +46,10 @@ Automated, idempotent provisioning of the whole environment, Linux and Windows a
 
 - 🐚 **Shell:** `zsh`, `zinit`, `starship`
 - 🧰 **CLI:** `eza`, `bat`, `ripgrep`, `fd`, `fzf`, `tree`, `gh`, `glab`, `glow`, `rtk`, `asciinema`
+- ✏️ **Editor:** `vim` (default `$EDITOR`)
 - ⚙️ **Runtimes:** `node`, `rust`, `bun`, `flutter`, all via `mise`
 - 🐳 **Containers:** `docker`, `kubectl`, `kind`
-- 🤖 **AI:** `claude`, `codex`, `uze` (built from source at `~/uze`)
+- 🤖 **Agents:** `claude`, `codex`, and [`uze`](https://uze.hiukky.com) — built from source at `~/uze`, and the owner of this repo's portable [`AGENTS.md`](./AGENTS.md) context
 - 🔑 **Accounts:** fresh SSH key per machine plus `gh`/`glab`/`claude` login
 - 🪟 **Windows (host, via WSL):** VirtualBox, Android SDK, Discord, Notion, Steam, Spotify, Teams, VLC, CapCut, Chrome, and more
 - 🔄 **WSL ⇄ Windows:** Nerd Font, `.wslconfig`, and Windows Terminal `settings.json` kept in sync

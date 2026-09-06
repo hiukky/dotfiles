@@ -8,6 +8,17 @@ This is a [chezmoi](https://www.chezmoi.io) source directory: it stores dotfiles
 
 Non-default setup: chezmoi's source directory is pointed at this repo (`~/dotfiles`) via `sourceDir = "/home/hiukky/dotfiles"` in `~/.config/chezmoi/chezmoi.toml`, instead of chezmoi's default `~/.local/share/chezmoi`. Any `chezmoi` command run on this machine operates on this repo.
 
+## Agent context (this file)
+
+This repo's agent instructions are portable by design: `AGENTS.md` is the single source, read natively by Claude Code, Codex, OpenCode and Antigravity alike. It was migrated here from a `CLAUDE.md` in 2026-09 using [uze](https://uze.hiukky.com)'s `uze context` (`inspect` -> `plan` -> `reconcile`), which reported the repo `VENDOR_LOCKED` before and `PORTABLE` after.
+
+Nothing in the old file was actually harness-specific -- every mention of Claude in it is subject matter, since this repo provisions the `claude` CLI, `dot_claude/settings.json` and `run_once_after_83-claude-plugins.sh` -- so the whole body moved as-is and `CLAUDE.md` was dropped rather than left as a stub. `uze context reconcile` reports the claude-code bridge as `needed: false` and writes no bridge region into it.
+
+Two rules follow from that:
+
+- Don't hand-create a `CLAUDE.md` or `GEMINI.md` here. If a harness ever genuinely needs one, `uze context reconcile` is what creates it, and it owns everything between its `<!-- uze:begin -->` / `<!-- uze:end -->` markers. Run `uze context inspect` before assuming anything about the current state.
+- `AGENTS.md` is in `.chezmoiignore` for the same reason `README.md` and `LICENSE` are: it's repo documentation, not a dotfile, and must never be applied into `$HOME`.
+
 ## Commands
 
 ```sh
@@ -61,6 +72,8 @@ Dotfiles alone are not enough: `.zshrc` assumes `zinit`, `eza`, `bat`, `fd`, `ri
 Rust, bun, glow and rtk are all installed via mise (`dot_config/mise/config.toml`) rather than dedicated scripts. mise has core/aqua/github backends for all four, so there's no need for a separate curl-based installer per tool.
 
 `asciinema` (terminal session recorder) comes from apt, not mise: mise's registry has no entry for it at all, so a dedicated backend would have to be invented. apt ships 2.4.0, the Python implementation, which records the v2 `.cast` format; upstream's 3.x Rust rewrite is packaged by neither and isn't worth a curl-based installer here. Rendering a cast to GIF needs `agg` (`cargo install --git https://github.com/asciinema/agg`), deliberately not installed — `asciinema play`/`upload` cover the common case, and `agg` is a Rust build only wanted when a GIF is.
+
+`vim` is in the apt list only because `dot_zshrc` sets `EDITOR`/`VISUAL` to it and `dot_gitconfig.tmpl` sets `core.editor` -- it replaced `neovim`, and the whole tracked `dot_config/nvim/` config, in 2026-09. `vi` was the tempting alternative and is the wrong one: it always exists, but it's an `update-alternatives` symlink whose target depends on what's installed. Ubuntu's WSL base image ships only `vim-tiny`, so there `vi` is `vim.tiny` (no syntax highlighting, no persistent undo) and `/usr/bin/vim` doesn't exist at all. Naming `vim` and installing the package makes the editor the same one on every machine; on a provisioned host both names then resolve to the same `/usr/bin/vim.basic`.
 
 `run_once_before_70-claude-code.sh` and `run_once_before_71-codex-cli.sh` install the `claude` and `codex` CLIs via their respective official install scripts (`curl -fsSL https://claude.ai/install.sh | bash` and `curl -fsSL https://chatgpt.com/codex/install.sh | sh`), both landing in `~/.local/bin`, guarded by the same `command -v` idempotency check used everywhere else in this directory. mise's registry does know a `codex` tool (`npm:@openai/codex`/`aqua:openai/codex`), but the official installer is what's actually used on this machine, so the dedicated script matches reality instead of switching to mise for the sake of it. `bubblewrap` (added to `run_once_before_00-apt-packages.sh`) is Codex's Linux sandbox backend; without it Codex falls back to a bundled copy and warns on every run.
 
