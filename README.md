@@ -49,7 +49,7 @@ Automated, idempotent provisioning of the whole environment, Linux and Windows a
 - ✏️ **Editor:** `vim` (default `$EDITOR`)
 - ⚙️ **Runtimes:** `node`, `rust`, `bun`, `flutter`, all via `mise`
 - 🐳 **Containers:** `docker`, `kubectl`, `kind`
-- 🤖 **Agents:** `claude`, `codex`, and [`uze`](https://uze.hiukky.com) — built from source at `~/uze`, and the owner of this repo's portable [`AGENTS.md`](./AGENTS.md) context
+- 🤖 **Agents:** `claude`, `codex`, `opencode`, and [`uze`](https://uze.hiukky.com) — built from source at `~/uze`, and the owner of this repo's portable [`AGENTS.md`](./AGENTS.md) context
 - 🔑 **Accounts:** fresh SSH key per machine plus `gh`/`glab`/`claude` login
 - 🪟 **Windows (host, via WSL):** VirtualBox, Android SDK, Discord, Notion, Steam, Spotify, Teams, VLC, CapCut, Chrome, and more
 - 🔄 **WSL ⇄ Windows:** Nerd Font, `.wslconfig`, and Windows Terminal `settings.json` kept in sync

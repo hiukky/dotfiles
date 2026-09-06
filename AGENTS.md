@@ -117,13 +117,17 @@ Two constraints drive its numbering and its handling of an existing checkout:
 
 `~/.config/uze/` is deliberately untracked: it holds only generated state (`cache/`, `runtime/`, `shims/`, `state/`, `store/`), no hand-written config.
 
+`run_once_after_97-harnesses.sh` installs `opencode`, the one harness used here that has no installer worth hand-scripting. Rather than reimplement it, the script defers to `uze setup opencode`, which provisions it from OpenCode's own official install script -- `uze setup inspect opencode` reports the provisioning route it took, and `uze setup list` shows all four harnesses' health. It is numbered past `96-uze.sh` because it needs the `uze` binary that script builds, resolved via the same `command -v uze || ~/.cargo/bin/uze` fallback.
+
+The other three harnesses (`claude`, `codex`, `antigravity`) are left to `uze setup` only implicitly: `claude` and `codex` already have dedicated scripts at `70`/`71`, so this script targets `opencode` by name instead of running a bare `uze setup` that would also touch them.
+
 `run_once_before_47-flutter.sh` clones the `stable` channel into `~/.flutter` (matches `dot_zshrc`'s existing `PATH` entry; kept as a plain git clone rather than switching to mise's `flutter`/`dart` plugins, to avoid touching an already-correct path).
 
 `run_once_before_48-android-sdk.sh` is WSL-specific: provisions the Android SDK on the Windows host, matching `dot_zshrc`'s `ANDROID_HOME` (`/mnt/c/...`). Requires Android Studio already installed (`run_once_before_18-windows-apps.sh`, earlier by numeric order); uses its **bundled JBR** as `JAVA_HOME` to run `sdkmanager` instead of needing a separate Windows-side JDK. Downloads the SDK command-line tools from `dl.google.com` (version-pinned; Google has no stable "latest" URL, so bump the build number if it's ever pulled), accepts licenses non-interactively, installs `platform-tools`, `build-tools;36.1.0` (matches `dot_zshrc`'s `PATH`), `platforms;android-35`, and `emulator`. Skips NDK/CMake/system-images on purpose (large, specialized, add via Android Studio's own SDK Manager on demand).
 
 Gotcha: `sdkmanager.bat` runs via `cmd.exe`, which always warns "UNC paths are not supported" on stderr (we're invoked from a `\\wsl.localhost\...` cwd). With `$ErrorActionPreference = "Stop"` (used elsewhere in this file) that warning becomes a script-terminating error before redirection can suppress it, so this script locally relaxes it to `"Continue"` around just the `sdkmanager` calls. Second gotcha (found via a real `chezmoi apply` failing with "exit status 1" even though the install had actually succeeded): the same cmd.exe wrapper can also return a non-zero process exit code on a cosmetically-successful run, which would otherwise kill the whole script under `set -e`. Since every real failure path already exits earlier via `"Stop"`, the script forces `exit 0` at the very end rather than trusting `sdkmanager.bat`'s own exit code.
 
-Deliberately not scripted: a few personal/uncommon CLIs (kimi-code, opencode, craude, patrol_cli) whose install methods aren't well-known enough to script reliably. Install those manually if a new machine needs them.
+Deliberately not scripted: a few personal/uncommon CLIs (kimi-code, craude, patrol_cli) whose install methods aren't well-known enough to script reliably. Install those manually if a new machine needs them. `opencode` used to be in this list and no longer is -- see `run_once_after_97-harnesses.sh`.
 
 ## Account setup (`run_once_after_95-account-setup.sh`)
 
