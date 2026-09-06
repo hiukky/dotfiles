@@ -1,33 +1,14 @@
 # ──────────────────────────────────────────────
-# PATH (must come first: zinit, mise, kubectl, kind, herdr, claude,
+# PATH (must come first: zinit, mise, kubectl, kind, claude,
 # starship etc. all install into ~/.local/bin)
 # ──────────────────────────────────────────────
 export PATH="$HOME/.local/bin:$PATH"
 
 # ──────────────────────────────────────────────
-# Auto-launch a program in new herdr tabs (e.g. Ctrl+. -> tab with nvim)
-# Must run early, and use exec + unset so it doesn't recurse into a nvim :terminal
-# ──────────────────────────────────────────────
-if [ -n "$HERDR_AUTOSTART" ]; then
-  __herdr_autostart_cmd="$HERDR_AUTOSTART"
-  unset HERDR_AUTOSTART
-  exec "$__herdr_autostart_cmd"
-fi
-
-# Report the current cwd to herdr's spaces sidebar (see [ui.sidebar.spaces] in config.toml)
-if [ -n "$HERDR_ENV" ]; then
-  __herdr_report_cwd() {
-    herdr workspace report-metadata "$HERDR_WORKSPACE_ID" --source zsh-cwd --token "cwd=${PWD/#$HOME/~}" >/dev/null 2>&1
-  }
-  chpwd_functions+=(__herdr_report_cwd)
-  __herdr_report_cwd
-fi
-
-# ──────────────────────────────────────────────
 # Default editor
 # ──────────────────────────────────────────────
-export EDITOR="nvim"
-export VISUAL="nvim"
+export EDITOR="vim"
+export VISUAL="vim"
 
 # ──────────────────────────────────────────────
 # Browser (opens URLs via Windows' default browser, not a Linux one)
@@ -231,8 +212,8 @@ alias prd='pnpm dev'
 alias prb='pnpm build'
 alias prt='pnpm test'
 
-# herdr
-alias up='herdr'
+# uze
+alias up='uze'
 
 # navigation
 alias ..='cd ..'

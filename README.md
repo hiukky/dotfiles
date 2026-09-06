@@ -43,10 +43,9 @@ Automated, idempotent provisioning of the whole environment, Linux and Windows a
 
 - 🐚 **Shell:** `zsh`, `zinit`, `starship`
 - 🧰 **CLI:** `eza`, `bat`, `ripgrep`, `fd`, `fzf`, `tree`, `gh`, `glab`, `glow`, `rtk`
-- ✏️ **Editor:** `neovim` (default `$EDITOR`)
 - ⚙️ **Runtimes:** `node`, `rust`, `bun`, `flutter`, all via `mise`
 - 🐳 **Containers:** `docker`, `kubectl`, `kind`
-- 🤖 **AI:** `claude`, `codex`, `herdr`
+- 🤖 **AI:** `claude`, `codex`, `uze` (built from source at `~/uze`)
 - 🔑 **Accounts:** fresh SSH key per machine plus `gh`/`glab`/`claude` login
 - 🪟 **Windows (host, via WSL):** VirtualBox, Android SDK, Discord, Notion, Steam, Spotify, Teams, VLC, CapCut, Chrome, and more
 - 🔄 **WSL ⇄ Windows:** Nerd Font, `.wslconfig`, and Windows Terminal `settings.json` kept in sync
