@@ -12,7 +12,7 @@ Non-default setup: chezmoi's source directory is pointed at this repo (`~/dotfil
 
 This repo's agent instructions are portable by design: `AGENTS.md` is the single source, read natively by Claude Code, Codex, OpenCode and Antigravity alike. It was migrated here from a `CLAUDE.md` in 2026-09 using [uze](https://uze.hiukky.com)'s `uze context` (`inspect` -> `plan` -> `reconcile`), which reported the repo `VENDOR_LOCKED` before and `PORTABLE` after.
 
-Nothing in the old file was actually harness-specific -- every mention of Claude in it is subject matter, since this repo provisions the `claude` CLI, `dot_claude/settings.json` and `run_once_after_83-claude-plugins.sh` -- so the whole body moved as-is and `CLAUDE.md` was dropped rather than left as a stub. `uze context reconcile` reports the claude-code bridge as `needed: false` and writes no bridge region into it.
+Nothing in the old file was actually harness-specific -- every mention of Claude in it is subject matter, since this repo provisions the `claude` CLI, `dot_claude/settings.json` and `run_once_after_98-claude-plugins.sh` -- so the whole body moved as-is and `CLAUDE.md` was dropped rather than left as a stub. `uze context reconcile` reports the claude-code bridge as `needed: false` and writes no bridge region into it.
 
 Two rules follow from that:
 
@@ -75,7 +75,7 @@ Rust, bun, glow and rtk are all installed via mise (`dot_config/mise/config.toml
 
 `vim` is in the apt list only because `dot_zshrc` sets `EDITOR`/`VISUAL` to it and `dot_gitconfig.tmpl` sets `core.editor` -- it replaced `neovim`, and the whole tracked `dot_config/nvim/` config, in 2026-09. `vi` was the tempting alternative and is the wrong one: it always exists, but it's an `update-alternatives` symlink whose target depends on what's installed. Ubuntu's WSL base image ships only `vim-tiny`, so there `vi` is `vim.tiny` (no syntax highlighting, no persistent undo) and `/usr/bin/vim` doesn't exist at all. Naming `vim` and installing the package makes the editor the same one on every machine; on a provisioned host both names then resolve to the same `/usr/bin/vim.basic`.
 
-`run_once_before_70-claude-code.sh` and `run_once_before_71-codex-cli.sh` install the `claude` and `codex` CLIs via their respective official install scripts (`curl -fsSL https://claude.ai/install.sh | bash` and `curl -fsSL https://chatgpt.com/codex/install.sh | sh`), both landing in `~/.local/bin`, guarded by the same `command -v` idempotency check used everywhere else in this directory. mise's registry does know a `codex` tool (`npm:@openai/codex`/`aqua:openai/codex`), but the official installer is what's actually used on this machine, so the dedicated script matches reality instead of switching to mise for the sake of it. `bubblewrap` (added to `run_once_before_00-apt-packages.sh`) is Codex's Linux sandbox backend; without it Codex falls back to a bundled copy and warns on every run.
+Coding harnesses are not installed here one curl-pipe script per vendor any more; `run_once_after_97-harnesses.sh` provisions all of them through `uze setup` (see below). `run_once_before_70-claude-code.sh` and `run_once_before_71-codex-cli.sh` were deleted in that move. mise's registry does know a `codex` tool (`npm:@openai/codex`/`aqua:openai/codex`), and it is still not used: uze reaches for the same official installer that the dedicated script used to. `bubblewrap` (in `run_once_before_00-apt-packages.sh`) is Codex's Linux sandbox backend; without it Codex falls back to a bundled copy and warns on every run, so it stays an apt package regardless of who installs Codex itself.
 
 `dot_fzf.zsh` is tracked because Ubuntu's apt `fzf` package doesn't ship the `~/.fzf.zsh` shim that `.zshrc` sources for Ctrl+T/Ctrl+R key bindings and completion. Without this file, `fzf` installs but its shell integration silently does nothing.
 
@@ -100,7 +100,7 @@ Rust, bun, glow and rtk are all installed via mise (`dot_config/mise/config.toml
 
 `run_once_after_82-openspec.sh` installs `@fission-ai/openspec` (spec-driven planning CLI for AI coding assistants) via `npm install -g`, same `after`-80/`command -v || fallback` pattern as `ccstatusline`. Global npm packages resolve `npm` via the mise shim path (`~/.local/share/mise/shims/npm`), not the version-pinned `mise/installs/node/<version>/bin/npm`, so the fallback keeps working across node version bumps.
 
-`run_once_after_83-claude-plugins.sh` closes a gap `dot_claude/settings.json`'s `enabledPlugins` block used to leave open: that block is only a *preference* (`"playwright@claude-plugins-official": true`), not an installer — Claude Code's actual plugin state (marketplace registration, downloaded plugin code) lives under `~/.claude/plugins/` (`known_marketplaces.json`, `installed_plugins.json`, `cache/`), which chezmoi never touches. Before this script existed, a fresh machine got the `true` flag written into `~/.claude/settings.json` but the plugins themselves were never installed or enabled, requiring a manual `claude plugin install`/`enable` per plugin. This script reads `enabledPlugins` from the already-applied `~/.claude/settings.json` (run_once_after scripts always run after dotfiles are written, so the file is guaranteed present) and, for each plugin declared `true`, installs it if `claude plugin list --json` doesn't know about it yet and enables it if it's installed-but-disabled. The marketplace itself (`claude-plugins-official`, hardcoded since it's the only one in use) is registered first via `claude plugin marketplace add anthropics/claude-plugins-official` if missing.
+`run_once_after_98-claude-plugins.sh` closes a gap `dot_claude/settings.json`'s `enabledPlugins` block used to leave open: that block is only a *preference* (`"playwright@claude-plugins-official": true`), not an installer — Claude Code's actual plugin state (marketplace registration, downloaded plugin code) lives under `~/.claude/plugins/` (`known_marketplaces.json`, `installed_plugins.json`, `cache/`), which chezmoi never touches. Before this script existed, a fresh machine got the `true` flag written into `~/.claude/settings.json` but the plugins themselves were never installed or enabled, requiring a manual `claude plugin install`/`enable` per plugin. This script reads `enabledPlugins` from the already-applied `~/.claude/settings.json` (run_once_after scripts always run after dotfiles are written, so the file is guaranteed present) and, for each plugin declared `true`, installs it if `claude plugin list --json` doesn't know about it yet and enables it if it's installed-but-disabled. The marketplace itself (`claude-plugins-official`, hardcoded since it's the only one in use) is registered first via `claude plugin marketplace add anthropics/claude-plugins-official` if missing.
 
 Two gotchas found via direct end-to-end testing (uninstalling a plugin, then re-running the script to simulate a fresh machine), not obvious from the CLI's `--help` output:
 - `claude plugin install <id>` respects an existing `true` value for that plugin already in `enabledPlugins` and auto-enables it as part of install. Calling `claude plugin enable` again right after unconditionally fails (`"already enabled"`, non-zero exit, fatal under `set -e`). The script re-checks state after install instead of assuming still-disabled.
@@ -117,9 +117,20 @@ Two constraints drive its numbering and its handling of an existing checkout:
 
 `~/.config/uze/` is deliberately untracked: it holds only generated state (`cache/`, `runtime/`, `shims/`, `state/`, `store/`), no hand-written config.
 
-`run_once_after_97-harnesses.sh` installs `opencode`, the one harness used here that has no installer worth hand-scripting. Rather than reimplement it, the script defers to `uze setup opencode`, which provisions it from OpenCode's own official install script -- `uze setup inspect opencode` reports the provisioning route it took, and `uze setup list` shows all four harnesses' health. It is numbered past `96-uze.sh` because it needs the `uze` binary that script builds, resolved via the same `command -v uze || ~/.cargo/bin/uze` fallback.
+`run_once_after_97-harnesses.sh` runs `uze setup claude codex opencode`, and is the only thing that installs a coding harness here. uze knows each one's official installer, reports which route it took (`uze setup inspect <harness>`), verifies an existing install rather than blindly reinstalling, and covers `opencode`, which never had a script at all and used to sit in the "deliberately not scripted" list below. `antigravity` is deliberately left off the list -- uze can provision it, it just isn't used on this machine. It resolves `uze` via the usual `command -v uze || ~/.cargo/bin/uze` fallback.
 
-The other three harnesses (`claude`, `codex`, `antigravity`) are left to `uze setup` only implicitly: `claude` and `codex` already have dedicated scripts at `70`/`71`, so this script targets `opencode` by name instead of running a bare `uze setup` that would also touch them.
+This is what forces the tail of the run order, and the ordering is the whole subtlety of the change:
+
+```
+80 mise install        cargo
+95 account-setup       SSH key + gh/glab login (interactive)
+96 uze                 SSH clone of ~/uze + cargo install
+97 harnesses           uze setup -> claude, codex, opencode appear HERE
+98 claude-plugins      (was 83)
+99 harness-auth        claude auth login (was part of 95, interactive)
+```
+
+`uze` can't exist before `96` (it needs cargo from `80` and the SSH key registered in `95`), so nothing that needs a harness binary can run before `97`. Both former consumers had to move: `claude-plugins` from `83` to `98`, and the `claude auth login` step out of `95` into `99-harness-auth.sh`. The old `83` would not have failed loudly -- it opens with `[ -x "$CLAUDE_BIN" ] || exit 0` and would simply have gone quiet on a fresh machine, installing no plugins at all.
 
 `run_once_before_47-flutter.sh` clones the `stable` channel into `~/.flutter` (matches `dot_zshrc`'s existing `PATH` entry; kept as a plain git clone rather than switching to mise's `flutter`/`dart` plugins, to avoid touching an already-correct path).
 
@@ -129,14 +140,20 @@ Gotcha: `sdkmanager.bat` runs via `cmd.exe`, which always warns "UNC paths are n
 
 Deliberately not scripted: a few personal/uncommon CLIs (kimi-code, craude, patrol_cli) whose install methods aren't well-known enough to script reliably. Install those manually if a new machine needs them. `opencode` used to be in this list and no longer is -- see `run_once_after_97-harnesses.sh`.
 
-## Account setup (`run_once_after_95-account-setup.sh`)
+## Account setup (`run_once_after_95-account-setup.sh`, `99-harness-auth.sh`)
 
-SSH keys, GitHub auth, and Claude Code auth are the one part of provisioning that can't be silently scripted. They need a human to click through browser OAuth / device-code flows. Rather than skip them, this script runs last (after everything else, so it reads as "you're basically done, now finish these") and does each step interactively against the real TTY running `chezmoi apply`:
+SSH keys, GitHub auth, and Claude Code auth are the one part of provisioning that can't be silently scripted. They need a human to click through browser OAuth / device-code flows. Rather than skip them, they run at the very end (so they read as "you're basically done, now finish these") and do each step interactively against the real TTY running `chezmoi apply`.
+
+They are split across two scripts only because of the ordering above: `95` holds the git/forge credentials, which `96-uze.sh` needs in place before it can clone over SSH, while the Claude Code step had to move to `99-harness-auth.sh` because `claude` doesn't exist until `97`. `95` does:
 
 1. Generates `~/.ssh/id_ed25519` if missing, with **no passphrase**, so it doesn't block automation on a prompt. This is a deliberate convenience/security trade-off (an unencrypted private key at rest); a fresh key per machine at least limits blast radius if one machine is compromised.
 2. `gh auth login` if not already authenticated, then registers the new key with `gh ssh-key add`.
 3. `glab auth login` if not already authenticated (no SSH key registration step for this one, not added yet). Gotcha: `glab auth status` always exits `0`, even when not authenticated at all (it only reports problems in its text output), so this step checks for the literal `"Logged in to"` success line instead of trusting the exit code, unlike `gh`'s check just above it. Found by actually observing `glab` silently skip login on a genuinely unauthenticated host.
-4. `claude auth login` if not already authenticated.
+`99-harness-auth.sh` then reports Claude Code's auth state -- and only reports it. The step it replaced called `claude auth status` and `claude auth login`, and **neither command exists**: `claude` has no `auth status` subcommand, so the words are taken as a prompt. Without a TTY that surfaces as `Error: Input must be provided ... when using --print`; *with* one -- which is exactly how chezmoi runs these scripts -- the full interactive Claude Code TUI opens instead, blocking the entire `chezmoi apply` until somebody notices and quits it. Confirmed by running the old line under a pty (`script -qec`).
+
+So auth state is read from `~/.claude/.credentials.json` (`.claudeAiOauth.accessToken`, presence only -- the token value is never read or printed), and when it's missing the script prints what to run rather than launching anything. Logging in stays a deliberate manual step: there is no non-interactive `claude` login to script, and a provisioning run should never hang on a TUI.
+
+Same class of bug as the `glab auth status` gotcha above, and worth the same caution: a CLI that "succeeds" is not evidence the subcommand you typed exists.
 
 `dot_local/bin/executable_wsl-browser` opens a URL on the Windows side via `powershell.exe Start-Process`, reusing whatever's already logged in there (e.g. Edge), instead of a Linux-side browser. `wslu`/`wslview` was considered for this and rejected: its GitHub repo is archived as of 2025, so it's a dead dependency to lean on.
 
@@ -147,7 +164,7 @@ Two ways this is wired up, and only one of them is reliable:
 
 SSH itself otherwise stays entirely out of this repo; see Security below.
 
-Gotcha (found via a real `chezmoi apply`, not just direct `bash script.sh` testing): `chezmoi` runs each script in its own shell without `dot_zshrc`/`dot_profile` sourced, so tools installed to `~/.local/bin` (like `claude`, installed by `run_once_before_70-claude-code.sh`) aren't necessarily on `PATH` here even though they work fine in a normal interactive shell. This script resolves `claude` via `command -v claude || echo "$HOME/.local/bin/claude"` rather than calling it bare, the same pattern already used for `mise`/`cargo` elsewhere in this file. If a new tool is added to this script, resolve its path the same way instead of assuming it is on `PATH`.
+Gotcha (found via a real `chezmoi apply`, not just direct `bash script.sh` testing): `chezmoi` runs each script in its own shell without `dot_zshrc`/`dot_profile` sourced, so tools installed to `~/.local/bin` (like `claude`, installed by `run_once_after_97-harnesses.sh`) aren't necessarily on `PATH` here even though they work fine in a normal interactive shell. This script resolves `claude` via `command -v claude || echo "$HOME/.local/bin/claude"` rather than calling it bare, the same pattern already used for `mise`/`cargo` elsewhere in this file. If a new tool is added to this script, resolve its path the same way instead of assuming it is on `PATH`.
 
 ## Bootstrap entry points (`setup.sh`, `setup.ps1`)
 
@@ -178,7 +195,7 @@ Rules for adding new files or editing existing ones:
 - **Never commit live credentials.** Before `chezmoi add`-ing anything from `$HOME` (or pasting content into a tracked file), check it for tokens/keys/passwords first. `chezmoi add` copies file content verbatim with zero awareness of what's sensitive.
 - Already confirmed excluded and must stay excluded: `~/.npmrc` (has an npm `_authToken`), `~/.config/gh/hosts.yml` (has a GitHub `oauth_token`), anything under `~/.ssh/` or `~/.gnupg/` (private keys), shell history files.
 - If a secret must be referenced (e.g. a script needs an API key), use an environment variable read at runtime or a template that pulls from a local, gitignored file. Never inline the value.
-- The install scripts under `.chezmoiscripts/` run automatically and unattended during `chezmoi apply`; only pipe `curl | sh`/`curl | bash` from a tool's own official install domain (as the existing scripts do: `get.chezmoi.io`, `starship.rs`, `mise.run`, `get.docker.com`, `claude.ai`, `get.scoop.sh`, plus binary/installer downloads straight from `dl.k8s.io`/`kind.sigs.k8s.io`/GitHub releases for `kubectl`/`kind`). Don't add a new one without being sure of the source.
+- The install scripts under `.chezmoiscripts/` run automatically and unattended during `chezmoi apply`; only pipe `curl | sh`/`curl | bash` from a tool's own official install domain (as the existing scripts do: `get.chezmoi.io`, `starship.rs`, `mise.run`, `get.docker.com`, `get.scoop.sh`, plus binary/installer downloads straight from `dl.k8s.io`/`kind.sigs.k8s.io`/GitHub releases for `kubectl`/`kind`). The harness installers (`claude.ai`, `chatgpt.com`, OpenCode's) are no longer invoked here directly -- `uze setup` reaches them, and `uze setup inspect <harness>` names the route it used, which is worth checking after a uze upgrade. Don't add a new one without being sure of the source.
 - Full git history (including the pre-chezmoi `legacy-2026-08-09` era) was scanned on 2026-08-09 for known secret patterns (API tokens, private key headers, AWS keys, etc.); clean. Re-run a similar scan (`git grep` over `git rev-list --all`) before making history public again after any future rewrite.
 
 ## History note

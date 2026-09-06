@@ -2,8 +2,12 @@
 set -euo pipefail
 
 # Things that inherently need a human in the loop (browser OAuth, device
-# codes) can't be silently scripted -- this runs last and walks through them
-# interactively, using whatever real TTY is running `chezmoi apply`.
+# codes) can't be silently scripted -- this walks through them interactively,
+# using whatever real TTY is running `chezmoi apply`.
+#
+# This covers the machine's git/forge credentials only. It has to run before
+# 96-uze.sh, which clones over SSH with the key registered here. Harness
+# login moved to 99-harness-auth.sh, since `claude` isn't installed until 97.
 
 echo "==> SSH key"
 KEY_PATH="$HOME/.ssh/id_ed25519"
@@ -43,15 +47,4 @@ if glab auth status 2>&1 | grep -q "Logged in to"; then
 else
   echo "Not authenticated, logging in..."
   glab auth login
-fi
-
-echo "==> Claude Code"
-CLAUDE_BIN="$(command -v claude || echo "$HOME/.local/bin/claude")"
-if [ ! -x "$CLAUDE_BIN" ]; then
-  echo "claude binary not found, skipping."
-elif "$CLAUDE_BIN" auth status 2>/dev/null | grep -q '"loggedIn": *true'; then
-  echo "Already authenticated."
-else
-  echo "Not authenticated, logging in..."
-  "$CLAUDE_BIN" auth login
 fi
