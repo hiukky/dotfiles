@@ -1,0 +1,78 @@
+# Tunables for `idle-guard check` (see ~/.local/bin/idle-guard).
+#
+# This is the WSL half of the sleep profile: it decides whether Linux is doing
+# work worth staying awake for. The Windows half (how long to wait for input
+# idleness before sleeping at all) is set by
+# .chezmoiscripts/run_onchange_before_07-idle-guard.sh.tmpl via powercfg.
+#
+# Sourced as shell. Re-read on every check, so edits take effect immediately --
+# no need to restart the Windows task.
+
+# Total CPU utilisation, in percent, above which WSL counts as busy regardless
+# of which processes are responsible. Measured baseline on this machine with
+# every daemon up but nothing actually running: ~8%. One saturated core out of
+# the 4 vCPUs in .wslconfig is 25%, so 20% sits above the noise floor and still
+# catches a single-threaded build.
+CPU_BUSY_PCT=20
+
+# Window used to measure that utilisation. Long enough not to trip on a
+# one-second spike, short enough that the Windows poll (60s) isn't held up.
+CPU_SAMPLE_SECONDS=5
+
+# Processes whose mere presence means busy, matched against the full command
+# line as an extended regex. Presence, not CPU: an agent blocked on an API
+# response or a build blocked on a network fetch burns ~0% CPU and must still
+# hold the machine awake.
+#
+# `/claude/versions/[0-9]` is not redundant with the `claude` alternative
+# above it: Claude Code execs a binary named after its own version
+# (~/.local/share/claude/versions/2.1.278), so a session in progress matches
+# neither `claude` nor `node`. Without this line the guard would let the
+# machine sleep in the middle of an agent run, which is the exact failure the
+# whole profile exists to prevent.
+#
+# Keep this list narrow and job-shaped. Bare `cargo` or `node` would match the
+# long-lived daemons and watchers that are always up here (uze, jaeger, MCP
+# servers, docker-proxy), and the machine would then never sleep.
+WORK_PATTERNS='
+(^|/)(claude|codex|opencode|antigravity|aider)( |$)
+/claude/versions/[0-9]
+(^|/)cargo (build|test|run|install|bench|clippy)( |$)
+(^|/)(rustc|go) (build|test|install)( |$)
+(^|/)(npm|pnpm|yarn|bun) (run )?(build|test|install|ci)( |$)
+(^|/)(make|cmake|ninja|bazel|gradle|gradlew|mvn)( |$)
+(^|/)(flutter|dart) (build|run|test|pub)( |$)
+(^|/)(apt|apt-get|dpkg|pip|pip3|mise) (install|upgrade|update)( |$)
+(^|/)docker(-compose)? (build|compose build|pull|push)( |$)
+(^|/)git (push|pull|clone|fetch)( |$)
+(^|/)(rsync|ffmpeg|7z|zstd|tar)( |$)
+(^|/)llama-server( |$)
+'
+
+# Lines removed from the process list before WORK_PATTERNS is applied, same
+# regex syntax. This is the knob for the false positives that show up once the
+# guard has been watching for a few days: `idle-guard report` names whatever is
+# pinning the machine awake, and anything that turns out to be a stale daemon
+# or a test fixture rather than real work belongs here.
+#
+# The default entry is a concrete example of exactly that: uze's journey tests
+# leave a /bin/sh masquerading as `claude` running for hours under a
+# `uze terminal serve`, which matched WORK_PATTERNS and would have held the
+# machine awake indefinitely.
+IGNORE_PATTERNS='
+/tmp/uze-journeys/
+'
+
+# Count an inbound SSH login as busy, so remoting in never races the sleep
+# timer out from under you. 1 = on, 0 = off.
+COUNT_SSH_SESSIONS=1
+
+# Assumed wall draw of the machine while awake and asleep, and the electricity
+# price, used only by `idle-guard report` to turn measured sleep time into a
+# number. Replace WATTS_AWAKE with a real reading once a plug meter is on the
+# machine -- it is currently an estimate (4060 Ti measured at ~15W idle, plus
+# 5700G, board, drives and PSU losses).
+WATTS_AWAKE=80
+WATTS_ASLEEP=4
+PRICE_PER_KWH=1.00
+CURRENCY='R$'

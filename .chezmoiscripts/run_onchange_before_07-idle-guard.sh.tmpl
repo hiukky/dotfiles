@@ -1,0 +1,99 @@
+#!/bin/bash
+set -euo pipefail
+
+# Sleep profile for a desktop that is never turned off.
+#
+# Two halves that have to agree: Windows owns the idle timeout and the actual
+# suspend, but its idle timer only counts keyboard and mouse input and is blind
+# to anything running inside WSL. idle-guard.ps1 runs as a per-user scheduled
+# task, polls the Linux-side `idle-guard check` (~/.local/bin/idle-guard, with
+# its tunables in ~/.config/idle-guard/config) and holds ES_SYSTEM_REQUIRED
+# while WSL reports work, which suppresses idle sleep without blocking an
+# explicit Start > Sleep.
+#
+# Like 05/06, this lives on the Windows side and so can't be a normal $HOME
+# dotfile; it no-ops outside WSL.
+if ! grep -qi microsoft /proc/version 2>/dev/null; then
+  exit 0
+fi
+
+# Minutes of *input* idleness before Windows acts. The guard only ever delays
+# these, never shortens them.
+MONITOR_TIMEOUT_MIN=10
+STANDBY_TIMEOUT_MIN=30
+# Hibernate-after-sleep, counted from entering S3. 0 disables it. Left off
+# initially: S3 already drops this machine from ~80W to ~4W, and S4 adds a
+# slower resume plus more ways for a WSL2 VM to come back unhappy. Raise it
+# once the S3 cycle has proved itself.
+HIBERNATE_TIMEOUT_MIN=0
+
+POLL_SECONDS=60
+TASK_NAME="idle-guard"
+DISTRO="${WSL_DISTRO_NAME:-Ubuntu}"
+
+WIN_LOCALAPPDATA="$(wslpath "$(cmd.exe /c 'echo %LOCALAPPDATA%' 2>/dev/null | tr -d '\r\n')")"
+GUARD_DIR="$WIN_LOCALAPPDATA/idle-guard"
+mkdir -p "$GUARD_DIR"
+
+cat > "$GUARD_DIR/idle-guard.ps1" <<'PS1EOF'
+{{ template "idle-guard.ps1" . }}
+PS1EOF
+
+GUARD_PS1_WIN="$(wslpath -w "$GUARD_DIR/idle-guard.ps1")"
+
+echo "idle-guard: current Windows timeouts (AC), before this script:"
+powershell.exe -NoProfile -Command "
+  \$s = powercfg.exe /query SCHEME_CURRENT SUB_SLEEP STANDBYIDLE
+  \$v = powercfg.exe /query SCHEME_CURRENT SUB_VIDEO VIDEOIDLE
+  function Cur(\$t) { (\$t | Select-String -Pattern '0x[0-9a-f]{8}' -AllMatches).Matches[-2].Value }
+  'sleep   = ' + [Convert]::ToInt32((Cur \$s), 16) / 60 + ' min'
+  'monitor = ' + [Convert]::ToInt32((Cur \$v), 16) / 60 + ' min'
+" 2>/dev/null | tr -d '\r' | sed 's/^/  /' || true
+
+# /change writes to the active scheme for the current user and needs no
+# elevation, unlike /requests or /setactive on some policies.
+powercfg.exe /change monitor-timeout-ac   "$MONITOR_TIMEOUT_MIN"
+powercfg.exe /change standby-timeout-ac   "$STANDBY_TIMEOUT_MIN"
+powercfg.exe /change hibernate-timeout-ac "$HIBERNATE_TIMEOUT_MIN"
+echo "idle-guard: set monitor=${MONITOR_TIMEOUT_MIN}min standby=${STANDBY_TIMEOUT_MIN}min hibernate=${HIBERNATE_TIMEOUT_MIN}min"
+
+# Registered in the current user's namespace: no elevation, no stored
+# credentials. The trade-off is that it runs in the interactive session, so
+# powershell.exe flashes a window for an instant at logon.
+REG_PS1="$GUARD_DIR/register-task.ps1"
+cat > "$REG_PS1" <<REGEOF
+\$ErrorActionPreference = 'Stop'
+\$task = '$TASK_NAME'
+
+# Stop a previous generation before overwriting the script it is running.
+Get-ScheduledTask -TaskName \$task -ErrorAction SilentlyContinue |
+  Where-Object { \$_.State -eq 'Running' } |
+  Stop-ScheduledTask
+
+\$action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument (
+  '-NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass ' +
+  '-File "$GUARD_PS1_WIN" -Distro $DISTRO -PollSeconds $POLL_SECONDS')
+
+\$trigger = New-ScheduledTaskTrigger -AtLogOn -User \$env:USERNAME
+
+# ExecutionTimeLimit Zero means "no limit": the default 3 days would silently
+# kill an infinite polling loop mid-week. MultipleInstances IgnoreNew keeps a
+# re-logon from stacking a second guard, which would double the veto.
+\$settings = New-ScheduledTaskSettingsSet \`
+  -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries \`
+  -ExecutionTimeLimit ([TimeSpan]::Zero) \`
+  -MultipleInstances IgnoreNew \`
+  -RestartInterval (New-TimeSpan -Minutes 1) -RestartCount 3 \`
+  -StartWhenAvailable
+
+Register-ScheduledTask -TaskName \$task -Action \$action -Trigger \$trigger \`
+  -Settings \$settings -Description 'Vetoes idle sleep while WSL is doing work' -Force | Out-Null
+
+Start-ScheduledTask -TaskName \$task
+(Get-ScheduledTask -TaskName \$task).State
+REGEOF
+
+STATE="$(powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w "$REG_PS1")" 2>&1 | tr -d '\r' | tail -n1)"
+rm -f "$REG_PS1"
+echo "idle-guard: scheduled task '$TASK_NAME' -> $STATE (distro=$DISTRO, poll=${POLL_SECONDS}s)"
+echo "idle-guard: inspect with 'idle-guard status' / 'idle-guard report'"

@@ -1,0 +1,211 @@
+#!/bin/bash
+# Reports whether this WSL instance is doing work worth keeping the machine
+# awake for.
+#
+# Windows' own idle timer only counts keyboard and mouse input, so it cannot
+# see a build or an agent running inside WSL: left to itself it would suspend
+# the machine mid-job. The Windows-side companion task (deployed by
+# .chezmoiscripts/run_onchange_before_07-idle-guard.sh.tmpl) polls `check` once
+# a minute and holds ES_SYSTEM_REQUIRED while it exits 0, vetoing sleep.
+#
+# The split matters: Windows still owns the decision to sleep and the timeout
+# that leads to it. This only ever says "not yet".
+#
+# Tunables live in ~/.config/idle-guard/config and are re-read on every check.
+
+set -uo pipefail
+
+CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/idle-guard/config"
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/idle-guard"
+INHIBIT="$STATE_DIR/inhibit"
+
+CPU_BUSY_PCT=20
+CPU_SAMPLE_SECONDS=5
+COUNT_SSH_SESSIONS=1
+WORK_PATTERNS=''
+IGNORE_PATTERNS=''
+WATTS_AWAKE=80
+WATTS_ASLEEP=4
+PRICE_PER_KWH=1.00
+CURRENCY='R$'
+# shellcheck source=/dev/null
+[ -r "$CONFIG" ] && . "$CONFIG"
+
+mkdir -p "$STATE_DIR"
+
+# The Windows half owns the log: it is the side that knows whether a veto was
+# actually applied, and the only side still running while the machine sleeps.
+# Resolved lazily because /mnt/c may be absent outside WSL.
+win_log() {
+  local profile
+  profile="$(wslpath "$(cmd.exe /c 'echo %LOCALAPPDATA%' 2>/dev/null | tr -d '\r\n')" 2>/dev/null)" || return 1
+  printf '%s/idle-guard/guard.log' "$profile"
+}
+
+# Total CPU utilisation over a sampling window, as an integer percent.
+# Deliberately not load average: under WSL2 that reads far higher than actual
+# utilisation (1.8 against a measured 8% here) and would never let the machine
+# sleep.
+cpu_percent() {
+  local _ a b c idle t1 i1 a2 b2 c2 idle2 t2 dt di
+  read -r _ a b c idle _ < /proc/stat
+  t1=$((a + b + c + idle)); i1=$idle
+  sleep "$CPU_SAMPLE_SECONDS"
+  read -r _ a2 b2 c2 idle2 _ < /proc/stat
+  t2=$((a2 + b2 + c2 + idle2))
+  dt=$((t2 - t1)); di=$((idle2 - i1))
+  [ "$dt" -gt 0 ] || { echo 0; return; }
+  echo $(( (dt - di) * 100 / dt ))
+}
+
+# First matching work process, or empty. ps output is captured before grepping
+# so the grep's own command line can't match the patterns and self-trigger.
+work_process() {
+  local snapshot pattern hit
+  snapshot="$(ps -eo args= 2>/dev/null | grep -v '[i]dle-guard')"
+  [ -n "$snapshot" ] || return 0
+  # Subtract the known-noise lines first, so a stale daemon or a test fixture
+  # that happens to match a work pattern can be excluded without having to
+  # weaken the pattern itself.
+  while IFS= read -r pattern; do
+    [ -n "${pattern// /}" ] || continue
+    snapshot="$(printf '%s\n' "$snapshot" | grep -E -v -- "$pattern")"
+  done <<< "$IGNORE_PATTERNS"
+  [ -n "$snapshot" ] || return 0
+  while IFS= read -r pattern; do
+    [ -n "${pattern// /}" ] || continue
+    hit="$(printf '%s\n' "$snapshot" | grep -E -m1 -- "$pattern" 2>/dev/null)"
+    [ -n "$hit" ] && { printf '%s' "${hit:0:80}"; return 0; }
+  done <<< "$WORK_PATTERNS"
+}
+
+ssh_sessions() {
+  [ "$COUNT_SSH_SESSIONS" = "1" ] || return 1
+  pgrep -f '^sshd: .*@(pts|notty)' >/dev/null 2>&1
+}
+
+inhibit_active() {
+  [ -f "$INHIBIT" ] || return 1
+  local until
+  until="$(head -n1 "$INHIBIT" 2>/dev/null)"
+  # An open-ended hold has no deadline on the first line.
+  [[ "$until" =~ ^[0-9]+$ ]] || return 0
+  if [ "$(date +%s)" -ge "$until" ]; then
+    rm -f "$INHIBIT"
+    return 1
+  fi
+  return 0
+}
+
+# Prints "<state>\t<reason>"; exits 0 when busy, 1 when idle. Ordered cheapest
+# first so the 5s CPU sample is only paid for when nothing else decided.
+cmd_check() {
+  local hit pct
+  if inhibit_active; then
+    printf 'busy\tmanual: %s\n' "$(sed -n 2p "$INHIBIT" 2>/dev/null || echo 'no reason given')"
+    return 0
+  fi
+  if hit="$(work_process)" && [ -n "$hit" ]; then
+    printf 'busy\twork: %s\n' "$hit"
+    return 0
+  fi
+  if ssh_sessions; then
+    printf 'busy\tssh: session attached\n'
+    return 0
+  fi
+  pct="$(cpu_percent)"
+  if [ "$pct" -ge "$CPU_BUSY_PCT" ]; then
+    printf 'busy\tcpu: %s%% (over %s%%)\n' "$pct" "$CPU_BUSY_PCT"
+    return 0
+  fi
+  printf 'idle\tquiet: cpu %s%%\n' "$pct"
+  return 1
+}
+
+cmd_status() {
+  local out state reason
+  out="$(cmd_check)"; state="${out%%$'\t'*}"; reason="${out#*$'\t'}"
+  printf 'state   : %s\n' "$state"
+  printf 'reason  : %s\n' "$reason"
+  printf 'config  : %s\n' "$CONFIG"
+  printf 'log     : %s\n' "$(win_log 2>/dev/null || echo 'unavailable (not WSL?)')"
+}
+
+# Holds the machine awake regardless of what is running, for a bounded window
+# by default -- an open-ended hold that outlives the reason for it is the main
+# way a guard like this quietly stops saving anything.
+cmd_inhibit() {
+  local spec="${1:-}" reason="${2:-manual}" secs until
+  if [ -z "$spec" ] || [ "$spec" = "forever" ]; then
+    printf 'forever\n%s\n' "$reason" > "$INHIBIT"
+    echo "holding awake until released"
+    return
+  fi
+  case "$spec" in
+    *h) secs=$(( ${spec%h} * 3600 )) ;;
+    *m) secs=$(( ${spec%m} * 60 )) ;;
+    *)  secs="$spec" ;;
+  esac
+  until=$(( $(date +%s) + secs ))
+  printf '%s\n%s\n' "$until" "$reason" > "$INHIBIT"
+  echo "holding awake until $(date -d "@$until" '+%H:%M:%S')"
+}
+
+cmd_release() {
+  rm -f "$INHIBIT" && echo "hold released"
+}
+
+# Reads the Windows-side log and turns it into the two things worth knowing:
+# what kept the machine awake, and how much sleep actually happened.
+cmd_report() {
+  local log days="${1:-7}" since
+  log="$(win_log)" || { echo "no Windows log reachable (not running under WSL?)"; return 1; }
+  [ -r "$log" ] || { echo "no log yet at $log -- has the idle-guard task run?"; return 1; }
+  since="$(date -d "$days days ago" '+%Y-%m-%dT%H:%M:%S')"
+
+  echo "== idle-guard, last $days day(s) =="
+  echo
+  echo "-- what held the machine awake, by cause --"
+  awk -F'\t' -v s="$since" '$1 >= s && $2 == "HOLD" { k = $3; sub(/:.*/, "", k); print k }' "$log" \
+    | sort | uniq -c | sort -rn | sed 's/^/  /'
+  echo
+  echo "-- which commands, specifically --"
+  awk -F'\t' -v s="$since" '$1 >= s && $2 == "HOLD" && $3 ~ /^work: / {
+        sub(/^work: /, "", $3); print substr($3, 1, 70) }' "$log" \
+    | sort | uniq -c | sort -rn | head -10 | sed 's/^/  /'
+  echo
+  echo "-- sleep sessions detected --"
+  awk -F'\t' -v s="$since" -v wa="$WATTS_AWAKE" -v ws="$WATTS_ASLEEP" \
+      -v price="$PRICE_PER_KWH" -v cur="$CURRENCY" -v days="$days" '
+    $1 >= s && $2 == "RESUME" { n++; total += $3 }
+    END {
+      if (!n) { print "  none yet"; exit }
+      h = total / 3600
+      printf "  %d session(s), %.1f h asleep (avg %.1f h)\n", n, h, h / n
+      saved_kwh = h * (wa - ws) / 1000
+      printf "  saved ~%.1f kWh = %s%.2f at %s%.2f/kWh\n", saved_kwh, cur, saved_kwh * price, cur, price
+      printf "  projected over 30 days: %s%.2f\n", cur, saved_kwh * price * (30 / days)
+    }' "$log" | sed 's/^$//'
+  echo
+  echo "-- last 15 events --"
+  tail -n 15 "$log" | sed 's/^/  /'
+}
+
+case "${1:-check}" in
+  check)   cmd_check ;;
+  status)  cmd_status ;;
+  inhibit) shift; cmd_inhibit "$@" ;;
+  release) cmd_release ;;
+  report)  shift; cmd_report "$@" ;;
+  *)
+    cat >&2 <<'USAGE'
+usage: idle-guard <command>
+
+  check              busy/idle + reason; exit 0 = busy (what Windows polls)
+  status             the same, in human-readable form
+  inhibit [dur] [why]  force awake; dur like 90m, 2h, or "forever" (default)
+  release            drop a manual hold
+  report [days]      what kept the machine awake, and how much it slept
+USAGE
+    exit 2 ;;
+esac

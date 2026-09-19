@@ -53,6 +53,7 @@ Automated, idempotent provisioning of the whole environment, Linux and Windows a
 - 🔑 **Accounts:** fresh SSH key per machine plus `gh`/`glab`/`claude` login
 - 🪟 **Windows (host, via WSL):** VirtualBox, Android SDK, Discord, Notion, Steam, Spotify, Teams, VLC, CapCut, Chrome, and more
 - 🔄 **WSL ⇄ Windows:** Nerd Font, `.wslconfig`, and Windows Terminal `settings.json` kept in sync
+- 🔋 **Power:** sleep profile for a machine that used to run 24/7. Windows' idle timer only counts keyboard and mouse input and is blind to WSL, so a guard task vetoes sleep while Linux is genuinely working, and lets it suspend the moment it isn't
 
 ## 🛠️ Usage
 
@@ -63,6 +64,9 @@ Automated, idempotent provisioning of the whole environment, Linux and Windows a
 | `chezmoi diff` | Preview what would change before applying |
 | `chezmoi apply` | Apply changes to `$HOME` |
 | `chezmoi update` | Pull the latest changes and apply |
+| `idle-guard status` | Why the machine is (or isn't) being held awake right now |
+| `idle-guard report` | What kept it awake lately, and how much it actually slept |
+| `idle-guard inhibit 2h` | Force it awake for a while (`release` to drop the hold) |
 
 📄 Full breakdown of conventions and design decisions: [`AGENTS.md`](./AGENTS.md).
 
