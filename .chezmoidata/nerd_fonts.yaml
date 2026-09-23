@@ -1,11 +1,7 @@
 # The Nerd Fonts this machine installs, and the catalog the font lab opens.
 #
-# One list drives three things: run_onchange_before_15-nerd-fonts.sh.tmpl
-# (download, verify, install), the "Nerd Lab" profiles in
-# .chezmoitemplates/windows-terminal-settings.json, and ~/.local/bin/nerd-font-lab.
-# It mirrors the catalog uze's Rendering Lab measures against, so a font
-# that looks wrong here can be compared with what the Lab recorded.
-#
+# One list drives two things: run_onchange_before_15-nerd-fonts.sh.tmpl
+# (download, verify, install) and ~/.local/bin/nerd-font-lab.
 # Pinned to one release and verified by the sha256 in that release's
 # SHA-256.txt: bumping `release` means updating every digest with it.
 #
@@ -22,60 +18,48 @@ nerdFonts:
       files: JetBrainsMonoNerdFont
       plain:
         face: JetBrainsMono Nerd Font
-        labGuid: "{19891e92-8479-55a8-a72a-1b45b23235a8}"
       mono:
         face: JetBrainsMono Nerd Font Mono
-        labGuid: "{710f5f53-f531-58e6-bb59-bfd5d9b4df56}"
     - name: Fira Code
       archive: FiraCode.tar.xz
       sha256: 68e3bd6164864b8b514605bc34e3a87ac401c8c48682fcce6478c70263340207
       files: FiraCodeNerdFont
       plain:
         face: FiraCode Nerd Font
-        labGuid: "{d80e1d63-3a75-59ad-9de3-89b6f8ce64fe}"
       mono:
         face: FiraCode Nerd Font Mono
-        labGuid: "{a0cd8be2-52ca-5e0e-9352-a83fceff6fb1}"
     - name: Hack
       archive: Hack.tar.xz
       sha256: cdd389472e10e2261520140ff1b382b4f8a226af5fd0b2735b975d31151d9c3c
       files: HackNerdFont
       plain:
         face: Hack Nerd Font
-        labGuid: "{d944fa4c-13c6-54fb-94eb-9c1cb50a94fb}"
       mono:
         face: Hack Nerd Font Mono
-        labGuid: "{d05c1be8-86dd-5848-a81a-13cc86eb53e3}"
     - name: Iosevka
       archive: Iosevka.tar.xz
       sha256: 3b94ea1dc3955756762f977b7677bca671947dd56bc755a6f8465a8e83b5f257
       files: IosevkaNerdFont
       plain:
         face: Iosevka Nerd Font
-        labGuid: "{3b0ec4f9-cafb-510f-95cf-000b9b8a317c}"
       mono:
         face: Iosevka Nerd Font Mono
-        labGuid: "{3c8066f2-79bd-5a3f-a5f5-136bcdccde5a}"
     - name: Cascadia (Caskaydia Cove)
       archive: CascadiaCode.tar.xz
       sha256: ae598e9401e2846aa3ee364513715de0490b844a4b54f0768991f45f23aa8369
       files: CaskaydiaCoveNerdFont
       plain:
         face: CaskaydiaCove Nerd Font
-        labGuid: "{3b29e20b-bc26-5c97-ab86-6358f98216d9}"
       mono:
         face: CaskaydiaCove Nerd Font Mono
-        labGuid: "{7885a2f9-6e8b-5200-8b03-6d3c604b7df4}"
     - name: Meslo LG M
       archive: Meslo.tar.xz
       sha256: 6b6624632dc6873dfb7681c3f818e7c01ab601ab707690b6440933bbe57e2b11
       files: MesloLGMNerdFont
       plain:
         face: MesloLGM Nerd Font
-        labGuid: "{157b2f69-8514-5b82-ba30-b5e08da26968}"
       mono:
         face: MesloLGM Nerd Font Mono
-        labGuid: "{3976abf0-e20d-5f16-873b-219b53a91704}"
     - name: Symbols only
       archive: NerdFontsSymbolsOnly.tar.xz
       sha256: 01172f37db8543edb102e5cb5c64101c9f4686630804d49b419aa07b23a69996
@@ -85,7 +69,5 @@ nerdFonts:
       fallback: Cascadia Mono
       plain:
         face: Symbols Nerd Font
-        labGuid: "{3a693df6-4df1-543e-9124-32d04809ed40}"
       mono:
         face: Symbols Nerd Font Mono
-        labGuid: "{f1720a6c-0c09-50a2-9f29-86a384a8fc2f}"

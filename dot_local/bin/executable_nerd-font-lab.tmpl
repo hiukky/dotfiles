@@ -1,12 +1,11 @@
 #!/bin/bash
-# nerd-font-lab: the Nerd Font catalog (.chezmoidata/nerd_fonts.yaml), side by side.
+# nerd-font-lab: the Nerd Font catalog (.chezmoidata/nerd_fonts.yaml).
 #
-#   nerd-font-lab            open a Windows Terminal window, one tab per font and build
-#   nerd-font-lab --list     which catalog fonts are installed on Windows
-#   nerd-font-lab --specimen draw uze's glyphs in this terminal (what each tab runs)
+#   nerd-font-lab --list      which catalog fonts are installed on Windows
+#   nerd-font-lab --specimen  draw uze's glyphs in this terminal
 #
-# Each tab is a hidden "Nerd Lab · <face>" profile in Windows Terminal's
-# settings, so the font is the only thing that differs between them.
+# To compare fonts, set one on the Ubuntu profile in Windows Terminal
+# (Settings > Ubuntu > Appearance > Font face) and run --specimen.
 set -euo pipefail
 
 FACES=(
@@ -37,15 +36,6 @@ list() {
   done
 }
 
-open_tabs() {
-  local args=(-w new)
-  for i in "${!FACES[@]}"; do
-    [ "$i" -gt 0 ] && args+=(";" new-tab)
-    args+=(-p "Nerd Lab · ${FACES[$i]}")
-  done
-  wt.exe "${args[@]}"
-}
-
 # uze's own marks, as the active glyph set resolves them, each followed by a
 # letter (the room uze leaves after an icon) and then alone. What to look
 # for: icons of one size, none running into the letter after it.
@@ -65,13 +55,6 @@ specimen() {
 case "${1:-}" in
   --list) list ;;
   --specimen) specimen ;;
-  "")
-    if ! command -v wt.exe >/dev/null 2>&1; then
-      echo "Windows Terminal (wt.exe) is not reachable from here" >&2
-      exit 1
-    fi
-    open_tabs
-    ;;
   *)
     sed -n '2,8p' "$0" | sed 's/^# \{0,1\}//'
     exit 2

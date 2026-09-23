@@ -72,18 +72,7 @@
                 "hidden": false,
                 "name": "Lab",
                 "source": "Microsoft.WSL"
-            }{{ range .nerdFonts.families }}{{ $family := . }}{{ range $build := list .plain .mono }},
-            {
-                "commandline": "wsl.exe ~ -- zsh -lc \"nerd-font-lab --specimen; exec zsh -l\"",
-                "font": {
-                    "face": "{{ if hasKey $family "fallback" }}{{ $family.fallback }}, {{ end }}{{ $build.face }}"
-                },
-                "guid": "{{ $build.labGuid }}",
-                "hidden": true,
-                "name": "Nerd Lab \u00b7 {{ $build.face }}",
-                "suppressApplicationTitle": true,
-                "tabTitle": "{{ $build.face }}"
-            }{{ end }}{{ end }}
+            }
         ]
     },
     "schemes": [],
