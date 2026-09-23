@@ -1,0 +1,79 @@
+#!/bin/bash
+# nerd-font-lab: the Nerd Font catalog (.chezmoidata/nerd_fonts.yaml), side by side.
+#
+#   nerd-font-lab            open a Windows Terminal window, one tab per font and build
+#   nerd-font-lab --list     which catalog fonts are installed on Windows
+#   nerd-font-lab --specimen draw uze's glyphs in this terminal (what each tab runs)
+#
+# Each tab is a hidden "Nerd Lab · <face>" profile in Windows Terminal's
+# settings, so the font is the only thing that differs between them.
+set -euo pipefail
+
+FACES=(
+{{- range .nerdFonts.families }}
+  "{{ .plain.face }}"
+  "{{ .mono.face }}"
+{{- end }}
+)
+FILES=(
+{{- range .nerdFonts.families }}
+  "{{ .files }}-Regular.ttf"
+  "{{ .files }}Mono-Regular.ttf"
+{{- end }}
+)
+
+windows_fonts() {
+  local local_app_data
+  local_app_data="$(cmd.exe /c "echo %LOCALAPPDATA%" 2>/dev/null | tr -d '\r\n')"
+  echo "$(wslpath "$local_app_data")/Microsoft/Windows/Fonts"
+}
+
+list() {
+  local dir
+  dir="$(windows_fonts)"
+  for i in "${!FACES[@]}"; do
+    if [ -f "$dir/${FILES[$i]}" ]; then mark="installed"; else mark="missing"; fi
+    printf '%-10s %s\n' "$mark" "${FACES[$i]}"
+  done
+}
+
+open_tabs() {
+  local args=(-w new)
+  for i in "${!FACES[@]}"; do
+    [ "$i" -gt 0 ] && args+=(";" new-tab)
+    args+=(-p "Nerd Lab · ${FACES[$i]}")
+  done
+  wt.exe "${args[@]}"
+}
+
+# uze's own marks, as the active glyph set resolves them, each followed by a
+# letter (the room uze leaves after an icon) and then alone. What to look
+# for: icons of one size, none running into the letter after it.
+specimen() {
+  printf '%s\n\n' "████████████████████████████████████████"
+  if ! command -v uze >/dev/null 2>&1; then
+    echo "uze is not installed; nothing to draw" >&2
+    return 1
+  fi
+  uze theme show --format json | jq -r '
+    .symbols | to_entries[]
+    | select(.value[0] | explode | any((. >= 57344 and . <= 63743) or . >= 983040))
+    | "\(.value[0]) x      \(.value[0])      \(.key)"'
+  printf '\nThe quick brown fox jumps over the lazy dog  0O 1lI {}[]()\n'
+}
+
+case "${1:-}" in
+  --list) list ;;
+  --specimen) specimen ;;
+  "")
+    if ! command -v wt.exe >/dev/null 2>&1; then
+      echo "Windows Terminal (wt.exe) is not reachable from here" >&2
+      exit 1
+    fi
+    open_tabs
+    ;;
+  *)
+    sed -n '2,8p' "$0" | sed 's/^# \{0,1\}//'
+    exit 2
+    ;;
+esac

@@ -1,0 +1,79 @@
+#!/bin/bash
+set -euo pipefail
+
+# Installs every Nerd Font in .chezmoidata/nerd_fonts.yaml, in its plain and
+# Mono builds, into the Windows user font store.
+#
+# Windows only, and on purpose: under WSL the terminal is Windows Terminal, a
+# Windows process that renders with Windows' fonts, so a Nerd Font installed
+# on the Linux side is never drawn. The Linux side only downloads, verifies
+# against the release's sha256, and extracts, into a cache. Its effects are
+# host-wide rather than per distro.
+#
+# run_onchange: it runs again whenever the catalog changes, since the
+# catalog is rendered into this file.
+
+if ! grep -qi microsoft /proc/version 2>/dev/null || ! command -v powershell.exe >/dev/null 2>&1; then
+  exit 0
+fi
+
+RELEASE="{{ .nerdFonts.release }}"
+BASE_URL="https://github.com/ryanoasis/nerd-fonts/releases/download/${RELEASE}"
+CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/nerd-fonts/${RELEASE}"
+WEIGHTS=(Regular Bold Italic BoldItalic)
+
+local_app_data="$(cmd.exe /c "echo %LOCALAPPDATA%" 2>/dev/null | tr -d '\r\n')"
+WIN_FONTS="$(wslpath "$local_app_data")/Microsoft/Windows/Fonts"
+mkdir -p "$CACHE" "$WIN_FONTS"
+
+install_family() {
+  local archive="$1" sha256="$2" files="$3"
+  local tarball="$CACHE/$archive"
+  local extracted="$CACHE/${archive%.tar.xz}"
+
+  if [ ! -f "$tarball" ]; then
+    curl -fsSL -o "$tarball.part" "$BASE_URL/$archive"
+    mv "$tarball.part" "$tarball"
+  fi
+  if ! echo "$sha256  $tarball" | sha256sum -c --quiet -; then
+    rm -f "$tarball"
+    echo "$archive: sha256 does not match the pinned digest; refusing to install it" >&2
+    return 1
+  fi
+
+  local members=()
+  for build in "" Mono; do
+    for weight in "${WEIGHTS[@]}"; do
+      members+=("${files}${build}-${weight}.ttf")
+    done
+  done
+
+  mkdir -p "$extracted"
+  # Not every family ships every weight (Fira Code has no italics), so a
+  # missing member is expected; tar reports it and extracts the rest.
+  tar -xJf "$tarball" -C "$extracted" "${members[@]}" 2>/dev/null || true
+
+  # A font Windows has loaded cannot be overwritten: an identical file is
+  # left alone, and a different one in use is reported and kept.
+  for member in "${members[@]}"; do
+    [ -f "$extracted/$member" ] || continue
+    cmp -s "$extracted/$member" "$WIN_FONTS/$member" && continue
+    cp "$extracted/$member" "$WIN_FONTS/$member" 2>/dev/null \
+      || echo "Nerd Fonts: $member is in use on Windows; kept the installed copy" >&2
+  done
+  echo "Nerd Fonts: ${archive%.tar.xz} installed on Windows"
+}
+
+{{ range .nerdFonts.families -}}
+install_family "{{ .archive }}" "{{ .sha256 }}" "{{ .files }}"
+{{ end -}}
+
+# Per-user fonts are registered by full path under HKCU.
+powershell.exe -NoProfile -ExecutionPolicy Bypass -Command '
+$fontsDir = Join-Path $env:LOCALAPPDATA "Microsoft\Windows\Fonts"
+$regPath  = "HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Fonts"
+Get-ChildItem $fontsDir -Filter "*NerdFont*.ttf" | ForEach-Object {
+  New-ItemProperty -Path $regPath -Name "$($_.BaseName) (TrueType)" -Value $_.FullName -PropertyType String -Force | Out-Null
+}
+Write-Host "Nerd Fonts registered for the current Windows user."
+'

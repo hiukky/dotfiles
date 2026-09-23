@@ -21,4 +21,5 @@ sudo apt-get install -y \
   glab \
   tree \
   jq \
+  xz-utils \
   asciinema
