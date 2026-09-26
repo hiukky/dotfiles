@@ -3,7 +3,10 @@
     "commit": "",
     "pr": ""
   },
-  "model": "claude-sonnet-5",
+  "permissions": {
+    "defaultMode": "auto"
+  },
+  "model": "opus",
   "statusLine": {
     "type": "command",
     "command": "ccstatusline",
@@ -11,13 +14,14 @@
     "refreshInterval": 10
   },
   "enabledPlugins": {
-    "playwright@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": true,
     "claude-md-management@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "playwright@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true,
     "vercel@claude-plugins-official": true,
-    "std@ai": true,
-    "flow@ai": true
+    "tui@uze-store": true,
+    "git@uze-store": true,
+    "uze@uze-store": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -26,15 +30,47 @@
         "repo": "anthropics/claude-plugins-official"
       }
     },
-    "ai": {
+    "uze-store": {
       "source": {
-        "source": "github",
-        "repo": "hiukky/ai"
+        "source": "directory",
+        "path": "/home/hiukky/.uze/runtime/attachments/claude/generated"
       }
     }
+  },
+  "sandbox": {
+    "enabled": true
   },
   "tui": "fullscreen",
   "skipWorkflowUsageWarning": true,
   "theme": "dark",
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "autoMode": {
+    "environment": [
+      "### Org-wide",
+      "**Organization**: None configured",
+      "**Cloud provider(s)**: None configured",
+      "**Repository visibility**: Public — hiukky/uze (github.com:hiukky/uze.git); any push there is publishing",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: None configured — CI references a GITHUB_TOKEN secret (name only, not its value)",
+      "**Default / protected branches**: main (default); no classic branch protection and no rulesets currently listed for hiukky/uze",
+      "**CI/CD deploy targets**: None configured",
+      "**Network posture**: None configured",
+      "**Host containment**: None configured — assume Claude Code runs on an ordinary developer machine or CI runner with open internet",
+      "**Source control**: The trusted repo (hiukky/uze) and its origin remote only (no additional orgs configured)",
+      "**Trusted internal domains**: None configured",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: None configured",
+      "**Internal package registry**: None configured",
+      "**Sensitive data locations & audiences**: any file or store holding personal data, confidential business data, credentials, regulated data, or similarly sensitive material; preserve exact handles when known and share only with audiences cleared at the [named+specifics] bar; note `conformance/.env` is gitignored and likely holds local secrets",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment",
+      "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment",
+      "### User-specific",
+      "**Primary use of Claude Code**: software development (Rust CLI/agent-tooling project, uze)",
+      "**Trusted repo**: hiukky/uze at /home/hiukky/uze/.worktrees/4j03rn, remote origin github.com:hiukky/uze.git; public repo — only this repo's own work belongs here, confidential/secret material never cleared by visibility",
+      "**Org-specific CLIs**: None configured — repo-specific tools observed: `uze`, `make` targets (build, release, lab-*, harness-*, python-fmt/lint), `gh`",
+      "routine under this repo's working tree (uze worktree) treated as local/trusted for build, lint, test, and lab-* Makefile targets"
+    ]
+  }
 }
