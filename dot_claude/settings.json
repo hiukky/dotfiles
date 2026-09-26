@@ -1,4 +1,8 @@
 {
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "model": "claude-sonnet-5",
   "statusLine": {
     "type": "command",
