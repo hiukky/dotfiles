@@ -56,7 +56,11 @@ zinit light agkozak/zsh-z
 # Copy command output with Ctrl+O
 zinit light reegnz/jq-zsh-plugin
 
-# Notification when a long-running command finishes
+# Reminds you when a typed command has an alias; printed after the
+# command's output instead of before it, so it doesn't split the output
+export YSU_MESSAGE_POSITION="after"
+# `uze` is typed on purpose; don't nag about its `up` alias
+export YSU_IGNORED_ALIASES=("up")
 zinit light MichaelAquilina/zsh-you-should-use
 
 # ──────────────────────────────────────────────
