@@ -59,8 +59,6 @@ zinit light reegnz/jq-zsh-plugin
 # Reminds you when a typed command has an alias; printed after the
 # command's output instead of before it, so it doesn't split the output
 export YSU_MESSAGE_POSITION="after"
-# `uze` is typed on purpose; don't nag about its `up` alias
-export YSU_IGNORED_ALIASES=("up")
 zinit light MichaelAquilina/zsh-you-should-use
 
 # ──────────────────────────────────────────────
@@ -217,7 +215,7 @@ alias prb='pnpm build'
 alias prt='pnpm test'
 
 # uze
-alias up='uze'
+alias up='uze workspace'
 
 # navigation
 alias ..='cd ..'
