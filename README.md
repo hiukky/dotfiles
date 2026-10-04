@@ -51,7 +51,7 @@ Automated, idempotent provisioning of the whole environment, Linux and Windows a
 - 🐳 **Containers:** `docker`, `kubectl`, `kind`
 - 🤖 **Agents:** `claude`, `codex`, `opencode`, and [`uze`](https://uze.hiukky.com) — built from source at `~/uze`, and the owner of this repo's portable [`AGENTS.md`](./AGENTS.md) context
 - 🔑 **Accounts:** fresh SSH key per machine plus `gh`/`glab`/`claude` login
-- 🪟 **Windows (host, via WSL):** VirtualBox, Android SDK, Discord, Notion, Steam, Spotify, Teams, VLC, CapCut, Chrome, and more
+- 🪟 **Windows (host, via WSL):** VirtualBox, Windows Sandbox, Android SDK, Discord, Notion, Steam, Spotify, Teams, VLC, CapCut, Chrome, and more
 - 🔄 **WSL ⇄ Windows:** a pinned Nerd Font catalog installed on Windows (`nerd-font-lab` to check them), `.wslconfig`, and Windows Terminal `settings.json` kept in sync
 - 🔋 **Power:** sleep profile for a machine that used to run 24/7. Windows' idle timer only counts keyboard and mouse input and is blind to WSL, so a guard task vetoes sleep while Linux is genuinely working, and lets it suspend the moment it isn't
 
