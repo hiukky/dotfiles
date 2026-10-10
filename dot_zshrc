@@ -4,6 +4,23 @@
 # ──────────────────────────────────────────────
 export PATH="$HOME/.local/bin:$PATH"
 
+# WSL appends the whole Windows PATH, and every command lookup that misses
+# on the Linux side then walks it over the 9p mount: measured at ~400 ms of
+# shell startup with its 20 entries. Only the system directories stay --
+# they hold cmd.exe, powershell.exe, wsl.exe, explorer.exe, clip.exe and
+# winget, which this repo's scripts and daily use reach by bare name.
+# Anything else from Windows is called by its full /mnt/c path.
+if [[ -n $WSL_DISTRO_NAME ]]; then
+  () {
+    setopt local_options extended_glob
+    local -a windows=(
+      ${(M)path:#(#i)/mnt/[a-z]/windows(|/system32|/system32/windowspowershell/v1.0)(|/)}
+      ${(M)path:#(#i)/mnt/[a-z]/users/*/appdata/local/microsoft/windowsapps(|/)}
+    )
+    path=(${path:#/mnt/[a-z]/*} $windows)
+  }
+fi
+
 # ──────────────────────────────────────────────
 # Default editor
 # ──────────────────────────────────────────────
@@ -31,60 +48,53 @@ autoload -Uz _zinit
 # ──────────────────────────────────────────────
 # Plugins (zinit)
 # ──────────────────────────────────────────────
+# Only what the first prompt needs loads here; everything else is in the
+# turbo block after compinit, which zinit loads right after that prompt is
+# drawn. Loaded synchronously they cost ~500 ms of every new shell.
 
-# Syntax highlighting (must come before autosuggestions)
-zinit light zdharma-continuum/fast-syntax-highlighting
-
-# Autosuggestions (Fish-like)
-zinit light zsh-users/zsh-autosuggestions
-
-# Extra completions
-zinit light zsh-users/zsh-completions
-
-# History substring search (up/down arrow filters by what you typed)
-zinit light zsh-users/zsh-history-substring-search
-
-# Improved vi mode
+# Improved vi mode (owns the keymap, so it can't arrive after the prompt)
 zinit light jeffreytse/zsh-vi-mode
 
-# fzf-tab: replaces the default completion menu with fzf
-zinit light Aloxaf/fzf-tab
+# Extra completions (only adds to fpath, which compinit must already see)
+zinit ice blockf
+zinit light zsh-users/zsh-completions
 
-# z / autojump (smart cd)
-zinit light agkozak/zsh-z
-
-# Copy command output with Ctrl+O
-zinit light reegnz/jq-zsh-plugin
-
-# Reminds you when a typed command has an alias; printed after the
-# command's output instead of before it, so it doesn't split the output
-export YSU_MESSAGE_POSITION="after"
-zinit light MichaelAquilina/zsh-you-should-use
-
-# ──────────────────────────────────────────────
-# Oh-My-Zsh libs (via zinit snippets)
-# ──────────────────────────────────────────────
-zinit snippet OMZL::git.zsh
+# Oh-My-Zsh libs: settings the rest of this file overrides, so they load
+# before it rather than after
 zinit snippet OMZL::history.zsh
 zinit snippet OMZL::key-bindings.zsh
 zinit snippet OMZL::completion.zsh
-
-# ──────────────────────────────────────────────
-# Oh-My-Zsh plugins (via zinit snippets)
-# ──────────────────────────────────────────────
-zinit snippet OMZP::git
-zinit snippet OMZP::docker-compose
-zinit snippet OMZP::npm
-zinit snippet OMZP::node
-zinit snippet OMZP::extract       # extract <file>, unpacks any archive format
-zinit snippet OMZP::sudo          # ESC ESC, prepends sudo to the last command
-zinit snippet OMZP::command-not-found
 
 # ──────────────────────────────────────────────
 # Completions
 # ──────────────────────────────────────────────
 autoload -Uz compinit
 compinit -d ~/.cache/zcompdump
+
+# Reminds you when a typed command has an alias; printed after the
+# command's output instead of before it, so it doesn't split the output
+export YSU_MESSAGE_POSITION="after"
+
+# Deferred plugins, loaded in this order once the first prompt is up.
+# fzf-tab goes after compinit and before anything that wraps widgets;
+# syntax highlighting goes last, since it wraps every widget defined
+# before it.
+zinit wait lucid for \
+  Aloxaf/fzf-tab \
+  agkozak/zsh-z \
+  reegnz/jq-zsh-plugin \
+  MichaelAquilina/zsh-you-should-use \
+  zsh-users/zsh-history-substring-search \
+  OMZL::git.zsh \
+  OMZP::git \
+  OMZP::docker-compose \
+  OMZP::npm \
+  OMZP::node \
+  OMZP::extract \
+  OMZP::sudo \
+  OMZP::command-not-found \
+  atload'!_zsh_autosuggest_start' zsh-users/zsh-autosuggestions \
+  zdharma-continuum/fast-syntax-highlighting
 
 # Completion style
 zstyle ':completion:*' menu select
@@ -95,8 +105,16 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza --tree --color=always $realpath
 zstyle ':fzf-tab:complete:*' fzf-preview 'bat --color=always --style=numbers $realpath 2>/dev/null || cat $realpath 2>/dev/null || ls $realpath'
 
 # kubectl completion (works both for "kubectl" and the "k" alias)
-if command -v kubectl >/dev/null 2>&1; then
-  source <(kubectl completion zsh)
+# Generated once per kubectl binary instead of on every shell (~130 ms).
+if (( $+commands[kubectl] )); then
+  () {
+    local cache=~/.cache/zsh/kubectl-completion.zsh
+    if [[ ! -s $cache || $commands[kubectl] -nt $cache ]]; then
+      mkdir -p ${cache:h}
+      kubectl completion zsh >| $cache
+    fi
+    source $cache
+  }
   compdef k=kubectl
 fi
 
@@ -264,7 +282,11 @@ export MANROFFOPT="-c"
 # ──────────────────────────────────────────────
 # Mise (version manager: node, python, etc)
 # ──────────────────────────────────────────────
-eval "$(mise activate zsh)"
+# Shims, not `mise activate`: activate runs `mise hook-env` before every
+# prompt (~170 ms on the first one), and exports RUSTUP_TOOLCHAIN from the
+# global `rust` tool, which overrides a project's rust-toolchain.toml.
+# A shim resolves the version per directory when the tool runs instead.
+export PATH="$HOME/.local/share/mise/shims:$PATH"
 
 # bun itself comes from mise above, but `bun install -g <pkg>` (e.g.
 # ccstatusline) still installs into bun's own ~/.bun/install/global and
@@ -302,10 +324,10 @@ export PATH="$PATH":"$HOME/.pub-cache/bin"
 # ──────────────────────────────────────────────
 # GnuPG: keep TTY correct for pinentry (signing from terminal / IDE)
 # ──────────────────────────────────────────────
-export GPG_TTY=$(tty)
+export GPG_TTY=$TTY
 autoload -Uz add-zsh-hook
 _gpg_tty_update() {
-  export GPG_TTY=$(tty)
+  export GPG_TTY=$TTY
   gpg-connect-agent updatestartuptty /bye >/dev/null 2>&1 || true
 }
 add-zsh-hook precmd _gpg_tty_update
