@@ -1,0 +1,36 @@
+#!/bin/bash
+set -euo pipefail
+
+# /etc/docker/daemon.json is a root-owned file outside $HOME, so it is written
+# here from .chezmoitemplates/docker-daemon.json. It caps the BuildKit cache:
+# left to its defaults the daemon sizes its GC from the WSL virtual disk
+# (1 TB), never from the Windows drive that disk actually lives on, so the
+# build cache grew past 40 GB with C: at 99%.
+if ! command -v dockerd >/dev/null 2>&1; then
+  exit 0
+fi
+
+DAEMON_JSON=/etc/docker/daemon.json
+DESIRED="$(mktemp)"
+trap 'rm -f "$DESIRED"' EXIT
+cat > "$DESIRED" <<'EOF'
+{{ template "docker-daemon.json" . }}
+EOF
+
+if sudo cmp -s "$DESIRED" "$DAEMON_JSON" 2>/dev/null; then
+  exit 0
+fi
+
+sudo dockerd --validate --config-file "$DESIRED"
+sudo install -D -m 0644 "$DESIRED" "$DAEMON_JSON"
+
+# The daemon reads this file only on start. A restart stops every running
+# container, so it happens here only when there are none; otherwise it is
+# left to whoever owns them.
+if systemctl is-active --quiet docker 2>/dev/null; then
+  if [ -z "$(docker ps -q 2>/dev/null)" ]; then
+    sudo systemctl restart docker
+  else
+    echo "$DAEMON_JSON updated; restart docker (sudo systemctl restart docker) once its containers can stop."
+  fi
+fi

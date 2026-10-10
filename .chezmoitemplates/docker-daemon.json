@@ -1,0 +1,9 @@
+{
+  "builder": {
+    "gc": {
+      "enabled": true,
+      "defaultReservedSpace": "5GB",
+      "defaultMaxUsedSpace": "20GB"
+    }
+  }
+}
