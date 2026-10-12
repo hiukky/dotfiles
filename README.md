@@ -42,33 +42,53 @@ Same command every time on either OS: first run bootstraps everything from scrat
 
 ## 📦 What it installs
 
-Automated, idempotent provisioning of the whole environment, Linux and Windows alike.
+One idempotent pass provisions both sides of the machine. Linux gets the shell and the toolchain, the Windows host gets the apps that need the GPU or the desktop.
 
-- 🐚 **Shell:** `zsh`, `zinit`, `starship`
-- 🧰 **CLI:** `eza`, `bat`, `ripgrep`, `fd`, `fzf`, `tree`, `gh`, `glab`, `glow`, `rtk`, `asciinema`
-- ✏️ **Editor:** `vim` (default `$EDITOR`)
-- ⚙️ **Runtimes:** `node`, `rust`, `bun`, `flutter`, all via `mise`
-- 🐳 **Containers:** `docker`, `kubectl`, `kind`
-- 🤖 **Agents:** `claude`, `codex`, `opencode`, and [`uze`](https://uze.hiukky.com) — built from source at `~/uze`, and the owner of this repo's portable [`AGENTS.md`](./AGENTS.md) context
-- 🔑 **Accounts:** fresh SSH key per machine plus `gh`/`glab`/`claude` login
-- 🪟 **Windows (host, via WSL):** VirtualBox, Windows Sandbox, Android SDK, Discord, Notion, Steam, Spotify, Teams, VLC, CapCut, Chrome, and more
-- 🔄 **WSL ⇄ Windows:** a pinned Nerd Font catalog installed on Windows (`nerd-font-lab` to check them), `.wslconfig`, and Windows Terminal `settings.json` kept in sync
-- 🔋 **Power:** sleep profile for a machine that used to run 24/7. Windows' idle timer only counts keyboard and mouse input and is blind to WSL, so a guard task vetoes sleep while Linux is genuinely working, and lets it suspend the moment it isn't
+**🐧 Linux / WSL**
+
+| | |
+| --- | --- |
+| 🐚 Shell | `zsh`, `zinit`, `starship` |
+| 🧰 CLI | `eza`, `bat`, `ripgrep`, `fd`, `fzf`, `tree`, `jq`, `gh`, `glab`, `glow`, `rtk`, `asciinema` |
+| ✏️ Editor | `vim` as `$EDITOR` |
+| ⚙️ Runtimes | `node`, `rust`, `bun`, `flutter`, all via `mise` |
+| 🐳 Containers | `docker` (BuildKit cache capped), `kubectl`, `kind` |
+| 🤖 Agents | `claude`, `codex`, `opencode`, [`uze`](https://uze.hiukky.com) built from `~/uze` |
+| 🔑 Accounts | fresh SSH key per machine, `gh` / `glab` / `claude` login |
+
+**🪟 Windows host**
+
+| | |
+| --- | --- |
+| 🖥️ Apps | Discord, Notion, Steam, Spotify, Teams, VLC, CapCut, Chrome, and more |
+| 🧪 Virtualization | VirtualBox, Windows Sandbox, Android SDK |
+| 🧠 Local inference | `llama.cpp` + `llmfit`, native for direct GPU access |
+| 🎮 Controller | 8BitDo Ultimate 2.4G tools (Ultimate Software, Pair Tools, Firmware Updater) |
+| 🔤 Fonts | pinned Nerd Font catalog (`nerd-font-lab` to check them) |
+| 🔄 Synced from WSL | `.wslconfig`, Windows Terminal `settings.json` |
+| 🔋 Power | `idle-guard`: vetoes sleep while WSL is working, since Windows only watches the keyboard and mouse |
 
 ## 🛠️ Usage
+
+**chezmoi**
 
 | Command | What it does |
 | --- | --- |
 | `chezmoi add ~/.zshrc` | Start tracking an existing file |
 | `chezmoi edit ~/.zshrc` | Edit the managed version of a file |
-| `chezmoi diff` | Preview what would change before applying |
+| `chezmoi diff` | Preview what would change |
 | `chezmoi apply` | Apply changes to `$HOME` |
 | `chezmoi update` | Pull the latest changes and apply |
-| `idle-guard status` | Why the machine is (or isn't) being held awake right now |
-| `idle-guard report` | What kept it awake lately, and how much it actually slept |
-| `idle-guard inhibit 2h` | Force it awake for a while (`release` to drop the hold) |
 
-📄 Full breakdown of conventions and design decisions: [`AGENTS.md`](./AGENTS.md).
+**idle-guard**
+
+| Command | What it does |
+| --- | --- |
+| `idle-guard status` | Why the machine is (or isn't) being held awake |
+| `idle-guard report` | What kept it awake lately, and how much it slept |
+| `idle-guard inhibit 2h` | Hold it awake for a while (`release` drops the hold) |
+
+📄 Conventions, design decisions and every gotcha: [`AGENTS.md`](./AGENTS.md).
 
 ## 💻 My setup
 
