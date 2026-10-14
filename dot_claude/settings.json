@@ -4,7 +4,15 @@
     "pr": ""
   },
   "permissions": {
-    "defaultMode": "auto"
+    "defaultMode": "auto",
+    "allow": [
+      "Bash(gh pr merge:*)",
+      "Bash(gh pr review:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh workflow run:*)",
+      "Bash(gh run:*)"
+    ]
   },
   "model": "opus",
   "statusLine": {
@@ -19,9 +27,11 @@
     "playwright@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true,
     "vercel@claude-plugins-official": true,
-    "tui@uze-store": true,
+    "code@uze-store": true,
+    "env@uze-store": true,
+    "uze@uze-store": true,
     "git@uze-store": true,
-    "uze@uze-store": true
+    "tui@uze-store": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -42,7 +52,7 @@
   },
   "tui": "fullscreen",
   "skipWorkflowUsageWarning": true,
-  "theme": "dark",
+  "theme": "auto",
   "agentPushNotifEnabled": true,
   "autoMode": {
     "environment": [
