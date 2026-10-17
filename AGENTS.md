@@ -237,7 +237,7 @@ Rules for adding new files or editing existing ones:
 ## History note
 
 This repo's git history predates the chezmoi setup (old shell-script-based dotfiles). The pre-chezmoi state is also tagged at `legacy-2026-08-09` for reference.
-<!-- uze:begin project:worktree-policy/f2b07866553b5ca1 -->
+<!-- uze:begin project:worktree-policy/a7cad0f194468ad7 -->
 ## Concurrent work isolation
 
 This section is for an agent `uze workspace` launched. An agent started any other way can ignore it: nothing below applies to it, and the `uze agent work` commands it names refuse outside the workspace.
@@ -245,7 +245,7 @@ This section is for an agent `uze workspace` launched. An agent started any othe
 - As soon as a user message gives the conversation a clear topic — normally the first message — make naming your work your first command, before reading a file, planning or editing: `uze agent work name <type>/<subject>`. Types this project accepts: `feat|fix|docs|refactor|perf|test|build|ci|chore|style|revert`. The subject is ideally one or two words, never more than three, naming the intention, not a description of the task — `fix/branch-naming`, not `fix/correct-the-problem-with-agent-branch-names`. The command always updates your label. In a checkout of your own it also renames your branch; in the operator's checkout only your label changes. Work that reaches a commit still unnamed is named by UZE from that commit's subject. Name it again with the same command whenever the work turns out to be something else — the last name given is the one that stands. Invoke the command directly; do not merely say you will name the work.
 - An agent UZE isolated works in a checkout of its own under `.worktrees/<id>`, on branch `agent/<id>`. If your working directory is inside `.worktrees/`, you are already isolated; do not switch branches.
 - If your working directory is not inside `.worktrees/`, you are in the operator's own checkout, on the branch they are on: commit there, as you go, and never switch, reset, stash or clean it — the operator's uncommitted work is theirs. Nothing below about delivery applies to you; the branch keeps the name it has. Naming your work still applies here, first: it names your label, never their branch.
-- Commit your work on your own branch, as you go. Never commit to, merge into, rebase, or reset the target branch: delivery is UZE's — your branch is left for a person to integrate; commit on it and stop.
+- Commit your work on your own branch, as you go. Never commit to, merge into, rebase, or reset the target branch: your branch is left for a person to integrate; commit on it and stop.
 - If UZE tells you a rebase is paused in your checkout, resolve the conflicts preserving the intent of your change, run `git rebase --continue`, run the project's checks, and end your turn.
 - Before spawning parallel subagents that write files, give each its own checkout: `uze agent work split <topic>` prints the path of one cut from your current commit — hand that path to the subagent. When it is done, commit in both checkouts and run `uze agent work join <topic>` to bring its commits onto your branch; on a conflict, resolve it in the subagent's checkout, run `git rebase --continue` there, and join again. `uze agent work list` shows them. Never make a worktree with Git for this: UZE only knows the checkouts it made. An agent in the operator's checkout has no branch of its own to join into, and runs its subagents one after another instead.
-<!-- uze:end project:worktree-policy/f2b07866553b5ca1 -->
+<!-- uze:end project:worktree-policy/a7cad0f194468ad7 -->
