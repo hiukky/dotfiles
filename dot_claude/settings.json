@@ -4,7 +4,6 @@
     "pr": ""
   },
   "permissions": {
-    "defaultMode": "auto",
     "allow": [
       "Bash(gh pr merge:*)",
       "Bash(gh pr review:*)",
@@ -12,9 +11,41 @@
       "Bash(gh pr checks:*)",
       "Bash(gh workflow run:*)",
       "Bash(gh run:*)"
-    ]
+    ],
+    "defaultMode": "auto"
   },
   "model": "opus",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/hiukky/.uze/runtime/attachments/claude/rules/engine",
+            "args": [
+              "/home/hiukky/.uze/runtime/rules/sessions"
+            ],
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Read|Edit|MultiEdit|Write|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/hiukky/.uze/runtime/attachments/claude/rules/engine",
+            "args": [
+              "/home/hiukky/.uze/runtime/rules/sessions"
+            ],
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
   "statusLine": {
     "type": "command",
     "command": "ccstatusline",
@@ -27,11 +58,12 @@
     "playwright@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true,
     "vercel@claude-plugins-official": true,
-    "code@uze-store": true,
     "env@uze-store": true,
     "uze@uze-store": true,
     "git@uze-store": true,
-    "tui@uze-store": true
+    "tui@uze-store": true,
+    "openspec@uze-store": true,
+    "code@uze-store": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
