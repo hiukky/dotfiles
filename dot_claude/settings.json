@@ -58,12 +58,7 @@
     "playwright@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true,
     "vercel@claude-plugins-official": true,
-    "env@uze-store": true,
-    "uze@uze-store": true,
-    "git@uze-store": true,
-    "tui@uze-store": true,
-    "openspec@uze-store": true,
-    "code@uze-store": true
+    "uze@uze-store": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
