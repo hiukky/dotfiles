@@ -75,7 +75,31 @@
             }
         ]
     },
-    "schemes": [],
+    "schemes": [
+        {
+            "name": "Ottosson",
+            "background": "#000000",
+            "foreground": "#BEBEBE",
+            "cursorColor": "#FFFFFF",
+            "selectionBackground": "#92A4FD",
+            "black": "#000000",
+            "red": "#BE2C21",
+            "green": "#3FAE3A",
+            "yellow": "#BE9A4A",
+            "blue": "#204DBE",
+            "purple": "#BB54BE",
+            "cyan": "#00A7B2",
+            "white": "#BEBEBE",
+            "brightBlack": "#808080",
+            "brightRed": "#FF3E30",
+            "brightGreen": "#58EA51",
+            "brightYellow": "#FFC944",
+            "brightBlue": "#2F6AFF",
+            "brightPurple": "#FC74FF",
+            "brightCyan": "#00E1F0",
+            "brightWhite": "#FFFFFF"
+        }
+    ],
     "theme": "system",
     "themes": []
 }
