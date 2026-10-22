@@ -21,12 +21,17 @@ if (Get-Command llama -ErrorAction SilentlyContinue) {
   Write-Host "llama.cpp already installed, skipping."
 } else {
   Write-Host "Installing llama.cpp..."
+  # The upstream installer removes this directory unconditionally, but its
+  # first-run cleanup fails when it has not been created yet.
+  $llamaAppDir = Join-Path $env:LOCALAPPDATA "llama-app"
+  New-Item -ItemType Directory -Path $llamaAppDir -Force | Out-Null
   Invoke-RestMethod -Uri https://llama.app/install.ps1 | Invoke-Expression
 }
 
 if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
   Write-Host "Installing scoop..."
-  Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+  # The enclosing PowerShell process already runs with -ExecutionPolicy Bypass.
+  # A user-level policy write can be blocked by a more specific policy.
   Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
 }
 
