@@ -4,7 +4,7 @@
     "actions": [],
     "copyFormatting": "none",
     "copyOnSelect": false,
-    "defaultProfile": "{b64d27a1-5881-50bb-bf7a-d1c2ec90ec1f}",
+    "defaultProfile": "{412ea6e0-b83b-537c-bf22-73aa63796ad4}",
     "keybindings": [
         {
             "id": "Terminal.CopyToClipboard",
@@ -60,7 +60,7 @@
                 "font": {
                     "face": "Hack Nerd Font Mono"
                 },
-                "guid": "{b64d27a1-5881-50bb-bf7a-d1c2ec90ec1f}",
+                "guid": "{412ea6e0-b83b-537c-bf22-73aa63796ad4}",
                 "hidden": false,
                 "name": "Ubuntu",
                 "padding": "8",
