@@ -35,12 +35,17 @@ function Install-App {
 Install-App -Name "Discord" -MsstoreId "XPDC2RH70K22MN"
 Install-App -Name "Notion" -MsstoreId "XPDBVSS44R0L9H"
 Install-App -Name "Steam" -WingetId "Valve.Steam"
+Install-App -Name "Brave Browser" -MsstoreId "XP8C9QZMS2PC1T"
+Install-App -Name "ChatGPT" -MsstoreId "9PLM9XGG6VKS"
 
 # Dev tools
 Install-App -Name "Claude" -WingetId "Anthropic.Claude"
 Install-App -Name "Cursor" -WingetId "Anysphere.Cursor"
 Install-App -Name "Android Studio" -WingetId "Google.AndroidStudio"
 Install-App -Name "Google Chrome" -WingetId "Google.Chrome"
+Install-App -Name "Git for Windows" -WingetId "Git.Git"
+Install-App -Name "OpenCode Desktop" -WingetId "SST.OpenCodeDesktop"
+Install-App -Name "Bun" -WingetId "Oven-sh.Bun"
 
 # Media / communication
 Install-App -Name "Spotify" -MsstoreId "9NCBCSZSJRSB"
@@ -57,8 +62,17 @@ Install-App -Name "TranslucentTB" -WingetId "CharlesMilette.TranslucentTB"
 Install-App -Name "Anki" -WingetId "Anki.Anki"
 Install-App -Name "Binance" -WingetId "BinanceTech.Binance"
 Install-App -Name "EA app" -WingetId "ElectronicArts.EADesktop"
+Install-App -Name "OneDrive" -WingetId "Microsoft.OneDrive"
+Install-App -Name "Outlook" -MsstoreId "9NRX63209R7B"
+Install-App -Name "WinDirStat" -MsstoreId "9PH1GL95P3WF"
 
 # WhatsApp Desktop (5319275A.WhatsAppDesktop) is on the Store but winget
 # cannot resolve/search it under either source -- known winget limitation.
 Write-Host "WhatsApp: no resolvable winget id -- install manually from the Microsoft Store."
+
+# BitTorrent Web has no Winget package. Steam itself is provisioned above, but
+# the signed-in account owns the library: BLOODSTRIKE, Crysis Remastered,
+# Katana ZERO, EA SPORTS FC 26, FC 26 and Wallpaper Engine must be restored
+# through Steam/EA after sign-in rather than installed unattended.
+Write-Host "BitTorrent Web and the Steam/EA library require manual restoration after sign-in."
 '

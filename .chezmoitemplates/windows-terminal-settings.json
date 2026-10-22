@@ -31,7 +31,7 @@
     "profiles": {
         "defaults": {
             "font": {
-                "face": "FiraCode Nerd Font Mono"
+                "face": "Hack Nerd Font Mono"
             },
             "scrollbarState": "hidden"
         },
@@ -58,7 +58,7 @@
                 "background": "#0A0C0D",
                 "colorScheme": "Ottosson",
                 "font": {
-                    "face": "FiraCode Nerd Font Mono"
+                    "face": "Hack Nerd Font Mono"
                 },
                 "guid": "{b64d27a1-5881-50bb-bf7a-d1c2ec90ec1f}",
                 "hidden": false,
@@ -76,5 +76,6 @@
         ]
     },
     "schemes": [],
+    "theme": "system",
     "themes": []
 }

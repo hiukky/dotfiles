@@ -1,5 +1,6 @@
 [tools]
 node = "latest"
+python = "latest"
 rust = "latest"
 bun = "latest"
 glow = "latest"
