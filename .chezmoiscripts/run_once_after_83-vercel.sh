@@ -1,7 +1,10 @@
 #!/bin/bash
 set -euo pipefail
 
-BUN_BIN="$(command -v bun || echo "$HOME/.bun/bin/bun")"
+# chezmoi runs this without the zshrc PATH, so neither bun (a mise shim) nor
+# the ~/.bun/bin globals are found by name -- look them up explicitly.
+BUN_BIN="$(command -v bun || echo "$HOME/.local/share/mise/shims/bun")"
+export PATH="$HOME/.bun/bin:$PATH"
 
 if [ -x "$BUN_BIN" ] && ! command -v vercel >/dev/null 2>&1; then
   "$BUN_BIN" add --global vercel
