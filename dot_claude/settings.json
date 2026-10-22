@@ -57,7 +57,12 @@
     "frontend-design@claude-plugins-official": true,
     "playwright@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true,
-    "vercel@claude-plugins-official": true
+    "vercel@claude-plugins-official": true,
+    "code@uze-store": true,
+    "git@uze-store": true,
+    "openspec@uze-store": true,
+    "tui@uze-store": true,
+    "uze@uze-store": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {

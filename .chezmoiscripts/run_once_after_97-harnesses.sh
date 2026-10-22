@@ -28,8 +28,10 @@ fi
 
 # agents.yaml/agents.lock in the UZE checkout declare the personal ai
 # marketplace (git, tui, openspec and code). UZE owns the generated vendor
-# marketplace and plugin lifecycle, so do not mirror those selectors in
-# ~/.claude/settings.json.
+# marketplace and plugin lifecycle, but chezmoi owns all of
+# ~/.claude/settings.json: dot_claude/settings.json must mirror the
+# `<name>@uze-store` selectors, or every apply disables them and uze blocks
+# updates as drifted.
 if [ -d "$HOME/uze/.git" ]; then
   (
     cd "$HOME/uze"
