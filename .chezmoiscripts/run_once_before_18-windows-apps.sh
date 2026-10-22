@@ -16,20 +16,38 @@ fi
 powershell.exe -NoProfile -ExecutionPolicy Bypass -Command '
 $ErrorActionPreference = "Stop"
 
+# winget reports failure only through its exit code, which PowerShell never
+# turns into an error: on a fresh Windows every install once failed in a
+# second and the script still exited 0, so chezmoi recorded it as done and
+# never ran it again. Failures are collected and fail the script instead.
+$failed = @()
+
+# A fresh Windows has never refreshed the sources (or accepted the msstore
+# agreement), and every lookup against them fails until it does.
+winget source update --disable-interactivity
+if ($LASTEXITCODE -ne 0) { winget source reset --force --disable-interactivity; winget source update --disable-interactivity }
+
 function Install-App {
   param($Name, $MsstoreId, $WingetId)
 
   $id = if ($MsstoreId) { $MsstoreId } else { $WingetId }
   $source = if ($MsstoreId) { "msstore" } else { "winget" }
 
-  winget list --id $id --source $source --exact *> $null
+  winget list --id $id --source $source --exact --accept-source-agreements --disable-interactivity *> $null
   if ($LASTEXITCODE -eq 0) {
     Write-Host "$Name already installed, skipping."
     return
   }
 
   Write-Host "Installing $Name from $source..."
-  winget install --id $id --source $source --accept-package-agreements --accept-source-agreements
+  winget install --id $id --source $source --exact --accept-package-agreements --accept-source-agreements --disable-interactivity
+  # 0x8A150061 already installed, 0x8A15002B no applicable update,
+  # 0x8A150109 installed but needs a restart: all leave the app in place.
+  $ok = @(0, -1978335135, -1978335189, -1978334967)
+  if ($ok -notcontains $LASTEXITCODE) {
+    Write-Host ("{0} failed (winget exit 0x{1:X8})." -f $Name, $LASTEXITCODE)
+    $script:failed += $Name
+  }
 }
 
 Install-App -Name "Discord" -MsstoreId "XPDC2RH70K22MN"
@@ -75,4 +93,9 @@ Write-Host "WhatsApp: no resolvable winget id -- install manually from the Micro
 # Katana ZERO, EA SPORTS FC 26, FC 26 and Wallpaper Engine must be restored
 # through Steam/EA after sign-in rather than installed unattended.
 Write-Host "BitTorrent Web and the Steam/EA library require manual restoration after sign-in."
+
+if ($failed.Count -gt 0) {
+  Write-Host ("Not installed: " + ($failed -join ", ") + ". Re-run chezmoi apply to retry.")
+  exit 1
+}
 '

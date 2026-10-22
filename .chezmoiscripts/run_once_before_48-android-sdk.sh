@@ -18,8 +18,10 @@ $ErrorActionPreference = "Stop"
 
 $studioJbr = "C:\Program Files\Android\Android Studio\jbr"
 if (-not (Test-Path $studioJbr)) {
-  Write-Host "Android Studio not found -- skipping Android SDK setup."
-  exit 0
+  # Failing (rather than skipping) keeps chezmoi from recording this script
+  # as done, so the SDK is set up on the apply that finds Android Studio.
+  Write-Host "Android Studio not found -- install it (run_once_before_18-windows-apps.sh) and re-run chezmoi apply."
+  exit 1
 }
 $env:JAVA_HOME = $studioJbr
 

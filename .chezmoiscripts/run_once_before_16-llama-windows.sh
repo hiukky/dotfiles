@@ -32,14 +32,30 @@ if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
   Write-Host "Installing scoop..."
   # The enclosing PowerShell process already runs with -ExecutionPolicy Bypass.
   # A user-level policy write can be blocked by a more specific policy.
-  Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
+  # When WSL itself was started elevated (Windows Terminal run as admin),
+  # every Windows process it spawns is elevated too, and the installer then
+  # prints "Abort." and returns without failing unless told -RunAsAdmin.
+  $principal = [Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()
+  $installer = Invoke-RestMethod -Uri https://get.scoop.sh
+  if ($principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    & ([scriptblock]::Create($installer)) -RunAsAdmin
+  } else {
+    & ([scriptblock]::Create($installer))
+  }
+  if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
+    Write-Host "scoop did not install."
+    exit 1
+  }
 }
 
-scoop list llmfit *> $null
-if ($LASTEXITCODE -eq 0) {
+if (Get-Command llmfit -ErrorAction SilentlyContinue) {
   Write-Host "llmfit already installed, skipping."
 } else {
   Write-Host "Installing llmfit..."
   scoop install llmfit
+  if (-not (Get-Command llmfit -ErrorAction SilentlyContinue)) {
+    Write-Host "llmfit did not install."
+    exit 1
+  }
 }
 '
