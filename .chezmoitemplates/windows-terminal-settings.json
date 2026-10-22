@@ -1,28 +1,34 @@
 {
     "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "actions": [],
-    "copyFormatting": "none",
-    "copyOnSelect": false,
-    "defaultProfile": "{412ea6e0-b83b-537c-bf22-73aa63796ad4}",
-    "keybindings": [
+    "actions": [
         {
-            "id": "Terminal.CopyToClipboard",
+            "command": {
+                "action": "copy",
+                "singleLine": false
+            },
             "keys": "ctrl+c"
         },
         {
-            "id": "Terminal.FindText",
+            "command": "find",
             "keys": "ctrl+shift+f"
         },
         {
-            "id": "Terminal.PasteFromClipboard",
+            "command": "paste",
             "keys": "ctrl+v"
         },
         {
-            "id": "Terminal.DuplicatePaneAuto",
+            "command": {
+                "action": "splitPane",
+                "split": "auto",
+                "splitMode": "duplicate"
+            },
             "keys": "alt+shift+d"
         }
     ],
+    "copyFormatting": "none",
+    "copyOnSelect": false,
+    "defaultProfile": "{412ea6e0-b83b-537c-bf22-73aa63796ad4}",
     "newTabMenu": [
         {
             "type": "remainingProfiles"
