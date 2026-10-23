@@ -1,0 +1,99 @@
+#!/bin/bash
+set -euo pipefail
+
+# Pins the apps in .chezmoidata/taskbar.yaml to the Windows taskbar, in order,
+# replacing the default pins.
+#
+# Windows has no command to pin an app; the supported route is a layout XML
+# named by the "Start Layout" policy (StartLayoutFile + LockedStartLayout under
+# HKCU\Software\Policies\Microsoft\Windows\Explorer), which Explorer reads when
+# it starts. Writing under Policies needs admin, so an unelevated session asks
+# through UAC.
+#
+# Numbered last so every app installer has run first. An app the Start menu
+# does not list yet is left out of the layout and fails the script, so chezmoi
+# runs it again on the next apply instead of recording a partial taskbar.
+#
+# run_onchange: it runs again whenever the pin list changes, since the list is
+# rendered into this file.
+
+if ! grep -qi microsoft /proc/version 2>/dev/null || ! command -v powershell.exe >/dev/null 2>&1; then
+  exit 0
+fi
+
+# Started from a Windows directory: Explorer, restarted below, inherits it.
+cd "$(wslpath "$(cmd.exe /c "echo %USERPROFILE%" 2>/dev/null | tr -d '\r\n')")"
+
+powershell.exe -NoProfile -ExecutionPolicy Bypass -Command '
+$ErrorActionPreference = "Stop"
+
+$pins = @(
+{{- range $i, $pin := .taskbar.pins }}{{ if $i }},{{ end }}
+  "{{ $pin }}"
+{{- end }}
+)
+
+$apps = Get-StartApps
+$entries = @()
+$missing = @()
+foreach ($pin in $pins) {
+  $app = $apps | Where-Object { $_.Name -eq $pin -or $_.AppID -eq $pin } | Select-Object -First 1
+  if (-not $app) {
+    $missing += $pin
+    continue
+  }
+  $id = [Security.SecurityElement]::Escape($app.AppID)
+  # Store apps are known by an AppUserModelID (Package_Family!App); everything
+  # else by the ID the Start menu gives its shortcut.
+  if ($app.AppID -like "*!*") {
+    $entries += "        <taskbar:UWA AppUserModelID=""$id"" />"
+  } else {
+    $entries += "        <taskbar:DesktopApp DesktopApplicationID=""$id"" />"
+  }
+}
+
+$layout = @"
+<?xml version="1.0" encoding="utf-8"?>
+<LayoutModificationTemplate
+  xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification"
+  xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout"
+  xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout"
+  xmlns:taskbar="http://schemas.microsoft.com/Start/2014/TaskbarLayout"
+  Version="1">
+  <CustomTaskbarLayoutCollection PinListPlacement="Replace">
+    <defaultlayout:TaskbarLayout>
+      <taskbar:TaskbarPinList>
+$($entries -join "`r`n")
+      </taskbar:TaskbarPinList>
+    </defaultlayout:TaskbarLayout>
+  </CustomTaskbarLayoutCollection>
+</LayoutModificationTemplate>
+"@
+
+$dir = Join-Path $env:LOCALAPPDATA "taskbar-pins"
+New-Item -ItemType Directory -Path $dir -Force | Out-Null
+$file = Join-Path $dir "layout.xml"
+Set-Content -Path $file -Value $layout -Encoding UTF8
+
+$key = "HKCU:\Software\Policies\Microsoft\Windows\Explorer"
+$principal = [Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()
+if ($principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+  New-Item -Path $key -Force | Out-Null
+  New-ItemProperty -Path $key -Name StartLayoutFile -PropertyType ExpandString -Value $file -Force | Out-Null
+  New-ItemProperty -Path $key -Name LockedStartLayout -PropertyType DWord -Value 1 -Force | Out-Null
+} else {
+  $set = "New-Item -Path ""$key"" -Force | Out-Null; " +
+    "New-ItemProperty -Path ""$key"" -Name StartLayoutFile -PropertyType ExpandString -Value ""$file"" -Force | Out-Null; " +
+    "New-ItemProperty -Path ""$key"" -Name LockedStartLayout -PropertyType DWord -Value 1 -Force | Out-Null"
+  Start-Process powershell.exe -Verb RunAs -Wait -ArgumentList @("-NoProfile", "-Command", $set)
+}
+
+# Explorer reads the layout only when it starts; Windows restarts it at once.
+Stop-Process -Name explorer -Force
+Write-Host ("Taskbar pinned: " + (($pins | Where-Object { $missing -notcontains $_ }) -join ", ") + ".")
+
+if ($missing.Count -gt 0) {
+  Write-Host ("Not in the Start menu yet, so not pinned: " + ($missing -join ", ") + ". Install them and re-run chezmoi apply.")
+  exit 1
+}
+'

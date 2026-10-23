@@ -1,0 +1,31 @@
+# The apps pinned to the Windows taskbar, left to right.
+#
+# Read by run_onchange_after_99-taskbar-pins.sh.tmpl, which replaces the
+# whole pin list (Windows' defaults included) with this one. Each entry is an
+# app's name exactly as the Start menu shows it, or its AppID: both are what
+# `Get-StartApps` in PowerShell lists, and the script resolves either one
+# there, so Store and desktop apps are listed the same way. Use the AppID for
+# Windows' own apps, whose names follow the display language.
+taskbar:
+  pins:
+    # Windows
+    - Microsoft Store
+    - Microsoft.Windows.Explorer # File Explorer
+    - Microsoft Edge
+    # Browsers
+    - Brave
+    # Social
+    - Discord
+    - WhatsApp
+    - Microsoft Teams
+    # AI
+    - Claude
+    - Codex
+    # Editors and dev tools
+    - Microsoft.WindowsNotepad_8wekyb3d8bbwe!App # Notepad
+    - Android Studio
+    - Terminal
+    # Media
+    - Spotify
+    # Games
+    - Steam
