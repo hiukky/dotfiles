@@ -28,3 +28,7 @@ fi
 
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/hiukky/.local/bin:$PATH"

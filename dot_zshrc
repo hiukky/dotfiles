@@ -350,3 +350,7 @@ export PATH="$HOME/.cargo/bin:$PATH"
 # Tracing local do uze: o exporter só existe num binário compilado com
 # --features telemetry; sem `make observe` no ar isto não custa nada.
 export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/hiukky/.local/bin:$PATH"
