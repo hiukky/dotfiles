@@ -76,6 +76,12 @@ Install-App -Name "FxSound" -MsstoreId "XP8JK4TBQ03LZ4"
 Install-App -Name "WinRAR" -WingetId "RARLab.WinRAR"
 Install-App -Name "TranslucentTB" -WingetId "CharlesMilette.TranslucentTB"
 
+# Peripherals
+# iCUE 5 is the current generation (Scimitar RGB Elite). DPI, polling
+# rate and angle snapping are saved to the onboard memory of the mouse from there,
+# so they travel with the device and are not provisioned here.
+Install-App -Name "Corsair iCUE" -WingetId "Corsair.iCUE.5"
+
 # Other
 Install-App -Name "Anki" -WingetId "Anki.Anki"
 Install-App -Name "Binance" -WingetId "BinanceTech.Binance"
