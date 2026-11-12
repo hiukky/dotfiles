@@ -62,7 +62,7 @@ Install-App -Name "Cursor" -WingetId "Anysphere.Cursor"
 Install-App -Name "Android Studio" -WingetId "Google.AndroidStudio"
 Install-App -Name "Google Chrome" -WingetId "Google.Chrome"
 Install-App -Name "Git for Windows" -WingetId "Git.Git"
-Install-App -Name "OpenCode Desktop" -WingetId "SST.OpenCodeDesktop"
+Install-App -Name "OpenCode Desktop" -WingetId "Anomaly.OpenCode.Desktop"
 Install-App -Name "Bun" -WingetId "Oven-sh.Bun"
 
 # Media / communication
