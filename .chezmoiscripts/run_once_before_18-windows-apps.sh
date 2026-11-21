@@ -75,6 +75,9 @@ Install-App -Name "FxSound" -MsstoreId "XP8JK4TBQ03LZ4"
 # Utilities
 Install-App -Name "WinRAR" -WingetId "RARLab.WinRAR"
 Install-App -Name "TranslucentTB" -WingetId "CharlesMilette.TranslucentTB"
+# Not on the Microsoft Store under its own publisher (listings there are
+# third-party repackages), so winget's community repo it is.
+Install-App -Name "qBittorrent" -WingetId "qBittorrent.qBittorrent"
 
 # Peripherals
 # iCUE 5 is the current generation (Scimitar RGB Elite). DPI, polling
