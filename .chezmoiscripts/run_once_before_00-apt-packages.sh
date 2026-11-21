@@ -33,4 +33,5 @@ sudo apt-get install -y \
   jq \
   xz-utils \
   zip \
-  asciinema
+  asciinema \
+  strace
