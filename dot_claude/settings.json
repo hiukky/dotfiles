@@ -21,9 +21,10 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/home/hiukky/.uze/runtime/attachments/claude/rules/engine",
+            "command": "/home/hiukky/.uze/store/claude/uze@uze/engine/rules",
             "args": [
-              "/home/hiukky/.uze/runtime/rules/sessions"
+              "/home/hiukky/.uze/runtime/rules/sessions",
+              "CLAUDE_PROJECT_DIR"
             ],
             "timeout": 10
           }
@@ -36,9 +37,10 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/home/hiukky/.uze/runtime/attachments/claude/rules/engine",
+            "command": "/home/hiukky/.uze/store/claude/uze@uze/engine/rules",
             "args": [
-              "/home/hiukky/.uze/runtime/rules/sessions"
+              "/home/hiukky/.uze/runtime/rules/sessions",
+              "CLAUDE_PROJECT_DIR"
             ],
             "timeout": 10
           }
@@ -57,8 +59,8 @@
     "frontend-design@claude-plugins-official": true,
     "playwright@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true,
-    "vercel@claude-plugins-official": true,
     "code@uze-store": true,
+    "env@uze-store": true,
     "git@uze-store": true,
     "openspec@uze-store": true,
     "tui@uze-store": true,
@@ -74,7 +76,7 @@
     "uze-store": {
       "source": {
         "source": "directory",
-        "path": "/home/hiukky/.uze/runtime/attachments/claude/generated"
+        "path": "/home/hiukky/.uze/store/claude"
       }
     }
   },
